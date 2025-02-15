@@ -1,0 +1,46 @@
+{
+  "group": [
+    {
+      "name": "cronjob",
+      "type": "cn.horace.cronjob.executor.starter.config.ExecutorProperties",
+      "sourceType": "cn.horace.cronjob.executor.starter.config.ExecutorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "cronjob.address",
+      "type": "java.lang.String",
+      "description": "调度器地址，例如：http://127.0.0.1:9527",
+      "sourceType": "cn.horace.cronjob.executor.starter.config.ExecutorProperties",
+      "defaultValue": "http://127.0.0.1:9527"
+    },
+    {
+      "name": "cronjob.tenant",
+      "type": "java.lang.String",
+      "description": "租户名称",
+      "sourceType": "cn.horace.cronjob.executor.starter.config.ExecutorProperties",
+      "defaultValue": "default"
+    },
+    {
+      "name": "cronjob.appName",
+      "type": "java.lang.String",
+      "description": "应用名称",
+      "sourceType": "cn.horace.cronjob.executor.starter.config.ExecutorProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "cronjob.appDesc",
+      "type": "java.lang.String",
+      "description": "应用描述",
+      "sourceType": "cn.horace.cronjob.executor.starter.config.ExecutorProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "cronjob.tag",
+      "type": "java.lang.String",
+      "description": "标签",
+      "sourceType": "cn.horace.cronjob.executor.starter.config.ExecutorProperties",
+      "defaultValue": "default"
+    }
+  ]
+}
