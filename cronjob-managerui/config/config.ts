@@ -75,7 +75,7 @@ export default defineConfig({
      * @name layout 插件
      * @doc https://umijs.org/docs/max/layout-menu
      */
-    title: 'cron-job 分布式任务调度平台',
+    title: 'Cron-Job 分布式任务调度平台',
     layout: {
         locale: true,
         ...defaultSettings,

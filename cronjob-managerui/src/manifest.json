@@ -1,6 +1,6 @@
 {
-  "name": "cron-job 分布式任务调度平台",
-  "short_name": "cron-job 分布式任务调度平台",
+  "name": "Cron-Job 分布式任务调度平台",
+  "short_name": "Cron-Job 分布式任务调度平台",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",

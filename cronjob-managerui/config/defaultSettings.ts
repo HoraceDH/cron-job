@@ -33,7 +33,7 @@ const Settings: ProLayoutProps & {
         loading: true,
         defaultOpenAll: true,
     },
-    title: 'cron-job 分布式任务调度平台',
+    title: 'Cron-Job 分布式任务调度平台',
     pwa: true,
     logo: '/icons/default-log.svg',
     iconfontUrl: '',

@@ -1,12 +1,12 @@
 ### 官方文档地址
-https://cronjob.horace.cn/
+[https://cronjob.horace.cn](https://cronjob.horace.cn)
 
 ### 一、介绍
 #### 1. cron-job
-cron-job 分布式任务调度平台是一种用于管理微服务系统中定时任务的软件系统，它提供了一种简单易用、超低延迟、支持用户权限管理、多语言客户端和多租户接入的方式来高效调度和执行任务。
+Cron-Job 分布式任务调度平台是一种用于管理微服务系统中定时任务的软件系统，它提供了一种简单易用、超低延迟、支持用户权限管理、多语言客户端和多租户接入的方式来高效调度和执行任务。
 
 #### 2. 技术栈
-cron-job 分布式任务调度平台是前后端分离的架构，服务端基于Java语言开发，前端基于Ant Design Pro开发，采用互联网主流技术栈构建而成。涉及的主要技术栈有：
+Cron-Job 分布式任务调度平台是前后端分离的架构，服务端基于Java语言开发，前端基于Ant Design Pro开发，采用互联网主流技术栈构建而成。涉及的主要技术栈有：
 - 服务端：MySQL、Druid、MyBatis、MyBatis-Generator、HttpClient、Spring Boot等。
 - 前端：React、Ant Design Pro、Ant Design Charts、Babel、Eslint、Axios等。
 
@@ -96,3 +96,4 @@ cron-job 分布式任务调度平台是前后端分离的架构，服务端基�
 
 ### 五、管理平台界面
 <img alt="管理后台主页" src="/images/demo_index.png" style="margin-left: 0;">
+<img alt="任务日志详情" src="/images/task_log_detail.png" style="margin-left: 0;">
