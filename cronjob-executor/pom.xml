@@ -6,13 +6,13 @@
     <parent>
         <groupId>cn.horace.cronjob</groupId>
         <artifactId>cron-job</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
 
     <artifactId>cronjob-executor</artifactId>
 
     <name>cronjob-executor</name>
-    <description>cron-job cronjob-executor, no need to introduce Spring-related dependencies, pure Java written executor</description>
+    <description>Cron-Job cronjob-executor, no need to introduce Spring-related dependencies, pure Java written executor</description>
     <url>https://cronjob.horace.cn</url>
 
     <licenses>
@@ -26,15 +26,17 @@
         <developer>
             <name>Horace</name>
             <email>Horace_DH@163.com</email>
+            <url>https://github.com/HoraceDH</url>
             <organization>Horace</organization>
             <organizationUrl>https://cronjob.horace.cn</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/horacedh/cron-job.git</connection>
-        <developerConnection>scm:git:ssh://github.com/horacedh/cron-job.git</developerConnection>
-        <url>http://github.com/horacedh/cron-job.git/tree/master</url>
+        <tag>master</tag>
+        <url>https://github.com/horacedh/cron-job.git</url>
+        <connection>scm:git:https://github.com/horacedh/cron-job.git</connection>
+        <developerConnection>scm:git:git@github.com:HoraceDH/cron-job.git</developerConnection>
     </scm>
 
     <properties>
