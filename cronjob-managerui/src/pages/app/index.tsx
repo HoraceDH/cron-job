@@ -111,8 +111,8 @@ const Index: React.FC = () => {
             }
         },
         {
-            title: '创建时间',
-            dataIndex: 'createTime',
+            title: '修改时间',
+            dataIndex: 'modifyTime',
             valueType: 'text',
             hideInSearch: true,
             ellipsis: {showTitle: true}, // 超出自动缩略

@@ -296,5 +296,4 @@ public class ExecutorServiceImpl implements ExecutorService {
         List<ExecutorEntity> executorEntities = this.mapper.selectByExample(example);
         this.offlineExpiredExecutor0(executorEntities);
     }
-
 }

@@ -1,5 +1,4 @@
-drop database if exists `cron-job`;
-create database `cron-job` default charset='utf8';
+create database if not exists `cron-job` default charset='utf8';
 use `cron-job`;
 
 # 租户表

@@ -40,6 +40,8 @@ public class SchedulerStarter implements InitializingBean {
     private SchedulerInstanceService schedulerInstanceService;
     @Resource
     private StatisticsService statisticsService;
+    @Resource
+    private DetectionService detectionService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -88,6 +90,9 @@ public class SchedulerStarter implements InitializingBean {
 
         // 定期将超时的任务日志设置为合适的状态
         this.threadScheduledExecutor.scheduleAtFixedRate(() -> this.schedulerService.handlerTimeoutTaskLog(), 0, 3, TimeUnit.SECONDS);
+
+        // 定期检测应用的执行器状态，如果所有的执行器离线太久，则自动停止应用，避免无意义的调度
+        this.threadScheduledExecutor.scheduleAtFixedRate(() -> this.detectionService.detectionAndStopApp(), 0, 5, TimeUnit.MINUTES);
     }
 
     /**

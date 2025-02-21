@@ -33,4 +33,9 @@ public class AppConfig {
     private String executorSignKey;
     @Value("${executor.timeout}")
     private int executorTimeout;
+    /**
+     * 如果所有的执行器离线太久，则自动停止应用，避免无意义的调度，单位分钟
+     */
+    @Value("${executor.autoStopAppMinutes}")
+    private int autoStopAppMinutes;
 }

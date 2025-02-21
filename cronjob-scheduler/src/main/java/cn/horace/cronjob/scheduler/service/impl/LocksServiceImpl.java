@@ -42,7 +42,7 @@ public class LocksServiceImpl implements LocksService {
     @Resource
     private AppConfig appConfig;
     @Resource
-    private LocksEntityMapper locksEntityMapper;
+    private LocksEntityMapper mapper;
 
     /**
      * 获取锁的拥有者
@@ -65,8 +65,22 @@ public class LocksServiceImpl implements LocksService {
      */
     @Override
     public boolean lock(String lockId, String owner, int expireTime, String lockDesc) {
-        // 如果锁是释放状态或者锁已经超时，那么将锁的拥有者更新为自己
+        LocksEntity entity = this.mapper.selectByPrimaryKey(lockId);
         Date currentDate = new Date();
+        if (entity == null) {
+            entity = new LocksEntity();
+            entity.setLockId(lockId);
+            entity.setLockOwner(owner);
+            entity.setLockDesc(lockDesc);
+            entity.setLockState(LockState.LOCKED.getValue());
+            entity.setExpireTime(new Date(System.currentTimeMillis() + (expireTime * 1000L)));
+            entity.setCreateTime(currentDate);
+            entity.setModifyTime(currentDate);
+            int count = this.mapper.insert(entity);
+            return count == 1;
+        }
+
+        // 如果锁是释放状态或者锁已经超时，那么将锁的拥有者更新为自己
         LocksEntity locksEntity = new LocksEntity();
         locksEntity.setLockId(lockId);
         locksEntity.setLockOwner(lockId + "_" + owner);
@@ -78,7 +92,7 @@ public class LocksServiceImpl implements LocksService {
         example.or().andLockIdEqualTo(lockId).andLockStateEqualTo(LockState.RELEASED.getValue());
         example.or().andLockIdEqualTo(lockId).andExpireTimeLessThan(currentDate);
 
-        int count = this.locksEntityMapper.updateByExampleSelective(locksEntity, example);
+        int count = this.mapper.updateByExampleSelective(locksEntity, example);
         return count == 1;
     }
 
@@ -98,10 +112,10 @@ public class LocksServiceImpl implements LocksService {
         example.or()
                 .andLockIdEqualTo(lockId)
                 .andLockOwnerEqualTo(lockId + "_" + owner);
-        int count = this.locksEntityMapper.updateByExampleSelective(locksEntity, example);
+        int count = this.mapper.updateByExampleSelective(locksEntity, example);
         // 释放锁失败
         if (count != 1) {
-            logger.error("failed to release distributed lock, lockId:{}, owner:{}, entity:{}", lockId, owner, this.locksEntityMapper.selectByPrimaryKey(lockId));
+            logger.error("failed to release distributed lock, lockId:{}, owner:{}, entity:{}", lockId, owner, this.mapper.selectByPrimaryKey(lockId));
         }
         return count == 1;
     }

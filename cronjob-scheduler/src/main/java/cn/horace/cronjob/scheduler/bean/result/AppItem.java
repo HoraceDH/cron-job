@@ -20,4 +20,5 @@ public class AppItem {
     private int executorCount;
     private int taskCount;
     private String createTime;
+    private String modifyTime;
 }

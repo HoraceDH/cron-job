@@ -251,4 +251,20 @@ public class AppServiceImpl implements AppService {
         example.or().andStateEqualTo(state.getValue());
         return (int) this.mapper.countByExample(example);
     }
+
+    /**
+     * 分页获取应用列表
+     *
+     * @param lastAppId 最后一次获取的应用ID
+     * @param pageSize  一页的大小
+     * @param state     状态
+     * @return
+     */
+    @Override
+    public List<AppEntity> getAppList(long lastAppId, int pageSize, AppState state) {
+        AppEntityExample example = new AppEntityExample();
+        example.or().andIdGreaterThan(lastAppId).andStateEqualTo(state.getValue());
+        example.setOrderByClause("`id` asc limit " + pageSize);
+        return this.mapper.selectByExample(example);
+    }
 }
