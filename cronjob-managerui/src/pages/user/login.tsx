@@ -70,7 +70,7 @@ const Login: React.FC = () => {
             <LoginFormPage
                 backgroundVideoUrl={"/background.mp4"}
                 logo={<img alt="logo" src="/logo.svg"/>}
-                title="cron-job 任务调度平台"
+                title="Cron-Job 任务调度平台"
                 subTitle={"简单易用、超低延迟，支持权限管理和多租户的分布式任务调度平台"}
                 initialValues={{
                     autoLogin: true,
