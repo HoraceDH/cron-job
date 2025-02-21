@@ -95,6 +95,9 @@ public class WebContextFilter implements Filter {
             }
             WebContext.getContext().setUserId(tokenEntity.getUserId());
         }
+
+        // 打印操作日志
+        logger.info("web context, request log, userId:{}, ip:{}, uri:{}, params:{}, body:{}", context.getUserId(), context.getRealIp(), context.getUri(), context.getParams(), context.getBody());
         chain.doFilter(requestWrapper, responseWrapper);
     }
 
