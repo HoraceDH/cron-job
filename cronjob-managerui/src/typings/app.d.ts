@@ -21,6 +21,7 @@ declare namespace AppBeans {
         executorCount: number,  // 在线执行器数
         taskCount: number,  // 任务数
         createTime: string, // 创建时间
+        modifyTime: string, // 修改时间
     };
 
     // 获取所有租户的结果

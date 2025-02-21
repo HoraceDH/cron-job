@@ -93,4 +93,14 @@ public interface AppService {
      * @return
      */
     int getAppCount(AppState state);
+
+    /**
+     * 分页获取应用列表
+     *
+     * @param lastAppId 最后一次获取的应用ID
+     * @param pageSize  一页的大小
+     * @param state     状态
+     * @return
+     */
+    List<AppEntity> getAppList(long lastAppId, int pageSize, AppState state);
 }

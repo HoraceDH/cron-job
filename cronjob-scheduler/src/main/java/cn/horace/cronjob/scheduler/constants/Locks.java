@@ -17,6 +17,10 @@ public enum Locks {
      * 生成统计数据的分布式锁
      */
     LOCK_GENERATE_STATISTICS(1, "生成统计数据的分布式锁"),
+    /**
+     * 定期检测是否需要停止没有执行器的应用
+     */
+    LOCK_DETECTION_AND_STOP_APP(2, "定期检测是否需要停止没有执行器的应用"),
     ;
     private int value;
     private String msg;

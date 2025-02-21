@@ -54,6 +54,9 @@ public class AppAdapter {
             if (app.getCreateTime() != null) {
                 appItem.setCreateTime(DateFormatUtils.format(app.getCreateTime(), Constants.DATE_FORMAT));
             }
+            if (app.getModifyTime() != null) {
+                appItem.setModifyTime(DateFormatUtils.format(app.getModifyTime(), Constants.DATE_FORMAT));
+            }
             appItems.add(appItem);
         }
         return appItems;
