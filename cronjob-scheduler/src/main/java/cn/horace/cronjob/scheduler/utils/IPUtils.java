@@ -57,7 +57,7 @@ public class IPUtils {
                     realIp = realIp.split(",")[0];
                 }
             }
-            if (StringUtils.isNotBlank(realIp) && isIpValid(realIp)) {
+            if (StringUtils.isNotBlank(realIp)) {
                 break;
             }
         }
@@ -66,19 +66,19 @@ public class IPUtils {
         if (StringUtils.isBlank(realIp)) {
             realIp = request.getRemoteAddr();
         }
-        if (isIpValid(realIp)) {
-            return realIp;
-        }
-        return null;
+//        if (isIpv4Valid(realIp)) {
+//            return realIp;
+//        }
+        return realIp;
     }
 
     /**
-     * 判断是否是合法的IP地址
+     * 判断是否是合法的IPv4地址
      *
      * @param ip
      * @return
      */
-    public static boolean isIpValid(String ip) {
+    public static boolean isIpv4Valid(String ip) {
         if (StringUtils.isBlank(ip)) {
             return false;
         }

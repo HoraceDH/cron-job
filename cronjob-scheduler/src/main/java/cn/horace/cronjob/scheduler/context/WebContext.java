@@ -127,17 +127,6 @@ public class WebContext {
             return body;
         }
 
-        /**
-         * 获取前端传递的Token，兼容各类传递情况，以下几种情况的传递都能读取到
-         * <p>
-         * header:
-         * lz-token=xxx，token=xxx
-         * <p>
-         * params:
-         * lz-token=xxx, token=xxx
-         *
-         * @return
-         */
         public String getToken() {
             return token;
         }
