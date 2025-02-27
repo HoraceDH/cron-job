@@ -93,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
                     entity.setAppName(taskParam.getAppName());
                     entity.setAppDesc(taskParam.getAppDesc());
                     entity.setName(taskParam.getName());
-                    entity.setOwner(StringUtils.isBlank(taskParam.getOwner()) ? "需要补充..." : taskParam.getOwner());
+                    entity.setOwner(StringUtils.isBlank(taskParam.getOwner()) ? "-" : taskParam.getOwner());
                     entity.setCron(taskParam.getCron());
                     entity.setTag(taskParam.getTag());
                     entity.setRunState(TaskRunState.STOP.getValue());

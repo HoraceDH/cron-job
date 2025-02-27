@@ -1,19 +1,18 @@
 import {ActionType, PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
-import React, {LegacyRef, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Commons} from "@/typings/commons";
-import {Button, Dropdown, message, Space, Tag} from "antd";
+import {Button, message, Tag} from "antd";
 import TenantService from "@/services/TenantService";
 import {TaskBeans} from "@/typings/task";
 import TaskService from "@/services/TaskService";
 import {Link} from "umi";
-import {CaretDownOutlined} from "@ant-design/icons";
 // @ts-ignore
 import type {ItemType} from "antd/es/menu/hooks/useItems";
 import AppService from "@/services/AppService";
 import {ProFormInstance} from "@ant-design/pro-form/lib";
 import {Pages} from "@/typings/pages";
 import {Modal} from 'antd/lib';
-import TextArea, {TextAreaRef} from "antd/lib/input/TextArea";
+import TextArea from "antd/lib/input/TextArea";
 
 
 const Index: React.FC = () => {
@@ -50,6 +49,16 @@ const Index: React.FC = () => {
             message.success("任务启动成功！");
             actionRef.current?.reload();
         }
+    }
+
+    /**
+     * 跳转到任务日志列表
+     */
+    const gotoTaskLogList = async (id?: string) => {
+        if (id == undefined) {
+            id = item?.id;
+        }
+        document.location.href = Pages.PAGE_TASKLOG_INDEX + "?taskId=" + id + "&state=4";
     }
 
     /**
@@ -105,27 +114,6 @@ const Index: React.FC = () => {
         location.href = "/schedulers/task/edit?id=" + id;
     }
 
-    // 操作按钮
-    const baseOperateItems: ItemType[] = [
-        {
-            label: <Button size="small" type={"primary"}><Link
-                to={`/schedulers/task/detail?id=${item?.id}`}>查看详情</Link></Button>,
-            key: '1',
-        },
-        {
-            label: <Button size="small" type={"primary"} onClick={() => {
-                showExecuteTaskDialog()
-            }}>执行一次</Button>,
-            key: '3',
-        },
-        {
-            label: <Button size="small" type={"primary"} onClick={() => {
-                toEditTaskPage(undefined)
-            }}>编辑任务</Button>,
-            key: '4',
-        },
-    ];
-
     /**
      * 渲染操作按钮
      *
@@ -134,51 +122,40 @@ const Index: React.FC = () => {
      */
     function renderOperationOptions(dom: React.ReactNode, entity: TaskBeans.TaskItem) {
         let quickButtons = [];
-        let items: ItemType[] = [];
-        items.push(...baseOperateItems);
         if (entity.runState === 1) {
-            items.push({
-                label: <Button danger size="small" type={"primary"} onClick={() => {
-                    stopTask(entity.id)
-                }}>停止任务</Button>,
-                key: '2',
-            });
-
             quickButtons.push(<Button danger type={"primary"} size={"small"} style={{marginRight: 4}} onClick={() => {
                 stopTask(entity.id)
             }}>停止</Button>);
         }
         if (entity.runState === 2) {
-            items.push({
-                label: <Button size="small" type={"primary"} onClick={() => {
-                    startTask(entity.id)
-                }}>启动任务</Button>,
-                key: '2',
-            });
             quickButtons.push(<Button type={"primary"} size={"small"} style={{marginRight: 4}} onClick={() => {
                 startTask(entity.id)
             }}>启动</Button>);
         }
 
+        quickButtons.push(<Button type={"primary"} size={"small"}
+                                  style={{marginRight: 4, marginTop: 2, marginBottom: 2}} onClick={() => {
+            updateCurrId(entity.id)
+            showExecuteTaskDialog();
+        }}>执行</Button>);
+
+        quickButtons.push(<Button type={"primary"} size={"small"}
+                                  style={{marginRight: 4, marginTop: 2, marginBottom: 2}} onClick={() => {
+            toEditTaskPage(entity.id)
+        }}>编辑</Button>);
+
+        quickButtons.push(<Button type={"primary"} size={"small"}
+                                  style={{marginRight: 4, marginTop: 2, marginBottom: 2}} onClick={() => {
+            gotoTaskLogList(entity.id)
+        }}>日志</Button>);
+
+        quickButtons.push(<Button type={"primary"} size={"small"}
+                                  style={{marginRight: 4, marginTop: 2, marginBottom: 2}}>
+            <Link to={`/schedulers/task/detail?id=${entity.id}`}>详情</Link>
+        </Button>);
         return (
             <>
                 {quickButtons}
-                <Button type={"primary"} size={"small"} style={{marginRight: 10}} onClick={() => {
-                    updateCurrId(entity.id)
-                    showExecuteTaskDialog();
-                }}>跑一次</Button>
-                <Dropdown menu={{items}} trigger={["click"]}>
-                    <a onClick={(e) => {
-                        e.preventDefault();
-                        updateItem(entity);
-                        updateCurrId(entity.id)
-                    }}>
-                        <Space>
-                            <Button type={"primary"} size={"small"}>更多</Button>
-                            <CaretDownOutlined/>
-                        </Space>
-                    </a>
-                </Dropdown>
             </>
         );
     }
@@ -291,7 +268,7 @@ const Index: React.FC = () => {
         },
         {
             title: "操作",
-            tooltip: "【跑一次】和【执行一次】表示只运行一次而不启动任务",
+            tooltip: "执行：只执行一次任务，但不启动任务；",
             width: "22%",
             hideInSearch: true,
             render: renderOperationOptions,
@@ -313,6 +290,7 @@ const Index: React.FC = () => {
                     actionRef={actionRef}
                     formRef={tableFormRef}
                     search={{
+                        defaultCollapsed: false,
                         labelWidth: 120,
                         optionRender: ({searchText, resetText}, {form}) => [
                             <Button

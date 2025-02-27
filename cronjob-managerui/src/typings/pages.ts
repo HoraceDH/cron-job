@@ -29,6 +29,10 @@ export enum Pages {
      */
     PAGE_TASK_DETAILS = "/schedulers/task/detail",
     /**
+     * 任务日志列表页
+     */
+    PAGE_TASKLOG_INDEX = "/schedulers/tasklog/index",
+    /**
      * 任务日志详情页
      */
     PAGE_TASKLOG_DETAILS = "/schedulers/tasklog/detail",

@@ -13,6 +13,7 @@ import AppService from "@/services/AppService";
 import TaskService from "@/services/TaskService";
 import {ProFormInstance} from "@ant-design/pro-form/lib";
 import dayjs from "dayjs";
+import ParamsUtils from "@/utils/ParamsUtils";
 
 
 const Index: React.FC = () => {
@@ -41,8 +42,17 @@ const Index: React.FC = () => {
     }
 
     useEffect(() => {
-        fetchTaskItems("", "");
-        fetchAppItems("");
+        fetchAppItems("").then(() => {
+            fetchTaskItems("", "").then(() => {
+                let params = ParamsUtils.getQueryParams();
+                if (params.taskId !== undefined && params.state !== undefined) {
+                    tableFormRef.current?.setFieldValue("appName", params.appName);
+                    tableFormRef.current?.setFieldValue("taskId", params.taskId);
+                    tableFormRef.current?.setFieldValue("state", params.state);
+                    tableFormRef.current?.submit();
+                }
+            });
+        });
     }, []);
 
     // 操作按钮
@@ -61,21 +71,6 @@ const Index: React.FC = () => {
      * @param entity 当前行数据实体
      */
     function renderOperationOptions(dom: React.ReactNode, entity: TaskLogBeans.TaskLogItem) {
-        // let items: ItemType[] = [];
-        // items.push(...baseOperateItems);
-        // return (
-        //     <Dropdown menu={{items}} trigger={["click"]}>
-        //         <a onClick={(e) => {
-        //             e.preventDefault();
-        //             updateItem(entity);
-        //         }}>
-        //             <Space>
-        //                 操作
-        //                 <DownOutlined/>
-        //             </Space>
-        //         </a>
-        //     </Dropdown>
-        // );
         return (
             <Button size="small" type={"primary"}>
                 <Link to={`${Pages.PAGE_TASKLOG_DETAILS}?id=${entity.id}`}>查看详情</Link>
@@ -283,7 +278,7 @@ const Index: React.FC = () => {
                     {label: "最近半小时", value: [dayjs().add(-30, 'minute'), dayjs().add(10, 'minute')]},
                     {label: "最近1小时", value: [dayjs().add(-1, 'hour'), dayjs().add(10, 'minute')]},
                     {label: "最近2小时", value: [dayjs().add(-2, 'hour'), dayjs().add(10, 'minute')]},
-                    {label: "最近3小时", value: [dayjs().add(-3, 'hour'), dayjs()]},
+                    {label: "最近3小时", value: [dayjs().add(-170, 'minute'), dayjs().add(10, 'minute')]},
                 ]
             },
             colSize: 2,
@@ -306,7 +301,7 @@ const Index: React.FC = () => {
                 actionRef={actionRef}
                 search={{
                     labelWidth: 'auto',
-                    defaultCollapsed: true,
+                    defaultCollapsed: false,
                     optionRender: ({searchText, resetText}, {form}) => [
                         <Button
                             key="reset"
