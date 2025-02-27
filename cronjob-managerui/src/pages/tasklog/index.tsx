@@ -104,8 +104,7 @@ const Index: React.FC = () => {
                 onChange: async (tenantId) => {
                     // @ts-ignore
                     fetchAppItems(tenantId);
-                    const appName = tableFormRef.current?.getFieldValue("appName");
-                    fetchTaskItems(tenantId, appName)
+                    fetchTaskItems(tenantId, "")
                 }
             },
             request: async () => {

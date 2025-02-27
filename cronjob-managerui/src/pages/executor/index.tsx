@@ -143,7 +143,7 @@ const Index: React.FC = () => {
                 formRef={tableFormRef}
                 search={{
                     labelWidth: 120,
-                    defaultCollapsed: true,
+                    defaultCollapsed: false,
                     optionRender: ({searchText, resetText}, {form}) => [
                         <Button
                             key="reset"

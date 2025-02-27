@@ -132,6 +132,7 @@ const Index: React.FC = () => {
                 headerTitle="查询表格"
                 actionRef={actionRef}
                 search={{
+                    defaultCollapsed: false,
                     labelWidth: 120,
                 }}
                 pagination={{pageSize: 15}}
