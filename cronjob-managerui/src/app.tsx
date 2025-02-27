@@ -110,6 +110,7 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
     return {
         menuDataRender: () => initialState?.searchMenus,
         // actionsRender: () => [<Question key="doc"/>, <SelectLang key="SelectLang"/>],
+        actionsRender: () => [<Question key="doc"/>],
         avatarProps: {
             src: initialState?.currentUser?.avatar,
             title: <AvatarName/>,
