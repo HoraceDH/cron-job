@@ -204,7 +204,7 @@ const Welcome: React.FC = () => {
 
                     <span style={{marginLeft: 40}}>任务：</span>
                     <Select defaultValue={""} options={taskSelectList} showSearch={true}
-                            placeholder={"请选择任务"} style={{width: '250px'}} onChange={(taskId) => {
+                            placeholder={"请选择任务"} style={{width: '400px'}} onChange={(taskId) => {
                         updateCurrentTaskId(taskId);
                         const startDate = dayjs().add(-2, 'hour');
                         const endDate = dayjs();

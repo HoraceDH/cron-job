@@ -8,6 +8,7 @@ function getNavTheme(): "light" | "realDark" {
         lightTheme = true;
     }
     return lightTheme ? "light" : "realDark";
+    // return "light";
 }
 
 /**
