@@ -11,6 +11,7 @@ import cn.horace.cronjob.scheduler.entities.StatisticsEntityExample;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 import cn.horace.cronjob.scheduler.mappers.StatisticsEntityMapper;
 import cn.horace.cronjob.scheduler.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
@@ -73,6 +74,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public Result<List<LineDataItem>> getLineData(GetLineDataParams params) {
+        if (StringUtils.isNotBlank(params.getTaskId())) {
+            return this.taskStatisticsService.getLineData(params);
+        }
+
         try {
             Date startDate = DateUtils.parseDate(params.getStartDate(), "yyyy-MM-dd HH:mm:ss");
             Date endDate = DateUtils.parseDate(params.getEndDate(), "yyyy-MM-dd HH:mm:ss");

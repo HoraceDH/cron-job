@@ -1,5 +1,8 @@
 package cn.horace.cronjob.scheduler.service;
 
+import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.scheduler.bean.params.GetLineDataParams;
+import cn.horace.cronjob.scheduler.bean.result.LineDataItem;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 
 import java.util.List;
@@ -17,4 +20,12 @@ public interface TaskStatisticsService {
      * @param dateGroupTaskLogs 按照日期分组的任务日志
      */
     void startStatistics(String dateScale, List<TaskLogEntity> dateGroupTaskLogs);
+
+    /**
+     * 获取概要统计数据
+     *
+     * @param params 请求参数
+     * @return
+     */
+    Result<List<LineDataItem>> getLineData(GetLineDataParams params);
 }

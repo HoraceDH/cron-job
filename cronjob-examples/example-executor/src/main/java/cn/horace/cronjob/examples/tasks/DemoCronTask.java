@@ -33,7 +33,7 @@ public class DemoCronTask implements TaskHandler {
     public HandlerResult handle(TaskParams params) {
         logger.info("task handler..., params:{}", params);
         Random random = new Random();
-        int delay = random.nextInt(50);
+        int delay = random.nextInt(10);
         LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(delay));
         return HandlerResult.success();
     }

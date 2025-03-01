@@ -39,13 +39,15 @@ class StatisticsService {
     /**
      * 获取曲线图数据
      *
+     * @param taskId 任务ID
      * @param startDate 开始时间
      * @param endDate 结束时间
      */
-    public async getLineData(startDate: string, endDate: string): Promise<StatisticsBeans.LineData[] | undefined> {
+    public async getLineData(taskId: string | undefined, startDate: string, endDate: string): Promise<StatisticsBeans.LineData[] | undefined> {
         const lineDataResult = await request<StatisticsBeans.LineDataResult>(Apis.URI_STATISTICS_GET_LINE_DATA, {
             method: "POST",
             data: {
+                taskId: taskId,
                 startDate: startDate,
                 endDate: endDate,
             }

@@ -1,18 +1,24 @@
 package cn.horace.cronjob.scheduler.service.impl;
 
+import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.commons.constants.TaskLogState;
-import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
-import cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity;
+import cn.horace.cronjob.scheduler.bean.params.GetLineDataParams;
+import cn.horace.cronjob.scheduler.bean.result.LineDataItem;
+import cn.horace.cronjob.scheduler.entities.*;
 import cn.horace.cronjob.scheduler.mappers.TaskStatisticsEntityMapper;
 import cn.horace.cronjob.scheduler.service.TaskStatisticsService;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -156,5 +162,52 @@ public class TaskStatisticsServiceImpl implements TaskStatisticsService {
         // 批量插入统计结果
         this.mapper.batchInsert(entities);
         logger.info("end calc task statistics, dateScale:{}, entitySize:{}", dateScale, entities.size());
+    }
+
+    /**
+     * 获取概要统计数据
+     *
+     * @param params 请求参数
+     * @return
+     */
+    @Override
+    public Result<List<LineDataItem>> getLineData(GetLineDataParams params) {
+        try {
+            Date startDate = DateUtils.parseDate(params.getStartDate(), "yyyy-MM-dd HH:mm:ss");
+            Date endDate = DateUtils.parseDate(params.getEndDate(), "yyyy-MM-dd HH:mm:ss");
+            long diff = endDate.getTime() - startDate.getTime();
+            long millis = TimeUnit.DAYS.toMillis(7);
+            if (diff > millis) {
+                return Result.msgCodes(MsgCodes.ERROR_QUERY_RANGE);
+            }
+
+            Result<List<LineDataItem>> result = Result.success();
+            TaskStatisticsEntityExample example = new TaskStatisticsEntityExample();
+            example.or()
+                    .andDateScaleGreaterThanOrEqualTo(startDate)
+                    .andDateScaleLessThanOrEqualTo(endDate)
+                    .andTaskIdEqualTo(Long.valueOf(params.getTaskId()));
+            List<TaskStatisticsEntity> entities = this.mapper.selectByExample(example);
+            List<LineDataItem> items = new ArrayList<>();
+            for (TaskStatisticsEntity entity : entities) {
+                String dateScale = DateFormatUtils.format(entity.getDateScale(), "yyyy-MM-dd HH:mm:ss");
+                items.add(new LineDataItem("调度成功", dateScale, entity.getSchedulerSuccess()));
+                items.add(new LineDataItem("调度失败", dateScale, entity.getSchedulerFailed()));
+                items.add(new LineDataItem("平均延迟(ms)", dateScale, entity.getDelayAvg()));
+                items.add(new LineDataItem("最大延迟(ms)", dateScale, entity.getDelayMax()));
+                items.add(new LineDataItem("最小延迟(ms)", dateScale, entity.getDelayMin()));
+                items.add(new LineDataItem("平均耗时(ms)", dateScale, entity.getElapsedAvg()));
+                items.add(new LineDataItem("最大耗时(ms)", dateScale, entity.getElapsedMax()));
+                items.add(new LineDataItem("最小耗时(ms)", dateScale, entity.getElapsedMin()));
+//                items.add(new LineDataItem("平均提前(ms)", dateScale, entity.getBeforeAvg()));
+//                items.add(new LineDataItem("最大提前(ms)", dateScale, entity.getBeforeMax()));
+//                items.add(new LineDataItem("最小提前(ms)", dateScale, entity.getBeforeMin()));
+            }
+            result.setData(items);
+            return result;
+        } catch (Exception e) {
+            logger.error("get line data error, params:{}, msg:{}", params, e.getMessage(), e);
+            return Result.msgCodes(MsgCodes.ERROR_SYSTEM);
+        }
     }
 }

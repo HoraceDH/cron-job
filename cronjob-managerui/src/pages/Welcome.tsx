@@ -1,6 +1,6 @@
 import {PageContainer} from '@ant-design/pro-components';
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, DatePicker, Divider, Row, Tooltip} from "antd";
+import {Button, Card, Col, DatePicker, Divider, Row, Select, Tooltip} from "antd";
 import {InfoCircleOutlined, ReloadOutlined} from "@ant-design/icons";
 import "./Welcome.less"
 import {StatisticsBeans} from "@/typings/statisticss";
@@ -10,14 +10,18 @@ import defaultSettings from '../../config/defaultSettings';
 import dayjs, {Dayjs} from "dayjs";
 import {Pages} from "@/typings/pages";
 import {Link} from "@@/exports";
+import TaskService from "@/services/TaskService";
+import {Commons} from "@/typings/commons";
 
 const {RangePicker} = DatePicker;
 
 const Welcome: React.FC = () => {
     const [summaryData, updateSummaryData] = useState<StatisticsBeans.SummaryData>();
     const [lineData, updateLineData] = useState<StatisticsBeans.LineData[]>();
+    const [taskSelectList, updateTaskSelectList] = useState<Commons.SearchItem[]>();
     const [loading, updateLoading] = useState<boolean>(true)
     const [rangePickerValue, updateRangePickerValue] = useState<[Dayjs | null | undefined, Dayjs | null | undefined]>([dayjs().add(-2, 'hour'), dayjs()]);
+    const [currentTaskId, updateCurrentTaskId] = useState<string>();
 
     /**
      * 加载概要数据
@@ -25,18 +29,20 @@ const Welcome: React.FC = () => {
     async function fetchData() {
         const data = await StatisticsService.getInstance().getSummaryData();
         updateSummaryData(data);
-
-        fetchLineData("", "");
+        // 获取任务列表
+        const taskSelectList = await TaskService.getInstance().getSearchList("", "");
+        updateTaskSelectList(taskSelectList);
+        fetchLineData("", "", "");
     }
 
-    async function fetchLineData(startDate: string, endDate: string) {
+    async function fetchLineData(taskId: string | undefined, startDate: string, endDate: string) {
         updateLoading(true);
         if (startDate === "" || endDate === "") {
             startDate = dayjs().add(-2, 'hour').format("YYYY-MM-DD HH:mm:ss");
             endDate = dayjs().format("YYYY-MM-DD HH:mm:ss");
         }
 
-        const lineDataSet = await StatisticsService.getInstance().getLineData(startDate, endDate);
+        const lineDataSet = await StatisticsService.getInstance().getLineData(taskId, startDate, endDate);
         updateLineData(lineDataSet)
         updateLoading(false);
     }
@@ -61,7 +67,10 @@ const Welcome: React.FC = () => {
                 fontSize: 10,
             },
         },
-        tooltip: {channel: 'y', valueFormatter: '.2f'},
+        tooltip: {
+            channel: 'y',
+            valueFormatter: '.2f'
+        },
     };
 
     // @ts-ignore
@@ -192,6 +201,16 @@ const Welcome: React.FC = () => {
                     }>
                         <InfoCircleOutlined/>
                     </Tooltip>
+
+                    <span style={{marginLeft: 40}}>任务：</span>
+                    <Select defaultValue={""} options={taskSelectList} showSearch={true}
+                            placeholder={"请选择任务"} style={{width: '250px'}} onChange={(taskId) => {
+                        updateCurrentTaskId(taskId);
+                        const startDate = dayjs().add(-2, 'hour');
+                        const endDate = dayjs();
+                        updateRangePickerValue([startDate, endDate]);
+                        fetchLineData(taskId, startDate.format("YYYY-MM-DD HH:mm:ss"), endDate.format("YYYY-MM-DD HH:mm:ss"));
+                    }}/>
                 </>
             } style={{marginTop: 20}} extra={
                 <>
@@ -200,7 +219,7 @@ const Welcome: React.FC = () => {
                             const startDate = dayjs().add(-2, 'hour');
                             const endDate = dayjs();
                             updateRangePickerValue([startDate, endDate]);
-                            fetchLineData(startDate.format("YYYY-MM-DD HH:mm:ss"), endDate.format("YYYY-MM-DD HH:mm:ss"));
+                            fetchLineData(currentTaskId, startDate.format("YYYY-MM-DD HH:mm:ss"), endDate.format("YYYY-MM-DD HH:mm:ss"));
                         }} style={{marginRight: 10}} type={"link"} shape="circle" icon={<ReloadOutlined/>}/>
                     </Tooltip>
                     <RangePicker showTime
@@ -222,7 +241,7 @@ const Welcome: React.FC = () => {
                                      const startDate = data[0].format('YYYY-MM-DD HH:mm:ss');
                                      // @ts-ignore
                                      const endDate = data[1].format('YYYY-MM-DD HH:mm:ss');
-                                     fetchLineData(startDate, endDate);
+                                     fetchLineData(currentTaskId, startDate, endDate);
                                  }}
                     />
                 </>

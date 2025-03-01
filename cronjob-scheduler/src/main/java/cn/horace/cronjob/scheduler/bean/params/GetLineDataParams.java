@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class GetLineDataParams {
+    private String taskId;
     private String startDate;
     private String endDate;
 }
