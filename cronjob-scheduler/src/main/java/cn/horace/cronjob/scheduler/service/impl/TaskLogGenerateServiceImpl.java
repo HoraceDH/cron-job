@@ -2,6 +2,7 @@ package cn.horace.cronjob.scheduler.service.impl;
 
 import cn.horace.cronjob.commons.constants.Constants;
 import cn.horace.cronjob.commons.constants.ExpiredStrategy;
+import cn.horace.cronjob.commons.constants.TaskLogState;
 import cn.horace.cronjob.commons.cron.CronExpression;
 import cn.horace.cronjob.commons.thread.DefaultThreadFactory;
 import cn.horace.cronjob.commons.utils.executor.GracefulThreadPoolExecutor;
@@ -113,7 +114,7 @@ public class TaskLogGenerateServiceImpl implements TaskLogGenerateService {
      * @param task 任务
      */
     private void generate(TaskEntity task) {
-        TaskLogEntity lastTaskLog = this.taskLogService.getLastTaskLog(task.getId(), false, null);
+        TaskLogEntity lastTaskLog = this.taskLogService.getLastTaskLog(task.getId(), false, null, TaskLogState.EXECUTION_CANCEL);
         long lastExecutionTime;
 
         // 1. lastTaskLog 为空，则表示没有历史日志

@@ -85,12 +85,13 @@ public interface TaskLogService {
     /**
      * 获取最新一条记录
      *
-     * @param taskId  任务ID
-     * @param reverse true表示按执行时间正序 asc，false表示按执行时间倒序 desc
-     * @param state   任务日志状态，如果为null则不指定状态
+     * @param taskId   任务ID
+     * @param reverse  true表示按执行时间正序 asc，false表示按执行时间倒序 desc
+     * @param state    任务日志状态，如果为null则不指定状态
+     * @param notState 排除的任务日志状态，如果为null则不指定状态
      * @return
      */
-    TaskLogEntity getLastTaskLog(long taskId, boolean reverse, TaskLogState state);
+    TaskLogEntity getLastTaskLog(long taskId, boolean reverse, TaskLogState state, TaskLogState notState);
 
     /**
      * 取消执行

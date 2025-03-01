@@ -228,6 +228,27 @@ create table `t_statistics` (
     `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间' on update current_timestamp(3)
 )  comment '统计数据表';
 
+# 任务级别统计数据表
+create table `t_task_statistics` (
+    `date_scale` datetime(3) comment '统计时间，分钟级',
+    `task_id` bigint not null comment '任务ID',
+    `task_name` varchar(100) not null comment '任务名',
+    `scheduler_success` int default 0 comment '调度成功',
+    `scheduler_failed` int default 0 comment '调度失败',
+    `delay_avg` double(10, 2) default 0 comment '平均延迟',
+    `delay_max` double(10, 2) default 0 comment '最大延迟',
+    `delay_min` double(10, 2) default 0 comment '最小延迟',
+    `elapsed_avg` double(10, 2) default 0 comment '平均耗时',
+    `elapsed_max` double(10, 2) default 0 comment '最大耗时',
+    `elapsed_min` double(10, 2) default 0 comment '最小耗时',
+    `before_avg` double(10, 2) default 0 comment '平均提前调度时间，毫秒',
+    `before_max` double(10, 2) default 0 comment '最大提前调度时间，毫秒',
+    `before_min` double(10, 2) default 0 comment '最小提前调度时间，毫秒',
+    `create_time` datetime(3) not null default current_timestamp(3) comment '创建时间',
+    `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间' on update current_timestamp(3),
+    primary key (`date_scale`, `task_id`)
+)  comment '任务统计数据表';
+
 # 初始化锁信息
 insert into `t_locks` (lock_id, lock_owner, lock_state, expire_time, lock_desc) values ('LOCK_GENERATE_TASK', 'default1', 2, now(), '生成调度任务的分布式锁');
 insert into `t_locks` (lock_id, lock_owner, lock_state, expire_time, lock_desc) values ('LOCK_GENERATE_STATISTICS', 'default2', 2, now(), '生成统计数据的分布式锁');

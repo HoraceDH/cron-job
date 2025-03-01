@@ -49,6 +49,8 @@ public class StatisticsServiceImpl implements StatisticsService {
     private TaskLogService taskLogService;
     @Resource
     private LocksService locksService;
+    @Resource
+    private TaskStatisticsService taskStatisticsService;
 
     /**
      * 获取概要统计数据
@@ -150,6 +152,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 try {
                     String dateScale = entry.getKey();
                     List<TaskLogEntity> groupTaskLogs = entry.getValue();
+                    this.taskStatisticsService.startStatistics(dateScale, groupTaskLogs);
 
                     // 调度成功数
                     long schedulerSuccess = groupTaskLogs.stream().filter(taskLog -> taskLog.getState() == TaskLogState.EXECUTION_SUCCESS.getValue()).count();
@@ -249,7 +252,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                     entity.setModifyTime(new Date());
                     statisticsEntities.add(entity);
                 } catch (Exception e) {
-                    logger.error("set data error, msg:{}", e.getMessage(), e);
+                    logger.error("calc statistics error, msg:{}", e.getMessage(), e);
                 }
                 return statisticsEntities.stream();
             }).collect(Collectors.toList());

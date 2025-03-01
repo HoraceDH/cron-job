@@ -249,14 +249,17 @@ public class TaskServiceImpl implements TaskService {
         if (tenantIds == null || tenantIds.isEmpty()) {
             return Result.msgCodes(MsgCodes.ERROR_PERMISSION);
         }
-        TaskEntity cronTask = this.getTaskDetail(id);
-        if (cronTask == null) {
+        TaskEntity taskEntity = this.getTaskDetail(id);
+        if (taskEntity == null) {
             return Result.msgCodes(MsgCodes.ERROR_NOT_FOUND_RECORD);
         }
         // 操作的不是自己租户范围内的任务
-        if (!tenantIds.contains(cronTask.getTenantId())) {
+        if (!tenantIds.contains(taskEntity.getTenantId())) {
             return Result.msgCodes(MsgCodes.ERROR_PERMISSION);
         }
+
+        // 如果是启动任务，则将应用状态也设置为启动状态
+        this.appService.updateState(taskEntity.getAppId(), AppState.RUN);
         return updateRunState(id, runState);
     }
 

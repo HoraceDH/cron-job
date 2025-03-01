@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.horace.cronjob.scheduler.mappers.TaskStatisticsEntityMapper">
+  <resultMap id="BaseResultMap" type="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity">
+    <id column="date_scale" jdbcType="TIMESTAMP" property="dateScale" />
+    <id column="task_id" jdbcType="BIGINT" property="taskId" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="scheduler_success" jdbcType="INTEGER" property="schedulerSuccess" />
+    <result column="scheduler_failed" jdbcType="INTEGER" property="schedulerFailed" />
+    <result column="delay_avg" jdbcType="DOUBLE" property="delayAvg" />
+    <result column="delay_max" jdbcType="DOUBLE" property="delayMax" />
+    <result column="delay_min" jdbcType="DOUBLE" property="delayMin" />
+    <result column="elapsed_avg" jdbcType="DOUBLE" property="elapsedAvg" />
+    <result column="elapsed_max" jdbcType="DOUBLE" property="elapsedMax" />
+    <result column="elapsed_min" jdbcType="DOUBLE" property="elapsedMin" />
+    <result column="before_avg" jdbcType="DOUBLE" property="beforeAvg" />
+    <result column="before_max" jdbcType="DOUBLE" property="beforeMax" />
+    <result column="before_min" jdbcType="DOUBLE" property="beforeMin" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    date_scale, task_id, task_name, scheduler_success, scheduler_failed, delay_avg, delay_max, 
+    delay_min, elapsed_avg, elapsed_max, elapsed_min, before_avg, before_max, before_min, 
+    create_time, modify_time
+  </sql>
+  <select id="selectByExample" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_task_statistics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntityKey" resultMap="BaseResultMap">
+    select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_task_statistics
+    where date_scale = #{dateScale,jdbcType=TIMESTAMP}
+      and task_id = #{taskId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntityKey">
+    delete from t_task_statistics
+    where date_scale = #{dateScale,jdbcType=TIMESTAMP}
+      and task_id = #{taskId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntityExample">
+    delete from t_task_statistics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity">
+    insert into t_task_statistics (date_scale, task_id, task_name, 
+      scheduler_success, scheduler_failed, delay_avg, 
+      delay_max, delay_min, elapsed_avg, 
+      elapsed_max, elapsed_min, before_avg, 
+      before_max, before_min, create_time, 
+      modify_time)
+    values (#{dateScale,jdbcType=TIMESTAMP}, #{taskId,jdbcType=BIGINT}, #{taskName,jdbcType=VARCHAR}, 
+      #{schedulerSuccess,jdbcType=INTEGER}, #{schedulerFailed,jdbcType=INTEGER}, #{delayAvg,jdbcType=DOUBLE}, 
+      #{delayMax,jdbcType=DOUBLE}, #{delayMin,jdbcType=DOUBLE}, #{elapsedAvg,jdbcType=DOUBLE}, 
+      #{elapsedMax,jdbcType=DOUBLE}, #{elapsedMin,jdbcType=DOUBLE}, #{beforeAvg,jdbcType=DOUBLE}, 
+      #{beforeMax,jdbcType=DOUBLE}, #{beforeMin,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity">
+    insert into t_task_statistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dateScale != null">
+        date_scale,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="schedulerSuccess != null">
+        scheduler_success,
+      </if>
+      <if test="schedulerFailed != null">
+        scheduler_failed,
+      </if>
+      <if test="delayAvg != null">
+        delay_avg,
+      </if>
+      <if test="delayMax != null">
+        delay_max,
+      </if>
+      <if test="delayMin != null">
+        delay_min,
+      </if>
+      <if test="elapsedAvg != null">
+        elapsed_avg,
+      </if>
+      <if test="elapsedMax != null">
+        elapsed_max,
+      </if>
+      <if test="elapsedMin != null">
+        elapsed_min,
+      </if>
+      <if test="beforeAvg != null">
+        before_avg,
+      </if>
+      <if test="beforeMax != null">
+        before_max,
+      </if>
+      <if test="beforeMin != null">
+        before_min,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dateScale != null">
+        #{dateScale,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulerSuccess != null">
+        #{schedulerSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="schedulerFailed != null">
+        #{schedulerFailed,jdbcType=INTEGER},
+      </if>
+      <if test="delayAvg != null">
+        #{delayAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="delayMax != null">
+        #{delayMax,jdbcType=DOUBLE},
+      </if>
+      <if test="delayMin != null">
+        #{delayMin,jdbcType=DOUBLE},
+      </if>
+      <if test="elapsedAvg != null">
+        #{elapsedAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="elapsedMax != null">
+        #{elapsedMax,jdbcType=DOUBLE},
+      </if>
+      <if test="elapsedMin != null">
+        #{elapsedMin,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeAvg != null">
+        #{beforeAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeMax != null">
+        #{beforeMax,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeMin != null">
+        #{beforeMin,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntityExample" resultType="java.lang.Long">
+    select count(*) from t_task_statistics
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_task_statistics
+    <set>
+      <if test="row.dateScale != null">
+        date_scale = #{row.dateScale,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.taskId != null">
+        task_id = #{row.taskId,jdbcType=BIGINT},
+      </if>
+      <if test="row.taskName != null">
+        task_name = #{row.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.schedulerSuccess != null">
+        scheduler_success = #{row.schedulerSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="row.schedulerFailed != null">
+        scheduler_failed = #{row.schedulerFailed,jdbcType=INTEGER},
+      </if>
+      <if test="row.delayAvg != null">
+        delay_avg = #{row.delayAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="row.delayMax != null">
+        delay_max = #{row.delayMax,jdbcType=DOUBLE},
+      </if>
+      <if test="row.delayMin != null">
+        delay_min = #{row.delayMin,jdbcType=DOUBLE},
+      </if>
+      <if test="row.elapsedAvg != null">
+        elapsed_avg = #{row.elapsedAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="row.elapsedMax != null">
+        elapsed_max = #{row.elapsedMax,jdbcType=DOUBLE},
+      </if>
+      <if test="row.elapsedMin != null">
+        elapsed_min = #{row.elapsedMin,jdbcType=DOUBLE},
+      </if>
+      <if test="row.beforeAvg != null">
+        before_avg = #{row.beforeAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="row.beforeMax != null">
+        before_max = #{row.beforeMax,jdbcType=DOUBLE},
+      </if>
+      <if test="row.beforeMin != null">
+        before_min = #{row.beforeMin,jdbcType=DOUBLE},
+      </if>
+      <if test="row.createTime != null">
+        create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.modifyTime != null">
+        modify_time = #{row.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_task_statistics
+    set date_scale = #{row.dateScale,jdbcType=TIMESTAMP},
+      task_id = #{row.taskId,jdbcType=BIGINT},
+      task_name = #{row.taskName,jdbcType=VARCHAR},
+      scheduler_success = #{row.schedulerSuccess,jdbcType=INTEGER},
+      scheduler_failed = #{row.schedulerFailed,jdbcType=INTEGER},
+      delay_avg = #{row.delayAvg,jdbcType=DOUBLE},
+      delay_max = #{row.delayMax,jdbcType=DOUBLE},
+      delay_min = #{row.delayMin,jdbcType=DOUBLE},
+      elapsed_avg = #{row.elapsedAvg,jdbcType=DOUBLE},
+      elapsed_max = #{row.elapsedMax,jdbcType=DOUBLE},
+      elapsed_min = #{row.elapsedMin,jdbcType=DOUBLE},
+      before_avg = #{row.beforeAvg,jdbcType=DOUBLE},
+      before_max = #{row.beforeMax,jdbcType=DOUBLE},
+      before_min = #{row.beforeMin,jdbcType=DOUBLE},
+      create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      modify_time = #{row.modifyTime,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity">
+    update t_task_statistics
+    <set>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulerSuccess != null">
+        scheduler_success = #{schedulerSuccess,jdbcType=INTEGER},
+      </if>
+      <if test="schedulerFailed != null">
+        scheduler_failed = #{schedulerFailed,jdbcType=INTEGER},
+      </if>
+      <if test="delayAvg != null">
+        delay_avg = #{delayAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="delayMax != null">
+        delay_max = #{delayMax,jdbcType=DOUBLE},
+      </if>
+      <if test="delayMin != null">
+        delay_min = #{delayMin,jdbcType=DOUBLE},
+      </if>
+      <if test="elapsedAvg != null">
+        elapsed_avg = #{elapsedAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="elapsedMax != null">
+        elapsed_max = #{elapsedMax,jdbcType=DOUBLE},
+      </if>
+      <if test="elapsedMin != null">
+        elapsed_min = #{elapsedMin,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeAvg != null">
+        before_avg = #{beforeAvg,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeMax != null">
+        before_max = #{beforeMax,jdbcType=DOUBLE},
+      </if>
+      <if test="beforeMin != null">
+        before_min = #{beforeMin,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where date_scale = #{dateScale,jdbcType=TIMESTAMP}
+      and task_id = #{taskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity">
+    update t_task_statistics
+    set task_name = #{taskName,jdbcType=VARCHAR},
+      scheduler_success = #{schedulerSuccess,jdbcType=INTEGER},
+      scheduler_failed = #{schedulerFailed,jdbcType=INTEGER},
+      delay_avg = #{delayAvg,jdbcType=DOUBLE},
+      delay_max = #{delayMax,jdbcType=DOUBLE},
+      delay_min = #{delayMin,jdbcType=DOUBLE},
+      elapsed_avg = #{elapsedAvg,jdbcType=DOUBLE},
+      elapsed_max = #{elapsedMax,jdbcType=DOUBLE},
+      elapsed_min = #{elapsedMin,jdbcType=DOUBLE},
+      before_avg = #{beforeAvg,jdbcType=DOUBLE},
+      before_max = #{beforeMax,jdbcType=DOUBLE},
+      before_min = #{beforeMin,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where date_scale = #{dateScale,jdbcType=TIMESTAMP}
+      and task_id = #{taskId,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    insert into t_task_statistics
+    (date_scale, task_id, task_name, scheduler_success, scheduler_failed, delay_avg, 
+      delay_max, delay_min, elapsed_avg, elapsed_max, elapsed_min, before_avg, before_max, 
+      before_min, create_time, modify_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.dateScale,jdbcType=TIMESTAMP}, #{item.taskId,jdbcType=BIGINT}, #{item.taskName,jdbcType=VARCHAR}, 
+        #{item.schedulerSuccess,jdbcType=INTEGER}, #{item.schedulerFailed,jdbcType=INTEGER}, 
+        #{item.delayAvg,jdbcType=DOUBLE}, #{item.delayMax,jdbcType=DOUBLE}, #{item.delayMin,jdbcType=DOUBLE}, 
+        #{item.elapsedAvg,jdbcType=DOUBLE}, #{item.elapsedMax,jdbcType=DOUBLE}, #{item.elapsedMin,jdbcType=DOUBLE}, 
+        #{item.beforeAvg,jdbcType=DOUBLE}, #{item.beforeMax,jdbcType=DOUBLE}, #{item.beforeMin,jdbcType=DOUBLE}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="batchInsertSelective" parameterType="map">
+    insert into t_task_statistics (
+    <foreach collection="selective" item="column" separator=",">
+      ${column.escapedColumnName}
+    </foreach>
+    )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (
+      <foreach collection="selective" item="column" separator=",">
+        <if test="'date_scale'.toString() == column.value">
+          #{item.dateScale,jdbcType=TIMESTAMP}
+        </if>
+        <if test="'task_id'.toString() == column.value">
+          #{item.taskId,jdbcType=BIGINT}
+        </if>
+        <if test="'task_name'.toString() == column.value">
+          #{item.taskName,jdbcType=VARCHAR}
+        </if>
+        <if test="'scheduler_success'.toString() == column.value">
+          #{item.schedulerSuccess,jdbcType=INTEGER}
+        </if>
+        <if test="'scheduler_failed'.toString() == column.value">
+          #{item.schedulerFailed,jdbcType=INTEGER}
+        </if>
+        <if test="'delay_avg'.toString() == column.value">
+          #{item.delayAvg,jdbcType=DOUBLE}
+        </if>
+        <if test="'delay_max'.toString() == column.value">
+          #{item.delayMax,jdbcType=DOUBLE}
+        </if>
+        <if test="'delay_min'.toString() == column.value">
+          #{item.delayMin,jdbcType=DOUBLE}
+        </if>
+        <if test="'elapsed_avg'.toString() == column.value">
+          #{item.elapsedAvg,jdbcType=DOUBLE}
+        </if>
+        <if test="'elapsed_max'.toString() == column.value">
+          #{item.elapsedMax,jdbcType=DOUBLE}
+        </if>
+        <if test="'elapsed_min'.toString() == column.value">
+          #{item.elapsedMin,jdbcType=DOUBLE}
+        </if>
+        <if test="'before_avg'.toString() == column.value">
+          #{item.beforeAvg,jdbcType=DOUBLE}
+        </if>
+        <if test="'before_max'.toString() == column.value">
+          #{item.beforeMax,jdbcType=DOUBLE}
+        </if>
+        <if test="'before_min'.toString() == column.value">
+          #{item.beforeMin,jdbcType=DOUBLE}
+        </if>
+        <if test="'create_time'.toString() == column.value">
+          #{item.createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="'modify_time'.toString() == column.value">
+          #{item.modifyTime,jdbcType=TIMESTAMP}
+        </if>
+      </foreach>
+      )
+    </foreach>
+  </insert>
+</mapper>

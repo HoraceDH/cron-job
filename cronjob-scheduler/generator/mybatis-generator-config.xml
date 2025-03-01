@@ -27,8 +27,8 @@
         <!-- 数据库配置 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/cron-job?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
-                        userId="root"
-                        password="Horace">
+                        userId="horace"
+                        password="SGJIWkjfdsof923847">
             <property name="useInformationSchema" value="true"/>
             <!-- 解决Entity、Mapper等重复生成的问题 -->
             <property name="nullCatalogMeansCurrent" value="true"/>
@@ -80,7 +80,7 @@
             tableName: 数据库中的表名
             domainObjectName: 生成的实体类名
         -->
-        <table schema="cron-job" tableName="t_locks" domainObjectName="LocksEntity" enableCountByExample="true"
+        <table schema="cron-job" tableName="t_task_statistics" domainObjectName="TaskStatisticsEntity" enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
                selectByExampleQueryId="true" enableInsert="true" enableSelectByPrimaryKey="true" selectByPrimaryKeyQueryId="true">
             <property name="useActualColumnNames" value="false"/>
