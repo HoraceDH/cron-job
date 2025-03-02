@@ -5,7 +5,9 @@ import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.commons.constants.TaskLogState;
 import cn.horace.cronjob.scheduler.bean.params.GetLineDataParams;
 import cn.horace.cronjob.scheduler.bean.result.LineDataItem;
-import cn.horace.cronjob.scheduler.entities.*;
+import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
+import cn.horace.cronjob.scheduler.entities.TaskStatisticsEntity;
+import cn.horace.cronjob.scheduler.entities.TaskStatisticsEntityExample;
 import cn.horace.cronjob.scheduler.mappers.TaskStatisticsEntityMapper;
 import cn.horace.cronjob.scheduler.service.TaskStatisticsService;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -208,6 +211,24 @@ public class TaskStatisticsServiceImpl implements TaskStatisticsService {
         } catch (Exception e) {
             logger.error("get line data error, params:{}, msg:{}", params, e.getMessage(), e);
             return Result.msgCodes(MsgCodes.ERROR_SYSTEM);
+        }
+    }
+
+    /**
+     * 删除过期的统计数据
+     *
+     * @param maxRetainDays 最大保留天数
+     */
+    @Override
+    public void deleteExpiredStatistics(int maxRetainDays) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -maxRetainDays);
+        Date date = calendar.getTime();
+        TaskStatisticsEntityExample example = new TaskStatisticsEntityExample();
+        example.or().andDateScaleLessThan(date);
+        int count = this.mapper.deleteByExample(example);
+        if (count > 0) {
+            logger.info("delete expired task statistics log, date:{}, count:{}", DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss"), count);
         }
     }
 }

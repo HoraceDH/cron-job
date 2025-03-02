@@ -275,6 +275,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public void deleteExpiredStatistics(int maxRetainDays) {
+        // 删除任务级别的统计日志
+        this.taskStatisticsService.deleteExpiredStatistics(maxRetainDays);
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -maxRetainDays);
         Date date = calendar.getTime();

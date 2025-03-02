@@ -28,4 +28,11 @@ public interface TaskStatisticsService {
      * @return
      */
     Result<List<LineDataItem>> getLineData(GetLineDataParams params);
+
+    /**
+     * 删除过期的统计数据
+     *
+     * @param maxRetainDays 最大保留天数
+     */
+    void deleteExpiredStatistics(int maxRetainDays);
 }
