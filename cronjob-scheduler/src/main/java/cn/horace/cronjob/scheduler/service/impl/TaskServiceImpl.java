@@ -401,10 +401,14 @@ public class TaskServiceImpl implements TaskService {
         }
 
         // 设置可以更新的字段
+        String tag = Constants.DEFAULT_TAG;
+        if (params.getTag() != null && !params.getTag().isEmpty()) {
+            tag = String.join(",", params.getTag());
+        }
         task.setAppDesc(params.getAppDesc());
         task.setOwner(params.getOwner());
         task.setCron(params.getCron());
-        task.setTag(params.getTag());
+        task.setTag(tag);
         task.setRunState(params.getRunState());
         task.setTaskParams(params.getParams());
         task.setRouterStrategy(params.getRouterStrategy());

@@ -7,6 +7,7 @@ import cn.horace.cronjob.scheduler.bean.params.ExecutorRegisterParams;
 import cn.horace.cronjob.scheduler.bean.params.ExecutorUnregisterParams;
 import cn.horace.cronjob.scheduler.bean.params.GetExecutorListParams;
 import cn.horace.cronjob.scheduler.bean.result.ExecutorListResult;
+import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.entities.ExecutorEntity;
 
 import java.util.List;
@@ -104,4 +105,12 @@ public interface ExecutorService {
      * @return
      */
     Result<Void> unregister(ExecutorUnregisterParams params);
+
+    /**
+     * 获取执行器标签列表，提供给搜索框用
+     *
+     * @param appId 应用ID
+     * @return
+     */
+    Result<List<SearchItem>> getSearchList(long appId);
 }

@@ -33,6 +33,8 @@ const TaskDetail: React.FC = () => {
         });
     }, [0]);
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <PageContainer
             header={{title: "任务详情"}}
@@ -55,7 +57,13 @@ const TaskDetail: React.FC = () => {
                             data?.runState === 2 ? <Tag color={"red"}>停止</Tag> :
                                 <Tag color={"red"}>未知状态</Tag>
                     }</ProDescriptions.Item>
-                    <ProDescriptions.Item label="标签">{data?.tag}</ProDescriptions.Item>
+                    <ProDescriptions.Item
+                        tooltip={"随机策略下：任务会在选择的标签的执行器集合中随机选择一个执行；分片策略下：会在选择的标签的执行器集合中分片执行；如果在任务调度时，所选的标签下没有任何在线的执行器，则会寻找common标签下的执行器进行。"}
+                        label="标签">{
+                        data?.tag?.map((tag, index) => {
+                            return <Tag key={index} color={"blue"}>{tag}</Tag>
+                        })
+                    }</ProDescriptions.Item>
                     <ProDescriptions.Item label="负责人">{data?.owner}</ProDescriptions.Item>
                     <ProDescriptions.Item label="任务描述">{data?.remark}</ProDescriptions.Item>
                     <ProDescriptions.Item label="创建时间">{data?.createTime}</ProDescriptions.Item>

@@ -175,6 +175,7 @@ create table `t_task_log` (
     `owner` varchar(50) default '' comment '任务负责人',
     `task_id` bigint not null comment '任务ID',
     `executor_address` varchar(50) comment '执行器地址',
+    `executor_host_name` varchar(100) comment '主机名',
     `method` varchar(500) not null comment '任务方法，类全限定名',
     `exe_type` int not null default 0 comment '执行类型，0：常规任务调度，1：管理后台立即执行，2：过期执行',
     `elapsed_time` int comment '执行耗时',

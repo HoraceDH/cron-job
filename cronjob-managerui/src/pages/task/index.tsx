@@ -260,6 +260,11 @@ const Index: React.FC = () => {
             title: '标签',
             dataIndex: 'tag',
             width: "8%",
+            render: (data: any) => {
+                return data.map((tag: any, index: any) => (
+                    <Tag color={"blue"} key={index}>{tag}</Tag>
+                ));
+            }
         },
         {
             title: '执行方法',

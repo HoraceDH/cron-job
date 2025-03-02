@@ -61,7 +61,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      */
     @Override
     public long addTaskLog(TaskEntity task, long lastExecutionTime) {
-        TaskLogEntity taskLogEntity = this.convertToCronTaskLog(task);
+        TaskLogEntity taskLogEntity = this.convertToTaskLog(task);
         taskLogEntity.setState(TaskLogState.INITIALIZE.getValue());
         Date executionTime = this.cronExpression.getNextExecutionTime(task.getCron(), lastExecutionTime);
         // 用于计算下一次时间
@@ -81,7 +81,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      */
     @Override
     public long addNowExecuteTaskLog(TaskEntity task, long executionTime, TaskLogExeType exeType) {
-        TaskLogEntity taskLog = this.convertToCronTaskLog(task);
+        TaskLogEntity taskLog = this.convertToTaskLog(task);
         Date date = new Date();
         taskLog.setExecutionTime(new Date(executionTime));
         taskLog.setCreateTime(date);
@@ -208,7 +208,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      */
     @Override
     public boolean updateTaskLogState(long id, TaskLogState state, int version) {
-        return this.updateTaskLogState(id, state, version, null, null, null);
+        return this.updateTaskLogState(id, state, version, null, null, null, null, null);
     }
 
     /**
@@ -220,10 +220,12 @@ public class TaskLogServiceImpl implements TaskLogService {
      * @param address         调度器地址，表示该任务由哪个调度器进行调度
      * @param failedReason    失败原因
      * @param executorAddress 执行器地址
+     * @param tag             任务标签
+     * @param hostName        执行器主机名
      * @return 返回是否更新成功
      */
     @Override
-    public boolean updateTaskLogState(long id, TaskLogState state, int version, String address, String failedReason, String executorAddress) {
+    public boolean updateTaskLogState(long id, TaskLogState state, int version, String address, String failedReason, String executorAddress, String tag, String hostName) {
         Date date = new Date();
         TaskLogEntity entity = new TaskLogEntity();
         entity.setState(state.getValue());
@@ -239,6 +241,12 @@ public class TaskLogServiceImpl implements TaskLogService {
         }
         if (state == TaskLogState.EXECUTION) {
             entity.setDispatchTime(date);
+        }
+        if (StringUtils.isNotBlank(tag)) {
+            entity.setTag(tag);
+        }
+        if (StringUtils.isNotBlank(hostName)) {
+            entity.setExecutorHostName(hostName);
         }
         entity.setModifyTime(date);
         TaskLogEntityExample example = new TaskLogEntityExample();
@@ -445,7 +453,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      * @param task 任务对象
      * @return
      */
-    private TaskLogEntity convertToCronTaskLog(TaskEntity task) {
+    private TaskLogEntity convertToTaskLog(TaskEntity task) {
         TaskLogEntity log = new TaskLogEntity();
         log.setId(this.guidGenerate.genId());
         log.setTenantId(task.getTenantId());
@@ -458,7 +466,7 @@ public class TaskLogServiceImpl implements TaskLogService {
         log.setAppName(task.getAppName());
         log.setAppDesc(task.getAppDesc());
         log.setCron(task.getCron());
-        log.setTag(task.getTag());
+        log.setTag("");
         log.setState(TaskLogState.INITIALIZE.getValue());
         log.setMethod(task.getMethod());
         log.setTaskParams(task.getTaskParams());

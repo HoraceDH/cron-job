@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  *
  * @author Horace
@@ -19,7 +21,7 @@ public class TaskItem {
     private String name;
     private String owner;
     private String cron;
-    private String tag;
+    private List<String> tag;
     private int runState;
     private String method;
     private int routerStrategy;

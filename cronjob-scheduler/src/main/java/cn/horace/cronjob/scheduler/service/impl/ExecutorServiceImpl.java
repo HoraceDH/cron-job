@@ -1,6 +1,7 @@
 package cn.horace.cronjob.scheduler.service.impl;
 
 import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.commons.constants.Constants;
 import cn.horace.cronjob.commons.constants.ExecutorState;
 import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.scheduler.adapter.ExecutorAdapter;
@@ -9,6 +10,7 @@ import cn.horace.cronjob.scheduler.bean.params.ExecutorRegisterParams;
 import cn.horace.cronjob.scheduler.bean.params.ExecutorUnregisterParams;
 import cn.horace.cronjob.scheduler.bean.params.GetExecutorListParams;
 import cn.horace.cronjob.scheduler.bean.result.ExecutorListResult;
+import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.config.AppConfig;
 import cn.horace.cronjob.scheduler.entities.AppEntity;
 import cn.horace.cronjob.scheduler.entities.ExecutorEntity;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -284,6 +287,26 @@ public class ExecutorServiceImpl implements ExecutorService {
         }
         logger.info("executor unregister, result:{}, address:{}", success, params.getAddress());
         return result;
+    }
+
+    /**
+     * 获取执行器标签列表，提供给搜索框用
+     *
+     * @param appId 应用ID
+     * @return
+     */
+    @Override
+    public Result<List<SearchItem>> getSearchList(long appId) {
+        List<SearchItem> items = new ArrayList<>();
+        items.add(new SearchItem(Constants.DEFAULT_TAG, Constants.DEFAULT_TAG));
+        List<ExecutorEntity> executorList = this.getExecutorList(appId, ExecutorState.ONLINE);
+        for (ExecutorEntity entity : executorList) {
+            if (Constants.DEFAULT_TAG.equals(entity.getTag())) {
+                continue;
+            }
+            items.add(new SearchItem(entity.getTag(), entity.getTag()));
+        }
+        return Result.success(items);
     }
 
     /**

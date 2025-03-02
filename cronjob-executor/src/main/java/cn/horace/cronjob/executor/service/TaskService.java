@@ -12,7 +12,6 @@ import cn.horace.cronjob.executor.annotation.TaskConfig;
 import cn.horace.cronjob.executor.bean.HandlerResult;
 import cn.horace.cronjob.executor.config.ExecutorConfig;
 import com.alibaba.fastjson.JSONArray;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.eclipse.jetty.util.BlockingArrayQueue;
 import org.slf4j.Logger;
@@ -79,7 +78,7 @@ public class TaskService {
             taskConfig.setAppDesc(this.config.getAppDesc());
             taskConfig.setName(cronTaskConfig.name());
             taskConfig.setCron(cronTaskConfig.cron());
-            taskConfig.setTag(StringUtils.isBlank(cronTaskConfig.tag()) ? this.config.getTag() : cronTaskConfig.tag());
+            taskConfig.setTag(this.config.getTag());
             taskConfig.setRemark(cronTaskConfig.remark());
             taskConfig.setRouterStrategy(cronTaskConfig.routerStrategy().getValue());
             taskConfig.setExpiredStrategy(cronTaskConfig.expiredStrategy().getValue());

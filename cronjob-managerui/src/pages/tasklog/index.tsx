@@ -22,6 +22,7 @@ const Index: React.FC = () => {
     const [item, updateItem] = useState<TaskLogBeans.TaskLogItem>();
     const [taskItems, updateTaskItems] = useState<Map<string, string>>();
     const [appItems, updateAppItems] = useState<Map<string, string>>();
+    const [firstQuery, updateFirstQuery] = useState<boolean>(true);
 
     /**
      * 加载应用列表
@@ -49,7 +50,7 @@ const Index: React.FC = () => {
                     tableFormRef.current?.setFieldValue("appName", params.appName);
                     tableFormRef.current?.setFieldValue("taskId", params.taskId);
                     tableFormRef.current?.setFieldValue("state", params.state);
-                    tableFormRef.current?.submit();
+                    //tableFormRef.current?.submit();
                 }
             });
         });
@@ -88,7 +89,7 @@ const Index: React.FC = () => {
             dataIndex: 'id',
             // hideInSearch: true,
             // hideInTable: true,
-            width: "12%",
+            width: "185px",
             render: (dom, entity) => {
                 return <Link to={`${Pages.PAGE_TASKLOG_DETAILS}?id=${entity.id}`}>{entity.id}</Link>
             }
@@ -152,6 +153,7 @@ const Index: React.FC = () => {
             title: '租户编码',
             dataIndex: 'tenant',
             hideInSearch: true,
+            ellipsis: {showTitle: true}, // 超出自动缩略
         },
         {
             title: '应用名',
@@ -168,12 +170,26 @@ const Index: React.FC = () => {
         {
             title: '负责人',
             dataIndex: 'owner',
+            width: "100px",
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '执行器地址',
+            dataIndex: 'executorAddress',
+            width: "165px",
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '执行器主机名',
+            width: "250px",
+            dataIndex: 'executorHostName',
             ellipsis: {showTitle: true}, // 超出自动缩略
         },
         {
             title: '延迟时间',
             dataIndex: 'delayTime',
             hideInSearch: true,
+            ellipsis: {showTitle: true}, // 超出自动缩略
             render: (dom, entity) => {
                 if (entity.delayTime !== null) {
                     return entity.delayTime + " ms";
@@ -186,6 +202,7 @@ const Index: React.FC = () => {
             title: '执行耗时',
             dataIndex: 'elapsedTime',
             hideInSearch: true,
+            ellipsis: {showTitle: true}, // 超出自动缩略
             render: (dom, entity) => {
                 if (entity.elapsedTime !== null) {
                     return entity.elapsedTime + " ms";
@@ -197,13 +214,15 @@ const Index: React.FC = () => {
         {
             title: 'Cron表达式',
             dataIndex: 'cron',
-            width: "12%",
+            width: "140px",
             hideInSearch: true,
+            ellipsis: {showTitle: true}, // 超出自动缩略
         },
         {
             title: '执行状态',
             dataIndex: 'state',
             hideInSearch: true,
+            width: "80px",
             render: (dom, entity) => {
                 switch (entity.state) {
                     case 1:
@@ -233,9 +252,16 @@ const Index: React.FC = () => {
             }
         },
         {
-            title: '标签',
+            title: '执行器标签',
             dataIndex: 'tag',
             hideInSearch: true,
+            width: "90px",
+            render: (tag) => {
+                if (tag === "" || tag === undefined || tag === null || tag === "-") {
+                    return tag;
+                }
+                return <Tag color={"blue"}>{tag}</Tag>
+            }
         },
         {
             title: '执行器地址',
@@ -253,7 +279,7 @@ const Index: React.FC = () => {
             title: '预计执行时间',
             dataIndex: 'executionTime',
             hideInSearch: true,
-            width: "11%",
+            width: "160px",
             render: (dom, entity) => {
                 if (entity.executionTime !== null) {
                     return dayjs(entity.executionTime).format("YYYY-MM-DD HH:mm:ss");
@@ -325,7 +351,20 @@ const Index: React.FC = () => {
                 pagination={{pageSize: 15}}
                 formRef={tableFormRef}
                 rowKey="id"
-                request={TaskLogService.getInstance().getTaskLogList}
+                request={
+                    async (params: any) => {
+                        // 如果是首次通过路径的查询参数进来
+                        let queryParams = ParamsUtils.getQueryParams();
+                        if (firstQuery && queryParams.taskId !== undefined && queryParams.state !== undefined) {
+                            updateFirstQuery(false);
+                            params.taskId = queryParams.taskId;
+                            params.state = queryParams.state;
+                            params.appName = queryParams.appName;
+                            return TaskLogService.getInstance().getTaskLogList(params);
+                        }
+                        return TaskLogService.getInstance().getTaskLogList(params);
+                    }
+                }
                 columns={columns}
                 onRow={(row) => {
                     return {

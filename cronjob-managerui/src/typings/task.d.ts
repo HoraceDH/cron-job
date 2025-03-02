@@ -18,7 +18,7 @@ declare namespace TaskBeans {
         appDesc: string, // 应用描述
         name: string, // 任务名
         cron: string, // cron表达式
-        tag: string, // 执行器标签
+        tag: string[], // 执行器标签
         onlineState: number, // 在线状态
         runState: number, // 运行状态
         method: string, // 方法全路径

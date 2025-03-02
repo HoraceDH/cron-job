@@ -1,5 +1,6 @@
 package cn.horace.cronjob.examples;
 
+import cn.horace.cronjob.commons.constants.Constants;
 import cn.horace.cronjob.examples.tasks.DemoCronTask;
 import cn.horace.cronjob.executor.CronJobExecutorClient;
 import cn.horace.cronjob.executor.config.ExecutorConfig;
@@ -39,7 +40,7 @@ public class ExampleExecutor {
                 .tenant(tenant)
                 .appName(appName)
                 .appDesc("普通示例执行器")
-                .tag("common")
+                .tag(Constants.DEFAULT_TAG)
                 .signKey("7d890a079948b196756rtf5452d2245t")
                 .build();
         CronJobExecutorClient.init(config).start();

@@ -82,13 +82,6 @@ public @interface TaskConfig {
     int timeout() default 10 * 1000;
 
     /**
-     * 预留tag标识
-     *
-     * @return
-     */
-    String tag() default "common";
-
-    /**
      * 任务备注，主要是用来描述任务详情，用来做什么样的任务？方便后期维护和管理
      *
      * @return

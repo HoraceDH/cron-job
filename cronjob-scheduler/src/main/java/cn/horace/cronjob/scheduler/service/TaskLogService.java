@@ -48,9 +48,11 @@ public interface TaskLogService {
      * @param address         调度器地址
      * @param failedReason    失败原因
      * @param executorAddress 执行器地址
+     * @param tag             任务标签
+     * @param hostName        执行器主机名
      * @return 返回是否更新成功
      */
-    boolean updateTaskLogState(long id, TaskLogState state, int version, String address, String failedReason, String executorAddress);
+    boolean updateTaskLogState(long id, TaskLogState state, int version, String address, String failedReason, String executorAddress, String tag, String hostName);
 
     /**
      * 更新失败任务状态

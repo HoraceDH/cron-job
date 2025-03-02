@@ -4,7 +4,6 @@ import cn.horace.cronjob.commons.utils.MavenUtils;
 
 
 /**
- *
  * @author Horace
  */
 public class Constants {
@@ -21,4 +20,8 @@ public class Constants {
      * 日期格式
      */
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+    /**
+     * 默认的标签名称
+     */
+    public static final String DEFAULT_TAG = "common";
 }

@@ -8,6 +8,8 @@ import {ModalForm, ProFormInstance, ProFormSelect} from "@ant-design/pro-form/li
 import MsgCodes from "@/typings/msgcodes";
 import {Pages} from "@/typings/pages";
 import CronComponent from "@/components/Customs/CronComponent";
+import ExecutorService from "@/services/ExecutorService";
+import TenantService from "@/services/TenantService";
 
 /**
  * 任务编辑
@@ -28,8 +30,8 @@ const TaskEdit: React.FC = () => {
     async function submitEditTask(data: Record<string, any>) {
         const success = await TaskService.getInstance().updateById(data);
         if (success) {
-            message.success("任务更新成功，未在队列中、调度中的将取消执行，已在队列中、调度中的将继续执行！", 3, function () {
-                // document.location.href = Pages.PAGE_TASK_INDEX;
+            message.success("任务更新成功，未在队列中、调度中的将取消执行，已在队列中、调度中的将继续执行！", 1, function () {
+                document.location.href = Pages.PAGE_TASK_INDEX;
             });
             return true;
         }
@@ -160,6 +162,7 @@ const TaskEdit: React.FC = () => {
                                 <ProFormText
                                     label={"任务名"}
                                     name="name"
+                                    disabled={true}
                                     rules={[{required: true, message: '请输入任务名'}]}
                                     placeholder={"请输入任务名"}
                                 />
@@ -213,11 +216,16 @@ const TaskEdit: React.FC = () => {
                                 />
                             </Col>
                             <Col xl={{span: 6, offset: 2}} lg={{span: 8}} md={{span: 12}} sm={24}>
-                                <ProFormText
+                                <ProFormSelect
+                                    tooltip={"可选择多个标签，随机策略下：任务会在选择的标签的执行器集合中随机选择一个执行；分片策略下：会在选择的标签的执行器集合中分片执行；如果在任务调度时，所选的标签下没有任何在线的执行器，则会寻找common标签下的执行器进行。"}
+                                    mode={"multiple"}
                                     label="标签"
                                     name="tag"
-                                    rules={[{required: true, message: '请输入标签'}]}
-                                    placeholder={"请输入标签"}
+                                    rules={[{required: true, message: '请选择标签'}]}
+                                    request={async () => {
+                                        const taskId = ParamsUtils.getQueryParams().id;
+                                        return ExecutorService.getInstance().getSearchList(taskId);
+                                    }}
                                 />
                             </Col>
                             <Col xl={{span: 8, offset: 2}} lg={{span: 10}} md={{span: 24}} sm={24}>

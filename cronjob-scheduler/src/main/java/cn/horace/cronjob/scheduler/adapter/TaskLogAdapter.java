@@ -55,6 +55,7 @@ public class TaskLogAdapter {
         item.setOwner(entity.getOwner());
         item.setCron(entity.getCron());
         item.setExecutorAddress(entity.getExecutorAddress());
+        item.setExecutorHostName(entity.getExecutorHostName());
         if (entity.getElapsedTime() != null) {
             item.setElapsedTime(entity.getElapsedTime());
         }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- * Create in 2025-01-13 18:31:39.530.
+ * Create in 2025-03-02 16:53:50.758.
  * <p>
  * 对应数据库表：t_task_log
  * 
@@ -56,6 +56,11 @@ public class TaskLogEntity {
      * 执行器地址 executor_address
      */
     private String executorAddress;
+
+    /**
+     * 主机名 executor_host_name
+     */
+    private String executorHostName;
 
     /**
      * 任务方法，类全限定名 method
@@ -352,6 +357,24 @@ public class TaskLogEntity {
      */
     public void setExecutorAddress(String executorAddress) {
         this.executorAddress = executorAddress == null ? null : executorAddress.trim();
+    }
+
+    /**
+     * 主机名
+     * 
+     * @return 主机名
+     */
+    public String getExecutorHostName() {
+        return executorHostName;
+    }
+
+    /**
+     * 主机名
+     * 
+     * @param executorHostName 主机名
+     */
+    public void setExecutorHostName(String executorHostName) {
+        this.executorHostName = executorHostName == null ? null : executorHostName.trim();
     }
 
     /**
@@ -857,6 +880,7 @@ public class TaskLogEntity {
         sb.append(", owner=").append(owner);
         sb.append(", taskId=").append(taskId);
         sb.append(", executorAddress=").append(executorAddress);
+        sb.append(", executorHostName=").append(executorHostName);
         sb.append(", method=").append(method);
         sb.append(", exeType=").append(exeType);
         sb.append(", elapsedTime=").append(elapsedTime);
@@ -901,6 +925,7 @@ public class TaskLogEntity {
         owner("owner", "owner", "VARCHAR", false),
         taskId("task_id", "taskId", "BIGINT", false),
         executorAddress("executor_address", "executorAddress", "VARCHAR", false),
+        executorHostName("executor_host_name", "executorHostName", "VARCHAR", false),
         method("method", "method", "VARCHAR", false),
         exeType("exe_type", "exeType", "INTEGER", false),
         elapsedTime("elapsed_time", "elapsedTime", "INTEGER", false),

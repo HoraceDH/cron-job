@@ -21,6 +21,7 @@ public class TaskLogItem {
     private String owner;
     private String cron;
     private String executorAddress;
+    private String executorHostName;
     private Integer elapsedTime;
     private String tag;
     private int exeType;

@@ -96,7 +96,7 @@ public class TaskLogEntityExample {
     }
 
     /**
-     * Create in 2025-01-13 18:31:39.530.
+     * Create in 2025-03-02 16:53:50.758.
      * <p>
      * 对应数据库表：t_task_log
      * 
@@ -730,6 +730,76 @@ public class TaskLogEntityExample {
 
         public Criteria andExecutorAddressNotBetween(String value1, String value2) {
             addCriterion("executor_address not between", value1, value2, "executorAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameIsNull() {
+            addCriterion("executor_host_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameIsNotNull() {
+            addCriterion("executor_host_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameEqualTo(String value) {
+            addCriterion("executor_host_name =", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameNotEqualTo(String value) {
+            addCriterion("executor_host_name <>", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameGreaterThan(String value) {
+            addCriterion("executor_host_name >", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameGreaterThanOrEqualTo(String value) {
+            addCriterion("executor_host_name >=", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameLessThan(String value) {
+            addCriterion("executor_host_name <", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameLessThanOrEqualTo(String value) {
+            addCriterion("executor_host_name <=", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameLike(String value) {
+            addCriterion("executor_host_name like", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameNotLike(String value) {
+            addCriterion("executor_host_name not like", value, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameIn(List<String> values) {
+            addCriterion("executor_host_name in", values, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameNotIn(List<String> values) {
+            addCriterion("executor_host_name not in", values, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameBetween(String value1, String value2) {
+            addCriterion("executor_host_name between", value1, value2, "executorHostName");
+            return (Criteria) this;
+        }
+
+        public Criteria andExecutorHostNameNotBetween(String value1, String value2) {
+            addCriterion("executor_host_name not between", value1, value2, "executorHostName");
             return (Criteria) this;
         }
 
@@ -2355,7 +2425,7 @@ public class TaskLogEntityExample {
     }
 
     /**
-     * Create in 2025-01-13 18:31:39.530.
+     * Create in 2025-03-02 16:53:50.758.
      * <p>
      * 对应数据库表：t_task_log
      * 
@@ -2368,7 +2438,7 @@ public class TaskLogEntityExample {
     }
 
     /**
-     * Create in 2025-01-13 18:31:39.530.
+     * Create in 2025-03-02 16:53:50.758.
      * <p>
      * 对应数据库表：t_task_log
      * 

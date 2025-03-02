@@ -20,6 +20,7 @@ declare namespace TaskLogBeans {
         taskName: string, // 任务名
         cron: string, // cron表达式
         executorAddress: string, // 执行器地址
+        executorHostName: string, // 执行器主机名
         elapsedTime: number, // 执行耗时
         tag: string, // 任务标签
         routerStrategy: number, // 路由策略，1：随机策略，2：分片策略

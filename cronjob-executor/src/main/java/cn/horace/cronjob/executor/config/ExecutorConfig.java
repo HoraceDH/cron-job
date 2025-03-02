@@ -1,5 +1,7 @@
 package cn.horace.cronjob.executor.config;
 
+import cn.horace.cronjob.commons.constants.Constants;
+
 import java.util.ArrayList;
 
 /**
@@ -86,7 +88,7 @@ public class ExecutorConfig {
         private String tenant;
         private String appName;
         private String appDesc;
-        private String tag = "common";
+        private String tag = Constants.DEFAULT_TAG;
         private String signKey = "7d890a079948b196756rtf5452d2245t";
         private ArrayList<Object> taskObjects;
 

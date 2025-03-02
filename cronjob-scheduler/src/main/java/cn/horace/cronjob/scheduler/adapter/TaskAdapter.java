@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class TaskAdapter {
         item.setName(entity.getName());
         item.setOwner(entity.getOwner());
         item.setCron(entity.getCron());
-        item.setTag(entity.getTag());
+        item.setTag(Arrays.asList(entity.getTag().split(",")));
         item.setRunState(entity.getRunState());
         item.setMethod(entity.getMethod());
         item.setRouterStrategy(entity.getRouterStrategy());

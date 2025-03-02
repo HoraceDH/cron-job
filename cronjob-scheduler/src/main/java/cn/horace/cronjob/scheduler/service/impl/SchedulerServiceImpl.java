@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
+import java.util.stream.Collectors;
 
 /**
  * 调度服务类
@@ -145,7 +147,7 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
                 // 任务已经过期，并且过期策略是丢弃
                 if (interval >= taskLog.getExpiredTime() && ExpiredStrategy.from(taskLog.getExpiredStrategy()) == ExpiredStrategy.EXPIRED_DISCARD) {
                     logger.warn("dispatching task, discard expired task, interval:{}, expireTime:{}, taskLog:{}", interval, taskLog.getExpiredTime(), taskLog);
-                    this.taskLogService.updateTaskLogState(taskLog.getTaskId(), TaskLogState.EXECUTION_EXPIRED, taskLog.getVersion(), "", "任务已过期，且过期策略为丢弃", null);
+                    this.taskLogService.updateTaskLogState(taskLog.getTaskId(), TaskLogState.EXECUTION_EXPIRED, taskLog.getVersion(), "", "任务已过期，且过期策略为丢弃", null, null, null);
                     continue;
                 }
 
@@ -222,6 +224,9 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
             return;
         }
 
+        // 根据配置的标签过滤
+        executors = this.filterExecutorByTag(executors, taskLog);
+
         RouterStrategy routerStrategy = RouterStrategy.from(taskLog.getRouterStrategy());
         if (routerStrategy == null) {
             routerStrategy = RouterStrategy.RANDOM;
@@ -245,6 +250,43 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
         if (routerStrategy == RouterStrategy.SHARDING) {
             dispatcherSharding(taskLog, executors);
         }
+    }
+
+    /**
+     * 根据配置的标签进行执行器的过滤
+     *
+     * @param executors 在线的执行器列表
+     * @param taskLog   任务日志对象
+     * @return
+     */
+    private List<ExecutorEntity> filterExecutorByTag(List<ExecutorEntity> executors, TaskLogEntity taskLog) {
+        String tag = this.taskService.getTaskDetail(taskLog.getTaskId()).getTag();
+        if (StringUtils.isEmpty(tag)) {
+            tag = Constants.DEFAULT_TAG;
+        }
+
+        String finalTag = tag + ",";
+        List<ExecutorEntity> commonExecutors = new ArrayList<>();
+        List<ExecutorEntity> result = executors.stream()
+                .filter(entity -> {
+                    // 临时暂存默认Tag的执行器
+                    if (Constants.DEFAULT_TAG.equals(entity.getTag())) {
+                        commonExecutors.add(entity);
+                    }
+
+                    String executorTag = entity.getTag();
+                    return finalTag.contains(executorTag + ",");
+                })
+                .collect(Collectors.toList());
+
+
+        // 如果只指定了个性化标签的执行器，但没有找到可用的在线执行器时，返回默认Tag的执行器
+        if (!finalTag.contains(Constants.DEFAULT_TAG + ",") && result.isEmpty()) {
+            result = commonExecutors;
+            logger.info("filter executor by tag, not found available executors, use default tag executor, tag:{}, defaultTag:{}, executors:{}", tag, Constants.DEFAULT_TAG, commonExecutors);
+        }
+        logger.info("filter executor by tag, tag:{}, executors:{}", tag, result);
+        return result;
     }
 
     /**
@@ -287,7 +329,7 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
      */
     private void dispatcherToExecutor(TaskLogEntity taskLog, ExecutorEntity executor) {
         String address = this.schedulerInstanceService.getCurrentAddress();
-        boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION, taskLog.getVersion(), address, null, executor.getAddress());
+        boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION, taskLog.getVersion(), address, null, executor.getAddress(), executor.getTag(), executor.getHostName());
         if (!success) {
             this.handlerFailureTaskLog(taskLog, FailureType.FAILURE_UPDATE_STATE, null);
             logger.error("dispatcher task failed, update state failed, taskLog:{}", taskLog);
@@ -373,14 +415,14 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
         Integer failureStrategy = taskLog.getFailureStrategy();
         FailureStrategy strategy = FailureStrategy.from(failureStrategy);
         if (strategy == null) {
-            boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION_FAILED, taskLog.getVersion(), null, failureReason, null);
+            boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION_FAILED, taskLog.getVersion(), null, failureReason, null, null, null);
             logger.error("handler failure task log, failureStrategy not found, updateStateSuccess:{}, failureStrategy:{}, failureType:{}, taskLog:{}, failureReason:{}",
                     success, failureStrategy, failureType, taskLog, failureReason);
             return;
         }
 
         if (strategy == FailureStrategy.FAILURE_DISCARD) {
-            boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION_FAILED_DISCARD, taskLog.getVersion(), null, failureReason, null);
+            boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION_FAILED_DISCARD, taskLog.getVersion(), null, failureReason, null, null, null);
             logger.info("handler failure task log, discard the task log, updateStateSuccess:{}, strategy:{}, failureType:{}, taskLog:{}, failureReason:{}",
                     success, strategy, failureType, taskLog, failureReason);
             return;
@@ -390,7 +432,7 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
         if (strategy == FailureStrategy.FAILURE_RETRY) {
             // 如果已经到达最大重试次数
             if (taskLog.getRetryCount() >= taskLog.getMaxRetryCount()) {
-                boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION_FAILED, taskLog.getVersion(), null, failureReason, null);
+                boolean success = this.taskLogService.updateTaskLogState(taskLog.getId(), TaskLogState.EXECUTION_FAILED, taskLog.getVersion(), null, failureReason, null, null, null);
                 logger.error("handler failure task log, discard the task log, updateStateSuccess:{}, retryCount:{}, maxRetryCount:{}, taskLog:{}, failureReason:{}",
                         success, taskLog.getRetryCount(), taskLog.getMaxRetryCount(), taskLog, failureReason);
                 return;
@@ -415,7 +457,7 @@ public class SchedulerServiceImpl implements SchedulerService, ApplicationContex
         SchedulerInstanceEntity schedulers = this.schedulerInstanceService.getSchedulerInstance(this.appConfig.getServerId());
         for (TaskLogEntity entity : cronTaskList) {
             // 更新状态成功则把任务放到内存队列中
-            boolean success = this.taskLogService.updateTaskLogState(entity.getId(), TaskLogState.QUEUEING, entity.getVersion(), schedulers.getAddress(), null, null);
+            boolean success = this.taskLogService.updateTaskLogState(entity.getId(), TaskLogState.QUEUEING, entity.getVersion(), schedulers.getAddress(), null, null, null, null);
             if (!success) {
                 logger.debug("add task log to queue failed, lock failure, taskLog:{}", entity);
                 continue;

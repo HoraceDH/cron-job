@@ -15,6 +15,7 @@ class ExecutorService {
      * @private
      */
     private static INSTANCE: ExecutorService = new ExecutorService();
+    private tagItems: Commons.SearchItem[] = [];
 
     /**
      * 获取实例对象
@@ -45,6 +46,26 @@ class ExecutorService {
             return [];
         }
         return executorListResult.data ? executorListResult.data : [];
+    }
+
+    /**
+     * 获取执行器的标签列表，提供给搜索框用
+     */
+    public async getSearchList(taskId: string): Promise<Commons.SearchItem[]> {
+        if (this.tagItems === null || this.tagItems === undefined || this.tagItems.length === 0) {
+            const result = await request<Commons.SearchResult>(Apis.URI_EXECUTOR_GET_SEARCH_LIST, {
+                method: "POST",
+                data: {
+                    taskId: taskId,
+                }
+            });
+            if (result.code !== MsgCodes.SUCCESS) {
+                console.error("get search executor tag list failed, ", result);
+                this.tagItems = [];
+            }
+            this.tagItems = result.data;
+        }
+        return this.tagItems;
     }
 }
 

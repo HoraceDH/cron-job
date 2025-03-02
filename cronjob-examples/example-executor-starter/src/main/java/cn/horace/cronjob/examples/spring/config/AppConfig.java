@@ -1,5 +1,6 @@
 package cn.horace.cronjob.examples.spring.config;
 
+import cn.horace.cronjob.commons.constants.Constants;
 import cn.horace.cronjob.executor.starter.config.ExecutorStarterConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class AppConfig {
         config.setTenant(tenant);
         config.setAppName(appName);
         config.setAppDesc("Spring示例执行器");
-        config.setTag("common");
+        config.setTag(Constants.DEFAULT_TAG);
         config.setSignKey("7d890a079948b196756rtf5452d2245t");
         return config;
     }

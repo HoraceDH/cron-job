@@ -100,6 +100,10 @@ export default {
      * 获取执行器列表
      */
     URI_EXECUTOR_GET_LIST: "/manager-api/executor/getExecutorList",
+    /**
+     * 获取执行器标签列表，提供给搜索框用
+     */
+    URI_EXECUTOR_GET_SEARCH_LIST: "/manager-api/executor/getSearchList",
     /*********** 执行器模块 **************************************/
 
     /*********** 任务模块 **************************************/

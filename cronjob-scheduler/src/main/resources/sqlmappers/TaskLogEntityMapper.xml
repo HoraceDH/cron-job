@@ -11,6 +11,7 @@
     <result column="owner" jdbcType="VARCHAR" property="owner" />
     <result column="task_id" jdbcType="BIGINT" property="taskId" />
     <result column="executor_address" jdbcType="VARCHAR" property="executorAddress" />
+    <result column="executor_host_name" jdbcType="VARCHAR" property="executorHostName" />
     <result column="method" jdbcType="VARCHAR" property="method" />
     <result column="exe_type" jdbcType="INTEGER" property="exeType" />
     <result column="elapsed_time" jdbcType="INTEGER" property="elapsedTime" />
@@ -101,8 +102,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, tenant_id, app_id, app_name, app_desc, name, owner, task_id, executor_address, 
-    method, exe_type, elapsed_time, version, cron, tag, router_strategy, expired_strategy, 
-    expired_time, failure_strategy, max_retry_count, retry_count, failure_retry_interval, 
+    executor_host_name, method, exe_type, elapsed_time, version, cron, tag, router_strategy, 
+    expired_strategy, expired_time, failure_strategy, max_retry_count, retry_count, failure_retry_interval, 
     timeout, scheduler_address, state, task_params, page, total, parent_id, remark, execution_time, 
     dispatch_time, real_execution_time, create_time, modify_time
   </sql>
@@ -163,29 +164,29 @@
     insert into t_task_log (id, tenant_id, app_id, 
       app_name, app_desc, name, 
       owner, task_id, executor_address, 
-      method, exe_type, elapsed_time, 
-      version, cron, tag, 
-      router_strategy, expired_strategy, expired_time, 
-      failure_strategy, max_retry_count, retry_count, 
-      failure_retry_interval, timeout, scheduler_address, 
-      state, task_params, page, 
-      total, parent_id, remark, 
-      execution_time, dispatch_time, real_execution_time, 
-      create_time, modify_time, failed_reason
-      )
+      executor_host_name, method, exe_type, 
+      elapsed_time, version, cron, 
+      tag, router_strategy, expired_strategy, 
+      expired_time, failure_strategy, max_retry_count, 
+      retry_count, failure_retry_interval, timeout, 
+      scheduler_address, state, task_params, 
+      page, total, parent_id, 
+      remark, execution_time, dispatch_time, 
+      real_execution_time, create_time, modify_time, 
+      failed_reason)
     values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=BIGINT}, #{appId,jdbcType=BIGINT}, 
       #{appName,jdbcType=VARCHAR}, #{appDesc,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{owner,jdbcType=VARCHAR}, #{taskId,jdbcType=BIGINT}, #{executorAddress,jdbcType=VARCHAR}, 
-      #{method,jdbcType=VARCHAR}, #{exeType,jdbcType=INTEGER}, #{elapsedTime,jdbcType=INTEGER}, 
-      #{version,jdbcType=INTEGER}, #{cron,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, 
-      #{routerStrategy,jdbcType=INTEGER}, #{expiredStrategy,jdbcType=INTEGER}, #{expiredTime,jdbcType=INTEGER}, 
-      #{failureStrategy,jdbcType=INTEGER}, #{maxRetryCount,jdbcType=INTEGER}, #{retryCount,jdbcType=INTEGER}, 
-      #{failureRetryInterval,jdbcType=INTEGER}, #{timeout,jdbcType=INTEGER}, #{schedulerAddress,jdbcType=VARCHAR}, 
-      #{state,jdbcType=INTEGER}, #{taskParams,jdbcType=VARCHAR}, #{page,jdbcType=INTEGER}, 
-      #{total,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
-      #{executionTime,jdbcType=TIMESTAMP}, #{dispatchTime,jdbcType=TIMESTAMP}, #{realExecutionTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{failedReason,jdbcType=LONGVARCHAR}
-      )
+      #{executorHostName,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{exeType,jdbcType=INTEGER}, 
+      #{elapsedTime,jdbcType=INTEGER}, #{version,jdbcType=INTEGER}, #{cron,jdbcType=VARCHAR}, 
+      #{tag,jdbcType=VARCHAR}, #{routerStrategy,jdbcType=INTEGER}, #{expiredStrategy,jdbcType=INTEGER}, 
+      #{expiredTime,jdbcType=INTEGER}, #{failureStrategy,jdbcType=INTEGER}, #{maxRetryCount,jdbcType=INTEGER}, 
+      #{retryCount,jdbcType=INTEGER}, #{failureRetryInterval,jdbcType=INTEGER}, #{timeout,jdbcType=INTEGER}, 
+      #{schedulerAddress,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{taskParams,jdbcType=VARCHAR}, 
+      #{page,jdbcType=INTEGER}, #{total,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT}, 
+      #{remark,jdbcType=VARCHAR}, #{executionTime,jdbcType=TIMESTAMP}, #{dispatchTime,jdbcType=TIMESTAMP}, 
+      #{realExecutionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{failedReason,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.horace.cronjob.scheduler.entities.TaskLogEntity">
     insert into t_task_log
@@ -216,6 +217,9 @@
       </if>
       <if test="executorAddress != null">
         executor_address,
+      </if>
+      <if test="executorHostName != null">
+        executor_host_name,
       </if>
       <if test="method != null">
         method,
@@ -326,6 +330,9 @@
       </if>
       <if test="executorAddress != null">
         #{executorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="executorHostName != null">
+        #{executorHostName,jdbcType=VARCHAR},
       </if>
       <if test="method != null">
         #{method,jdbcType=VARCHAR},
@@ -446,6 +453,9 @@
       <if test="row.executorAddress != null">
         executor_address = #{row.executorAddress,jdbcType=VARCHAR},
       </if>
+      <if test="row.executorHostName != null">
+        executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
+      </if>
       <if test="row.method != null">
         method = #{row.method,jdbcType=VARCHAR},
       </if>
@@ -543,6 +553,7 @@
       owner = #{row.owner,jdbcType=VARCHAR},
       task_id = #{row.taskId,jdbcType=BIGINT},
       executor_address = #{row.executorAddress,jdbcType=VARCHAR},
+      executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
       method = #{row.method,jdbcType=VARCHAR},
       exe_type = #{row.exeType,jdbcType=INTEGER},
       elapsed_time = #{row.elapsedTime,jdbcType=INTEGER},
@@ -585,6 +596,7 @@
       owner = #{row.owner,jdbcType=VARCHAR},
       task_id = #{row.taskId,jdbcType=BIGINT},
       executor_address = #{row.executorAddress,jdbcType=VARCHAR},
+      executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
       method = #{row.method,jdbcType=VARCHAR},
       exe_type = #{row.exeType,jdbcType=INTEGER},
       elapsed_time = #{row.elapsedTime,jdbcType=INTEGER},
@@ -641,6 +653,9 @@
       </if>
       <if test="executorAddress != null">
         executor_address = #{executorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="executorHostName != null">
+        executor_host_name = #{executorHostName,jdbcType=VARCHAR},
       </if>
       <if test="method != null">
         method = #{method,jdbcType=VARCHAR},
@@ -736,6 +751,7 @@
       owner = #{owner,jdbcType=VARCHAR},
       task_id = #{taskId,jdbcType=BIGINT},
       executor_address = #{executorAddress,jdbcType=VARCHAR},
+      executor_host_name = #{executorHostName,jdbcType=VARCHAR},
       method = #{method,jdbcType=VARCHAR},
       exe_type = #{exeType,jdbcType=INTEGER},
       elapsed_time = #{elapsedTime,jdbcType=INTEGER},
@@ -775,6 +791,7 @@
       owner = #{owner,jdbcType=VARCHAR},
       task_id = #{taskId,jdbcType=BIGINT},
       executor_address = #{executorAddress,jdbcType=VARCHAR},
+      executor_host_name = #{executorHostName,jdbcType=VARCHAR},
       method = #{method,jdbcType=VARCHAR},
       exe_type = #{exeType,jdbcType=INTEGER},
       elapsed_time = #{elapsedTime,jdbcType=INTEGER},
@@ -806,19 +823,19 @@
   <insert id="batchInsert" parameterType="map">
     insert into t_task_log
     (id, tenant_id, app_id, app_name, app_desc, name, owner, task_id, executor_address, 
-      method, exe_type, elapsed_time, version, cron, tag, router_strategy, expired_strategy, 
-      expired_time, failure_strategy, max_retry_count, retry_count, failure_retry_interval, 
-      timeout, scheduler_address, state, task_params, page, total, parent_id, remark, 
-      execution_time, dispatch_time, real_execution_time, create_time, modify_time, failed_reason
-      )
+      executor_host_name, method, exe_type, elapsed_time, version, cron, tag, router_strategy, 
+      expired_strategy, expired_time, failure_strategy, max_retry_count, retry_count, 
+      failure_retry_interval, timeout, scheduler_address, state, task_params, page, total, 
+      parent_id, remark, execution_time, dispatch_time, real_execution_time, create_time, 
+      modify_time, failed_reason)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.id,jdbcType=BIGINT}, #{item.tenantId,jdbcType=BIGINT}, #{item.appId,jdbcType=BIGINT}, 
         #{item.appName,jdbcType=VARCHAR}, #{item.appDesc,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
         #{item.owner,jdbcType=VARCHAR}, #{item.taskId,jdbcType=BIGINT}, #{item.executorAddress,jdbcType=VARCHAR}, 
-        #{item.method,jdbcType=VARCHAR}, #{item.exeType,jdbcType=INTEGER}, #{item.elapsedTime,jdbcType=INTEGER}, 
-        #{item.version,jdbcType=INTEGER}, #{item.cron,jdbcType=VARCHAR}, #{item.tag,jdbcType=VARCHAR}, 
-        #{item.routerStrategy,jdbcType=INTEGER}, #{item.expiredStrategy,jdbcType=INTEGER}, 
+        #{item.executorHostName,jdbcType=VARCHAR}, #{item.method,jdbcType=VARCHAR}, #{item.exeType,jdbcType=INTEGER}, 
+        #{item.elapsedTime,jdbcType=INTEGER}, #{item.version,jdbcType=INTEGER}, #{item.cron,jdbcType=VARCHAR}, 
+        #{item.tag,jdbcType=VARCHAR}, #{item.routerStrategy,jdbcType=INTEGER}, #{item.expiredStrategy,jdbcType=INTEGER}, 
         #{item.expiredTime,jdbcType=INTEGER}, #{item.failureStrategy,jdbcType=INTEGER}, 
         #{item.maxRetryCount,jdbcType=INTEGER}, #{item.retryCount,jdbcType=INTEGER}, #{item.failureRetryInterval,jdbcType=INTEGER}, 
         #{item.timeout,jdbcType=INTEGER}, #{item.schedulerAddress,jdbcType=VARCHAR}, #{item.state,jdbcType=INTEGER}, 
@@ -865,6 +882,9 @@
         </if>
         <if test="'executor_address'.toString() == column.value">
           #{item.executorAddress,jdbcType=VARCHAR}
+        </if>
+        <if test="'executor_host_name'.toString() == column.value">
+          #{item.executorHostName,jdbcType=VARCHAR}
         </if>
         <if test="'method'.toString() == column.value">
           #{item.method,jdbcType=VARCHAR}
