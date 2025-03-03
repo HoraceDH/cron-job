@@ -170,18 +170,15 @@ const Index: React.FC = () => {
         {
             title: '负责人',
             dataIndex: 'owner',
-            width: "100px",
             ellipsis: {showTitle: true}, // 超出自动缩略
         },
         {
             title: '执行器地址',
             dataIndex: 'executorAddress',
-            width: "165px",
             ellipsis: {showTitle: true}, // 超出自动缩略
         },
         {
             title: '执行器主机名',
-            width: "250px",
             dataIndex: 'executorHostName',
             ellipsis: {showTitle: true}, // 超出自动缩略
         },
@@ -214,7 +211,6 @@ const Index: React.FC = () => {
         {
             title: 'Cron表达式',
             dataIndex: 'cron',
-            width: "140px",
             hideInSearch: true,
             ellipsis: {showTitle: true}, // 超出自动缩略
         },
@@ -279,7 +275,7 @@ const Index: React.FC = () => {
             title: '预计执行时间',
             dataIndex: 'executionTime',
             hideInSearch: true,
-            width: "160px",
+            ellipsis: {showTitle: true}, // 超出自动缩略
             render: (dom, entity) => {
                 if (entity.executionTime !== null) {
                     return dayjs(entity.executionTime).format("YYYY-MM-DD HH:mm:ss");

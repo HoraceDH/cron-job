@@ -91,8 +91,7 @@ const TaskDetail: React.FC = () => {
 
                 <Divider style={{marginBottom: 32}}/>
                 <ProDescriptions title="执行详情" style={{marginBottom: 32}}>
-                    <ProDescriptions.Item label="任务日志状态"
-                                          tooltip={"1、取消执行（预生成日志后，任务取消等情况）。2、任务过期（超过执行时间而未被调度）"}>{
+                    <ProDescriptions.Item label="任务日志状态" tooltip={"1、取消执行（预生成日志后，任务取消等情况）。2、任务过期（超过执行时间而未被调度）"}>{
                         data?.state === 1 ? <Tag color={"seagreen"}>初始化</Tag> :
                             data?.state === 2 ? <Tag color={"coral"}>队列中</Tag> :
                                 data?.state === 3 ? <Tag color={"darkolivegreen"}>调度中</Tag> :
@@ -109,26 +108,27 @@ const TaskDetail: React.FC = () => {
                                                                 <Tag color={"red-inverse"}>未找到执行方法</Tag> :
                                                                 <Tag color={"red-inverse"}>未知状态</Tag>
                     }</ProDescriptions.Item>
-                    <ProDescriptions.Item tooltip={"任务方法的执行耗时"}
-                                          label="执行耗时">{data?.elapsedTime === null ? "-" : data?.elapsedTime + " ms"}</ProDescriptions.Item>
-                    <ProDescriptions.Item label="调度时间"
-                                          tooltip={"调度器将任务分发给执行器的时间"}>{data?.dispatcherTime}</ProDescriptions.Item>
+                    <ProDescriptions.Item label="调度时间" tooltip={"调度器将任务分发给执行器的时间"}>
+                        {data?.dispatcherTime}
+                    </ProDescriptions.Item>
+                    <ProDescriptions.Item label="首次执行时间" tooltip={"如果任务进行过失败重试，那么该时间表示重试前应该在什么时间执行"}>
+                        {data?.firstExecutionTime}
+                    </ProDescriptions.Item>
                     <ProDescriptions.Item label="调度器地址">{data?.schedulersAddress}</ProDescriptions.Item>
                     <ProDescriptions.Item label="执行器地址">{data?.executorAddress}</ProDescriptions.Item>
                     <ProDescriptions.Item label="预计执行时间">{data?.executionTime}</ProDescriptions.Item>
-                    <ProDescriptions.Item label="首次执行时间"
-                                          tooltip={"如果任务进行过失败重试，那么该时间表示重试前应该在什么时间执行"}>
-                        {data?.firstExecutionTime}
+                    <ProDescriptions.Item tooltip={"任务方法的执行耗时"} label="执行耗时">
+                        {data?.elapsedTime === null ? "-" : data?.elapsedTime + " ms"}
                     </ProDescriptions.Item>
                     <ProDescriptions.Item label="执行延迟时间"
                                           tooltip={"延迟时间 = 实际执行时间- 预计执行时间。如果是【执行失败，重试中】的状态，则该值会为负值，因为【预计执行时间】会重新计算，加上了重试间隔时间。"}>
                         {data?.delayTime === null ? "-" : data?.delayTime + " ms"}
                     </ProDescriptions.Item>
                     <ProDescriptions.Item label="实际执行时间">{data?.realExecutionTime}</ProDescriptions.Item>
-                    <ProDescriptions.Item label="分片参数"
-                                          tooltip={"只有在分片策略下才有参考意义"}>
+                    <ProDescriptions.Item label="分片参数" tooltip={"只有在分片策略下才有参考意义"}>
                         页码：{data?.page}，页数：{data?.total}
                     </ProDescriptions.Item>
+                    <ProDescriptions.Item label="执行器主机名">{data?.executorHostName}</ProDescriptions.Item>
                 </ProDescriptions>
 
                 <Divider style={{marginBottom: 32}}/>

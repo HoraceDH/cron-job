@@ -202,9 +202,9 @@ const Welcome: React.FC = () => {
                         <InfoCircleOutlined/>
                     </Tooltip>
 
-                    <span style={{marginLeft: 40}}>任务：</span>
+                    <span style={{marginLeft: 20}}>任务：</span>
                     <Select defaultValue={""} options={taskSelectList} showSearch={true}
-                            placeholder={"请选择任务"} style={{width: '400px'}} onChange={(taskId) => {
+                            placeholder={"请选择任务"} style={{width: '360px'}} onChange={(taskId) => {
                         updateCurrentTaskId(taskId);
                         const startDate = dayjs().add(-2, 'hour');
                         const endDate = dayjs();
