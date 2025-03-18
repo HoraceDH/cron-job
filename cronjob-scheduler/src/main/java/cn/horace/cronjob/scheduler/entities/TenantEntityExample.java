@@ -96,7 +96,7 @@ public class TenantEntityExample {
     }
 
     /**
-     * Create in 2024-07-27 12:24:48.
+     * Create in 2025-03-18 23:00:21.932.
      * <p>
      * 对应数据库表：t_tenant
      * 
@@ -343,6 +343,136 @@ public class TenantEntityExample {
             return (Criteria) this;
         }
 
+        public Criteria andAlarmTypeIsNull() {
+            addCriterion("alarm_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeIsNotNull() {
+            addCriterion("alarm_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeEqualTo(Integer value) {
+            addCriterion("alarm_type =", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeNotEqualTo(Integer value) {
+            addCriterion("alarm_type <>", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeGreaterThan(Integer value) {
+            addCriterion("alarm_type >", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("alarm_type >=", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeLessThan(Integer value) {
+            addCriterion("alarm_type <", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("alarm_type <=", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeIn(List<Integer> values) {
+            addCriterion("alarm_type in", values, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeNotIn(List<Integer> values) {
+            addCriterion("alarm_type not in", values, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeBetween(Integer value1, Integer value2) {
+            addCriterion("alarm_type between", value1, value2, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("alarm_type not between", value1, value2, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigIsNull() {
+            addCriterion("alarm_config is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigIsNotNull() {
+            addCriterion("alarm_config is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigEqualTo(String value) {
+            addCriterion("alarm_config =", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigNotEqualTo(String value) {
+            addCriterion("alarm_config <>", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigGreaterThan(String value) {
+            addCriterion("alarm_config >", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigGreaterThanOrEqualTo(String value) {
+            addCriterion("alarm_config >=", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigLessThan(String value) {
+            addCriterion("alarm_config <", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigLessThanOrEqualTo(String value) {
+            addCriterion("alarm_config <=", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigLike(String value) {
+            addCriterion("alarm_config like", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigNotLike(String value) {
+            addCriterion("alarm_config not like", value, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigIn(List<String> values) {
+            addCriterion("alarm_config in", values, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigNotIn(List<String> values) {
+            addCriterion("alarm_config not in", values, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigBetween(String value1, String value2) {
+            addCriterion("alarm_config between", value1, value2, "alarmConfig");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmConfigNotBetween(String value1, String value2) {
+            addCriterion("alarm_config not between", value1, value2, "alarmConfig");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;
@@ -535,7 +665,7 @@ public class TenantEntityExample {
     }
 
     /**
-     * Create in 2024-07-27 12:24:48.
+     * Create in 2025-03-18 23:00:21.932.
      * <p>
      * 对应数据库表：t_tenant
      * 
@@ -548,7 +678,7 @@ public class TenantEntityExample {
     }
 
     /**
-     * Create in 2024-07-27 12:24:48.
+     * Create in 2025-03-18 23:00:21.932.
      * <p>
      * 对应数据库表：t_tenant
      * 
