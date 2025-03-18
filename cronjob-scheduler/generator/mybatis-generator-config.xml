@@ -80,11 +80,16 @@
             tableName: 数据库中的表名
             domainObjectName: 生成的实体类名
         -->
-        <table schema="cron-job" tableName="t_task_statistics" domainObjectName="TaskStatisticsEntity" enableCountByExample="true"
+        <table schema="cron-job" tableName="t_alarm" domainObjectName="AlarmEntity" enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
                selectByExampleQueryId="true" enableInsert="true" enableSelectByPrimaryKey="true" selectByPrimaryKeyQueryId="true">
             <property name="useActualColumnNames" value="false"/>
         </table>
+<!--        <table schema="cron-job" tableName="t_task_statistics" domainObjectName="TaskStatisticsEntity" enableCountByExample="true"-->
+<!--               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+<!--               selectByExampleQueryId="true" enableInsert="true" enableSelectByPrimaryKey="true" selectByPrimaryKeyQueryId="true">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--        </table>-->
 <!--        <table schema="cron-job" tableName="t_scheduler_instance" domainObjectName="SchedulerInstanceEntity" enableCountByExample="true"-->
 <!--               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
 <!--               selectByExampleQueryId="true" enableInsert="true" enableSelectByPrimaryKey="true" selectByPrimaryKeyQueryId="true">-->

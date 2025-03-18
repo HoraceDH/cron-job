@@ -42,6 +42,8 @@ public class SchedulerStarter implements InitializingBean {
     private StatisticsService statisticsService;
     @Resource
     private DetectionService detectionService;
+    @Resource
+    private AlarmService alarmService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -120,6 +122,8 @@ public class SchedulerStarter implements InitializingBean {
         this.schedulerService.stopUpdateTaskQueue();
         // 停止派发任务，队列中的任务依然等待调度完成
         this.schedulerService.stopDispatcherTask();
+        // 优雅停止告警服务
+        this.alarmService.shutdownGracefully();
         // 停止心跳，并将调度器设置为下线状态
         this.schedulerInstanceService.stopSchedulerInstance();
         this.threadScheduledExecutor.shutdownGracefully();

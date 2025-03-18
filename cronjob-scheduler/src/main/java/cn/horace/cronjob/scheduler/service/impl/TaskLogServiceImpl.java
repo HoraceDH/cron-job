@@ -15,6 +15,7 @@ import cn.horace.cronjob.scheduler.entities.TaskEntity;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntityExample;
 import cn.horace.cronjob.scheduler.mappers.TaskLogEntityMapper;
+import cn.horace.cronjob.scheduler.service.AlarmService;
 import cn.horace.cronjob.scheduler.service.TaskLogService;
 import cn.horace.cronjob.scheduler.service.UserTenantService;
 import cn.horace.cronjob.scheduler.utils.LikeUtils;
@@ -51,6 +52,8 @@ public class TaskLogServiceImpl implements TaskLogService {
     private TaskLogAdapter taskLogAdapter;
     @Resource
     private UserTenantService userTenantService;
+    @Resource
+    private AlarmService alarmService;
 
     /**
      * 将任务入库
@@ -75,7 +78,7 @@ public class TaskLogServiceImpl implements TaskLogService {
      * 添加一个任务日志，并返回任务日志ID
      *
      * @param task          任务
-     * @param executionTime
+     * @param executionTime 执行时间
      * @param exeType       执行类型
      * @return
      */
@@ -126,7 +129,14 @@ public class TaskLogServiceImpl implements TaskLogService {
     @Override
     public boolean updateByPrimaryKeySelective(TaskLogEntity updateEntity) {
         updateEntity.setModifyTime(new Date());
-        return this.mapper.updateByPrimaryKeySelective(updateEntity) > 0;
+        boolean success = this.mapper.updateByPrimaryKeySelective(updateEntity) > 0;
+        if (success) {
+            boolean isAlarmState = this.alarmService.isAlarmState(TaskLogState.from(updateEntity.getState()));
+            if (isAlarmState) {
+                this.alarmService.alarm(this.mapper.selectByPrimaryKey(updateEntity.getId()));
+            }
+        }
+        return success;
     }
 
     @Override
@@ -252,7 +262,14 @@ public class TaskLogServiceImpl implements TaskLogService {
         TaskLogEntityExample example = new TaskLogEntityExample();
         example.or().andIdEqualTo(id).andVersionEqualTo(version);
         int count = this.mapper.updateByExampleSelective(entity, example);
-        return count > 0;
+        boolean success = count > 0;
+        if (success) {
+            boolean isAlarmState = this.alarmService.isAlarmState(state);
+            if (isAlarmState) {
+                this.alarmService.alarm(this.mapper.selectByPrimaryKey(id));
+            }
+        }
+        return success;
     }
 
     /**

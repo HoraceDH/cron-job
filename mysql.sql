@@ -250,6 +250,20 @@ create table `t_task_statistics` (
     primary key (`date_scale`, `task_id`)
 )  comment '任务统计数据表';
 
+# 告警表
+create table `t_alarm` (
+    `id` bigint primary key comment '主键',
+    `task_log_id` bigint not null comment '任务日志ID',
+    `app_name` varchar(100) not null comment '应用名',
+    `task_name` varchar(100) not null comment '任务名',
+    `executor_address` varchar(50) not null comment '执行器地址',
+    `executor_host_name` varchar(100) comment '执行器主机名',
+    `method` varchar(500) not null comment '任务方法，类全限定名',
+    `failed_reason` text not null comment '简要原因',
+    `create_time` datetime(3) not null default current_timestamp(3) comment '创建时间',
+    `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间' on update current_timestamp(3)
+) comment '告警记录表';
+
 # 初始化锁信息
 insert into `t_locks` (lock_id, lock_owner, lock_state, expire_time, lock_desc) values ('LOCK_GENERATE_TASK', 'default1', 2, now(), '生成调度任务的分布式锁');
 insert into `t_locks` (lock_id, lock_owner, lock_state, expire_time, lock_desc) values ('LOCK_GENERATE_STATISTICS', 'default2', 2, now(), '生成统计数据的分布式锁');

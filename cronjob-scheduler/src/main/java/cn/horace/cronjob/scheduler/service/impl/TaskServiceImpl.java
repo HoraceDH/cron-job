@@ -506,7 +506,7 @@ public class TaskServiceImpl implements TaskService {
         // 修改任务日志状态
         TaskLogEntity updateEntity = this.buildCompleteEntity(state, params, retryCount, nextExecutionTime);
         boolean success = this.taskLogService.updateByPrimaryKeySelective(updateEntity);
-        logger.info("complete task, success:{}, params:{}", success, params);
+        logger.info("complete task, updateSuccess:{}, state:{}, params:{}", success, TaskLogState.from(state), params);
         if (success) {
             return Result.success();
         }

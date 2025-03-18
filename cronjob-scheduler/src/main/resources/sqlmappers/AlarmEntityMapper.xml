@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.horace.cronjob.scheduler.mappers.AlarmEntityMapper">
+  <resultMap id="BaseResultMap" type="cn.horace.cronjob.scheduler.entities.AlarmEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="task_log_id" jdbcType="BIGINT" property="taskLogId" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
+    <result column="executor_address" jdbcType="VARCHAR" property="executorAddress" />
+    <result column="executor_host_name" jdbcType="VARCHAR" property="executorHostName" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="failed_reason" jdbcType="VARCHAR" property="failedReason" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, task_log_id, app_name, task_name, executor_address, executor_host_name, method, 
+    failed_reason, create_time, modify_time
+  </sql>
+  <select id="selectByExample" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_alarm
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_alarm
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_alarm
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntityExample">
+    delete from t_alarm
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
+    insert into t_alarm (id, task_log_id, app_name, 
+      task_name, executor_address, executor_host_name, 
+      method, failed_reason, create_time, 
+      modify_time)
+    values (#{id,jdbcType=BIGINT}, #{taskLogId,jdbcType=BIGINT}, #{appName,jdbcType=VARCHAR}, 
+      #{taskName,jdbcType=VARCHAR}, #{executorAddress,jdbcType=VARCHAR}, #{executorHostName,jdbcType=VARCHAR}, 
+      #{method,jdbcType=VARCHAR}, #{failedReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
+    insert into t_alarm
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskLogId != null">
+        task_log_id,
+      </if>
+      <if test="appName != null">
+        app_name,
+      </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
+      <if test="executorAddress != null">
+        executor_address,
+      </if>
+      <if test="executorHostName != null">
+        executor_host_name,
+      </if>
+      <if test="method != null">
+        method,
+      </if>
+      <if test="failedReason != null">
+        failed_reason,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="taskLogId != null">
+        #{taskLogId,jdbcType=BIGINT},
+      </if>
+      <if test="appName != null">
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="executorAddress != null">
+        #{executorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="executorHostName != null">
+        #{executorHostName,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="failedReason != null">
+        #{failedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntityExample" resultType="java.lang.Long">
+    select count(*) from t_alarm
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_alarm
+    <set>
+      <if test="row.id != null">
+        id = #{row.id,jdbcType=BIGINT},
+      </if>
+      <if test="row.taskLogId != null">
+        task_log_id = #{row.taskLogId,jdbcType=BIGINT},
+      </if>
+      <if test="row.appName != null">
+        app_name = #{row.appName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.taskName != null">
+        task_name = #{row.taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.executorAddress != null">
+        executor_address = #{row.executorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="row.executorHostName != null">
+        executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.method != null">
+        method = #{row.method,jdbcType=VARCHAR},
+      </if>
+      <if test="row.failedReason != null">
+        failed_reason = #{row.failedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createTime != null">
+        create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.modifyTime != null">
+        modify_time = #{row.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_alarm
+    set id = #{row.id,jdbcType=BIGINT},
+      task_log_id = #{row.taskLogId,jdbcType=BIGINT},
+      app_name = #{row.appName,jdbcType=VARCHAR},
+      task_name = #{row.taskName,jdbcType=VARCHAR},
+      executor_address = #{row.executorAddress,jdbcType=VARCHAR},
+      executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
+      method = #{row.method,jdbcType=VARCHAR},
+      failed_reason = #{row.failedReason,jdbcType=VARCHAR},
+      create_time = #{row.createTime,jdbcType=TIMESTAMP},
+      modify_time = #{row.modifyTime,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
+    update t_alarm
+    <set>
+      <if test="taskLogId != null">
+        task_log_id = #{taskLogId,jdbcType=BIGINT},
+      </if>
+      <if test="appName != null">
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskName != null">
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="executorAddress != null">
+        executor_address = #{executorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="executorHostName != null">
+        executor_host_name = #{executorHostName,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="failedReason != null">
+        failed_reason = #{failedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
+    update t_alarm
+    set task_log_id = #{taskLogId,jdbcType=BIGINT},
+      app_name = #{appName,jdbcType=VARCHAR},
+      task_name = #{taskName,jdbcType=VARCHAR},
+      executor_address = #{executorAddress,jdbcType=VARCHAR},
+      executor_host_name = #{executorHostName,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      failed_reason = #{failedReason,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    insert into t_alarm
+    (id, task_log_id, app_name, task_name, executor_address, executor_host_name, method, 
+      failed_reason, create_time, modify_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id,jdbcType=BIGINT}, #{item.taskLogId,jdbcType=BIGINT}, #{item.appName,jdbcType=VARCHAR}, 
+        #{item.taskName,jdbcType=VARCHAR}, #{item.executorAddress,jdbcType=VARCHAR}, #{item.executorHostName,jdbcType=VARCHAR}, 
+        #{item.method,jdbcType=VARCHAR}, #{item.failedReason,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifyTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <insert id="batchInsertSelective" parameterType="map">
+    insert into t_alarm (
+    <foreach collection="selective" item="column" separator=",">
+      ${column.escapedColumnName}
+    </foreach>
+    )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (
+      <foreach collection="selective" item="column" separator=",">
+        <if test="'id'.toString() == column.value">
+          #{item.id,jdbcType=BIGINT}
+        </if>
+        <if test="'task_log_id'.toString() == column.value">
+          #{item.taskLogId,jdbcType=BIGINT}
+        </if>
+        <if test="'app_name'.toString() == column.value">
+          #{item.appName,jdbcType=VARCHAR}
+        </if>
+        <if test="'task_name'.toString() == column.value">
+          #{item.taskName,jdbcType=VARCHAR}
+        </if>
+        <if test="'executor_address'.toString() == column.value">
+          #{item.executorAddress,jdbcType=VARCHAR}
+        </if>
+        <if test="'executor_host_name'.toString() == column.value">
+          #{item.executorHostName,jdbcType=VARCHAR}
+        </if>
+        <if test="'method'.toString() == column.value">
+          #{item.method,jdbcType=VARCHAR}
+        </if>
+        <if test="'failed_reason'.toString() == column.value">
+          #{item.failedReason,jdbcType=VARCHAR}
+        </if>
+        <if test="'create_time'.toString() == column.value">
+          #{item.createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="'modify_time'.toString() == column.value">
+          #{item.modifyTime,jdbcType=TIMESTAMP}
+        </if>
+      </foreach>
+      )
+    </foreach>
+  </insert>
+</mapper>
