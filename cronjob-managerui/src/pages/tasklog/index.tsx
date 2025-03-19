@@ -56,15 +56,6 @@ const Index: React.FC = () => {
         });
     }, []);
 
-    // 操作按钮
-    const baseOperateItems: ItemType[] = [
-        {
-            label: <Button size="small" type={"primary"}><Link
-                to={`${Pages.PAGE_TASKLOG_DETAILS}?id=${item?.id}`}>查看详情</Link></Button>,
-            key: '1',
-        },
-    ];
-
     /**
      * 渲染操作按钮
      *

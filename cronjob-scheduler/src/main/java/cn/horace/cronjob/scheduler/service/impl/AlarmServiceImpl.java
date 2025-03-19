@@ -1,19 +1,30 @@
 package cn.horace.cronjob.scheduler.service.impl;
 
 import cn.horace.cronjob.commons.GuidGenerate;
+import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.commons.constants.TaskLogState;
 import cn.horace.cronjob.commons.thread.DefaultThreadFactory;
 import cn.horace.cronjob.commons.utils.executor.GracefulThreadPoolExecutor;
+import cn.horace.cronjob.scheduler.alarm.AlarmHandler;
+import cn.horace.cronjob.scheduler.bean.Message;
+import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
+import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
+import cn.horace.cronjob.scheduler.bean.result.AlarmGroup;
+import cn.horace.cronjob.scheduler.bean.result.SearchItem;
+import cn.horace.cronjob.scheduler.constants.AlarmChannel;
 import cn.horace.cronjob.scheduler.entities.AlarmEntity;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 import cn.horace.cronjob.scheduler.mappers.AlarmEntityMapper;
 import cn.horace.cronjob.scheduler.service.AlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +41,17 @@ public class AlarmServiceImpl implements AlarmService {
     private AlarmEntityMapper mapper;
     @Resource
     private GuidGenerate guidGenerate;
+    @Autowired
+    private List<AlarmHandler> alarmHandlers;
+    private Map<Integer, AlarmHandler> alarmHandlerMap;
+
+    @PostConstruct
+    public void init() {
+        alarmHandlerMap = new HashMap<>();
+        for (AlarmHandler alarmHandler : alarmHandlers) {
+            alarmHandlerMap.put(alarmHandler.getAlarmChannel().getValue(), alarmHandler);
+        }
+    }
 
     /**
      * 是否是需要告警的状态
@@ -101,5 +123,68 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public void shutdownGracefully() {
         this.executor.shutdownGracefully();
+    }
+
+    /**
+     * 获取告警渠道列表，提供给搜索框用
+     *
+     * @return
+     */
+    @Override
+    public Result<List<SearchItem>> getSearchList() {
+        List<SearchItem> searchItems = new ArrayList<>();
+        for (AlarmHandler alarmHandler : this.alarmHandlers) {
+            if (alarmHandler.isAvailable()) {
+                AlarmChannel channel = alarmHandler.getAlarmChannel();
+                searchItems.add(new SearchItem(channel.getMsg(), String.valueOf(channel.getValue())));
+            }
+        }
+        return Result.success(searchItems);
+    }
+
+    /**
+     * 获取告警渠道的群组列表，提供给搜索框用
+     *
+     * @param params 参数
+     * @return
+     */
+    @Override
+    public Result<List<SearchItem>> getGroupList(GetGroupListParams params) {
+        AlarmHandler alarmHandler = this.alarmHandlerMap.get(params.getType());
+        if (alarmHandler == null || !alarmHandler.isAvailable()) {
+            logger.error("get group list, params is invalid, params:{}", params);
+            return Result.msgCodes(MsgCodes.ERROR_PARAMS);
+        }
+
+        Result<List<AlarmGroup>> result = alarmHandler.getGroupList();
+        if (!result.isSuccess()) {
+            return Result.msgCodes(result.getMsgCodes());
+        }
+
+        List<AlarmGroup> data = result.getData();
+        List<SearchItem> searchItems = new ArrayList<>();
+        for (AlarmGroup group : data) {
+            searchItems.add(new SearchItem(group.getName(), String.valueOf(group.getId())));
+        }
+        return Result.success(searchItems);
+    }
+
+    /**
+     * 发送告警
+     *
+     * @param params 参数
+     * @return
+     */
+    @Override
+    public Result<Void> sendAlarm(SendAlarmParams params) {
+        AlarmHandler alarmHandler = this.alarmHandlerMap.get(params.getType());
+        if (alarmHandler == null || !alarmHandler.isAvailable()) {
+            logger.error("send alarm, params is invalid, params:{}", params);
+            return Result.msgCodes(MsgCodes.ERROR_PARAMS);
+        }
+        Message message = new Message();
+        message.setChatId(params.getChatId());
+        message.setMsg("{\"text\": \"test message\"}");
+        return alarmHandler.sendMessage(message);
     }
 }

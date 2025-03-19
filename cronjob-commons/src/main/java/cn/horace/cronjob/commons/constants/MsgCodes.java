@@ -80,6 +80,10 @@ public enum MsgCodes {
      * 查询范围超限
      */
     ERROR_QUERY_RANGE(16, "查询范围超限"),
+    /**
+     * 外部调用失败
+     */
+    ERROR_EXTERNAL(17, "外部调用异常"),
 
     /**
      * 系统错误

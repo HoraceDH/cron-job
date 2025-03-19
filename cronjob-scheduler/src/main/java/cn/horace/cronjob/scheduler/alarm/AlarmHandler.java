@@ -1,5 +1,7 @@
 package cn.horace.cronjob.scheduler.alarm;
 
+import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.scheduler.bean.Message;
 import cn.horace.cronjob.scheduler.bean.result.AlarmGroup;
 import cn.horace.cronjob.scheduler.constants.AlarmChannel;
 
@@ -21,9 +23,24 @@ public interface AlarmHandler {
     public AlarmChannel getAlarmChannel();
 
     /**
+     * 是否可用
+     *
+     * @return
+     */
+    public boolean isAvailable();
+
+    /**
      * 获取告警群列表
      *
      * @return
      */
-    public List<AlarmGroup> getGroupList();
+    public Result<List<AlarmGroup>> getGroupList();
+
+    /**
+     * 发送消息
+     *
+     * @param message 消息对象
+     * @return
+     */
+    public Result<Void> sendMessage(Message message);
 }

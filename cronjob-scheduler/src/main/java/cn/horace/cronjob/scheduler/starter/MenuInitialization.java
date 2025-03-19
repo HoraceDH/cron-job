@@ -40,6 +40,7 @@ public class MenuInitialization implements ApplicationContextAware {
         parentMap.put("/manager-api/statistics", 1L);
         parentMap.put("/manager-api/user", 3L);
         parentMap.put("/manager-api/tenant", 4L);
+        parentMap.put("/manager-api/alarm", 4L);
         parentMap.put("/manager-api/schedulers", 5L);
         parentMap.put("/manager-api/menu", 6L);
         parentMap.put("/manager-api/executor", 8L);

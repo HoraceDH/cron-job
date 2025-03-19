@@ -14,7 +14,7 @@ public enum AlarmChannel {
     /**
      * 飞书或者Larkin
      */
-    Lark(0, "飞书或者是Lark"),
+    Lark(0, "飞书/Lark"),
     WEIXIN_WORK(1, "企业微信"),
     EMAIL(2, "邮件"),
     ;

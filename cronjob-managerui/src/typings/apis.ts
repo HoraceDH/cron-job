@@ -158,4 +158,19 @@ export default {
      */
     URI_STATISTICS_GET_LINE_DATA: "/manager-api/statistics/getLineData",
     /*********** 统计模块 **************************************/
+
+    /*********** 告警模块 **************************************/
+    /**
+     * 获取告警渠道列表，提供给搜索框用
+     */
+    URI_ALARM_GET_SEARCH_LIST: "/manager-api/alarm/getSearchList",
+    /**
+     * 获取告警渠道的群组列表，提供给搜索框用
+     */
+    URI_ALARM_GET_GROUP_LIST: "/manager-api/alarm/getGroupList",
+    /**
+     * 发送一次告警信息
+     */
+    URI_ALARM_GET_SEND_ALARM: "/manager-api/alarm/sendAlarm",
+    /*********** 告警模块 **************************************/
 }

@@ -1,7 +1,13 @@
 package cn.horace.cronjob.scheduler.service;
 
+import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.commons.constants.TaskLogState;
+import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
+import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
+import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
+
+import java.util.List;
 
 /**
  * Created in 2025-03-18 21:33.
@@ -28,4 +34,27 @@ public interface AlarmService {
      * 优雅关闭
      */
     void shutdownGracefully();
+
+    /**
+     * 获取告警渠道列表，提供给搜索框用
+     *
+     * @return
+     */
+    Result<List<SearchItem>> getSearchList();
+
+    /**
+     * 获取告警渠道的群组列表，提供给搜索框用
+     *
+     * @param params 参数
+     * @return
+     */
+    Result<List<SearchItem>> getGroupList(GetGroupListParams params);
+
+    /**
+     * 发送告警
+     *
+     * @param params 参数
+     * @return
+     */
+    Result<Void> sendAlarm(SendAlarmParams params);
 }
