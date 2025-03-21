@@ -10,7 +10,7 @@ declare namespace AlarmBeans {
         // 告警类型
         type?: string;
         // 告警群ID
-        chatId?: string;
+        nameAndChatId?: string;
     };
 
 }

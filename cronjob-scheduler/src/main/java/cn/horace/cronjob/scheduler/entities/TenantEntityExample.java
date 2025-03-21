@@ -96,7 +96,7 @@ public class TenantEntityExample {
     }
 
     /**
-     * Create in 2025-03-18 23:00:21.932.
+     * Create in 2025-03-21 21:28:20.487.
      * <p>
      * 对应数据库表：t_tenant
      * 
@@ -340,66 +340,6 @@ public class TenantEntityExample {
 
         public Criteria andTenantNotBetween(String value1, String value2) {
             addCriterion("tenant not between", value1, value2, "tenant");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeIsNull() {
-            addCriterion("alarm_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeIsNotNull() {
-            addCriterion("alarm_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeEqualTo(Integer value) {
-            addCriterion("alarm_type =", value, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeNotEqualTo(Integer value) {
-            addCriterion("alarm_type <>", value, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeGreaterThan(Integer value) {
-            addCriterion("alarm_type >", value, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("alarm_type >=", value, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeLessThan(Integer value) {
-            addCriterion("alarm_type <", value, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("alarm_type <=", value, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeIn(List<Integer> values) {
-            addCriterion("alarm_type in", values, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeNotIn(List<Integer> values) {
-            addCriterion("alarm_type not in", values, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeBetween(Integer value1, Integer value2) {
-            addCriterion("alarm_type between", value1, value2, "alarmType");
-            return (Criteria) this;
-        }
-
-        public Criteria andAlarmTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("alarm_type not between", value1, value2, "alarmType");
             return (Criteria) this;
         }
 
@@ -665,7 +605,7 @@ public class TenantEntityExample {
     }
 
     /**
-     * Create in 2025-03-18 23:00:21.932.
+     * Create in 2025-03-21 21:28:20.487.
      * <p>
      * 对应数据库表：t_tenant
      * 
@@ -678,7 +618,7 @@ public class TenantEntityExample {
     }
 
     /**
-     * Create in 2025-03-18 23:00:21.932.
+     * Create in 2025-03-21 21:28:20.487.
      * <p>
      * 对应数据库表：t_tenant
      * 

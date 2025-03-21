@@ -1,9 +1,11 @@
 package cn.horace.cronjob.scheduler.adapter;
 
 import cn.horace.cronjob.commons.constants.Constants;
+import cn.horace.cronjob.scheduler.bean.AlarmConfig;
 import cn.horace.cronjob.scheduler.bean.result.TenantItem;
 import cn.horace.cronjob.scheduler.entities.TenantEntity;
 import cn.horace.cronjob.scheduler.service.AppService;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Horace
  */
 @Component
@@ -51,6 +52,12 @@ public class TenantAdapter {
         tenantItem.setName(entity.getName());
         tenantItem.setTenant(entity.getTenant());
         tenantItem.setRemark(entity.getRemark());
+        if (entity.getAlarmConfig() != null) {
+            AlarmConfig alarmConfig = JSONObject.parseObject(entity.getAlarmConfig(), AlarmConfig.class);
+            tenantItem.setType(alarmConfig.getType());
+            tenantItem.setGroupName(alarmConfig.getGroupName());
+            tenantItem.setChatId(alarmConfig.getChatId());
+        }
         if (entity.getCreateTime() != null) {
             tenantItem.setCreateTime(DateFormatUtils.format(entity.getCreateTime(), Constants.DATE_FORMAT));
         }

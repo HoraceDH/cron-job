@@ -5,7 +5,6 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="tenant" jdbcType="VARCHAR" property="tenant" />
-    <result column="alarm_type" jdbcType="INTEGER" property="alarmType" />
     <result column="alarm_config" jdbcType="VARCHAR" property="alarmConfig" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -70,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, tenant, alarm_type, alarm_config, remark, create_time, modify_time
+    id, name, tenant, alarm_config, remark, create_time, modify_time
   </sql>
   <select id="selectByExample" parameterType="cn.horace.cronjob.scheduler.entities.TenantEntityExample" resultMap="BaseResultMap">
     select
@@ -105,11 +104,11 @@
   </delete>
   <insert id="insert" parameterType="cn.horace.cronjob.scheduler.entities.TenantEntity">
     insert into t_tenant (id, name, tenant, 
-      alarm_type, alarm_config, remark, 
-      create_time, modify_time)
+      alarm_config, remark, create_time, 
+      modify_time)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{tenant,jdbcType=VARCHAR}, 
-      #{alarmType,jdbcType=INTEGER}, #{alarmConfig,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{alarmConfig,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.horace.cronjob.scheduler.entities.TenantEntity">
     insert into t_tenant
@@ -122,9 +121,6 @@
       </if>
       <if test="tenant != null">
         tenant,
-      </if>
-      <if test="alarmType != null">
-        alarm_type,
       </if>
       <if test="alarmConfig != null">
         alarm_config,
@@ -148,9 +144,6 @@
       </if>
       <if test="tenant != null">
         #{tenant,jdbcType=VARCHAR},
-      </if>
-      <if test="alarmType != null">
-        #{alarmType,jdbcType=INTEGER},
       </if>
       <if test="alarmConfig != null">
         #{alarmConfig,jdbcType=VARCHAR},
@@ -184,9 +177,6 @@
       <if test="row.tenant != null">
         tenant = #{row.tenant,jdbcType=VARCHAR},
       </if>
-      <if test="row.alarmType != null">
-        alarm_type = #{row.alarmType,jdbcType=INTEGER},
-      </if>
       <if test="row.alarmConfig != null">
         alarm_config = #{row.alarmConfig,jdbcType=VARCHAR},
       </if>
@@ -209,7 +199,6 @@
     set id = #{row.id,jdbcType=BIGINT},
       name = #{row.name,jdbcType=VARCHAR},
       tenant = #{row.tenant,jdbcType=VARCHAR},
-      alarm_type = #{row.alarmType,jdbcType=INTEGER},
       alarm_config = #{row.alarmConfig,jdbcType=VARCHAR},
       remark = #{row.remark,jdbcType=VARCHAR},
       create_time = #{row.createTime,jdbcType=TIMESTAMP},
@@ -226,9 +215,6 @@
       </if>
       <if test="tenant != null">
         tenant = #{tenant,jdbcType=VARCHAR},
-      </if>
-      <if test="alarmType != null">
-        alarm_type = #{alarmType,jdbcType=INTEGER},
       </if>
       <if test="alarmConfig != null">
         alarm_config = #{alarmConfig,jdbcType=VARCHAR},
@@ -249,7 +235,6 @@
     update t_tenant
     set name = #{name,jdbcType=VARCHAR},
       tenant = #{tenant,jdbcType=VARCHAR},
-      alarm_type = #{alarmType,jdbcType=INTEGER},
       alarm_config = #{alarmConfig,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -258,12 +243,12 @@
   </update>
   <insert id="batchInsert" parameterType="map">
     insert into t_tenant
-    (id, name, tenant, alarm_type, alarm_config, remark, create_time, modify_time)
+    (id, name, tenant, alarm_config, remark, create_time, modify_time)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.id,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.tenant,jdbcType=VARCHAR}, 
-        #{item.alarmType,jdbcType=INTEGER}, #{item.alarmConfig,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR}, 
-        #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP})
+        #{item.alarmConfig,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifyTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   <insert id="batchInsertSelective" parameterType="map">
@@ -284,9 +269,6 @@
         </if>
         <if test="'tenant'.toString() == column.value">
           #{item.tenant,jdbcType=VARCHAR}
-        </if>
-        <if test="'alarm_type'.toString() == column.value">
-          #{item.alarmType,jdbcType=INTEGER}
         </if>
         <if test="'alarm_config'.toString() == column.value">
           #{item.alarmConfig,jdbcType=VARCHAR}

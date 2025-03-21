@@ -9,7 +9,6 @@ import MsgCodes from "@/typings/msgcodes";
 import {Pages} from "@/typings/pages";
 import CronComponent from "@/components/Customs/CronComponent";
 import ExecutorService from "@/services/ExecutorService";
-import TenantService from "@/services/TenantService";
 
 /**
  * 任务编辑

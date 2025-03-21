@@ -1,4 +1,4 @@
-import {ActionType, PageContainer, ProColumns, ProForm, ProTable} from '@ant-design/pro-components';
+import {ActionType, PageContainer, ProColumns, ProForm, ProFormText, ProTable} from '@ant-design/pro-components';
 import React, {useEffect, useRef, useState} from 'react';
 import {TenantBeans} from "@/typings/tenant";
 import {Commons} from "@/typings/commons";
@@ -7,13 +7,16 @@ import {Button, Tag} from "antd";
 import {Link} from "umi";
 import {ModalForm, ProFormInstance, ProFormSelect} from "@ant-design/pro-form/lib";
 import AlarmService from "@/services/AlarmService";
+import MsgCodes from "@/typings/msgcodes";
 
 const Index: React.FC = () => {
     const actionRef = useRef<ActionType>();
-    const [formVisibility, setFormVisibility] = useState<boolean>(false);
+    const [formVisibility, updateFormVisibility] = useState<boolean>(false);
     const [alarmChannelSearchList, updateAlarmChannelSearchList] = useState<Commons.SearchItem[]>();
     const [groupSearchList, updateGroupSearchList] = useState<Commons.SearchItem[]>();
     const createFormRef = useRef<ProFormInstance<AlarmBeans.AlarmConfig>>();
+    const [currentTenant, updateCurrentTenant] = useState<TenantBeans.TenantItem>();
+
 
     /**
      * 加载数据
@@ -28,6 +31,17 @@ const Index: React.FC = () => {
         fetchData().then();
     }, []);
 
+    // 在模态框打开时加载初始数据
+    useEffect(() => {
+        if (formVisibility) {
+            createFormRef.current?.setFieldsValue({
+                type: currentTenant?.type,
+                nameAndChatId: currentTenant?.groupName + "___SEP___" + currentTenant?.chatId,
+            });
+            console.log(formVisibility, currentTenant);
+        }
+    }, [formVisibility]);
+
     /**
      * 渲染操作按钮
      *
@@ -37,7 +51,8 @@ const Index: React.FC = () => {
     function renderOperationOptions(dom: React.ReactNode, entity: TenantBeans.TenantItem) {
         return (
             <Button size="small" type={"primary"} onClick={() => {
-                setFormVisibility(true);
+                updateFormVisibility(true);
+                updateCurrentTenant(entity);
             }}>
                 配置告警
             </Button>
@@ -71,6 +86,11 @@ const Index: React.FC = () => {
      * @param alarmConfig 用户对象
      */
     const updateAlarmConfig = async (alarmConfig: AlarmBeans.AlarmConfig) => {
+        let result = await AlarmService.getInstance().updateAlarmConfig(currentTenant?.key, alarmConfig);
+        if (result.code === MsgCodes.SUCCESS) {
+            updateFormVisibility(false);
+            return true;
+        }
         return false;
     }
 
@@ -107,6 +127,22 @@ const Index: React.FC = () => {
             },
         },
         {
+            title: '告警类型',
+            hideInSearch: true,
+            dataIndex: 'type',
+            valueEnum: {
+                0: <Tag color={"geekblue-inverse"}>未设置告警</Tag>,
+                1: <Tag color={"geekblue-inverse"}>飞书告警</Tag>,
+                2: <Tag color={"geekblue-inverse"}>企微告警</Tag>,
+                3: <Tag color={"geekblue-inverse"}>邮件告警</Tag>,
+            },
+        },
+        {
+            title: '告警群名称',
+            hideInSearch: true,
+            dataIndex: 'groupName',
+        },
+        {
             title: '创建时间',
             dataIndex: 'createTime',
             valueType: 'text',
@@ -131,11 +167,10 @@ const Index: React.FC = () => {
                 autoFocusFirstInput
                 modalProps={{
                     destroyOnClose: true,
-                    onCancel: () => setFormVisibility(false),
+                    onCancel: () => updateFormVisibility(false),
                 }}
                 submitTimeout={5000}
-                onFinish={updateAlarmConfig}
-            >
+                onFinish={updateAlarmConfig}>
                 <br/>
 
                 <ProForm.Group>
@@ -143,11 +178,11 @@ const Index: React.FC = () => {
                                    rules={[{required: true}]}
                                    tooltip={"如无可选告警渠道，请先在 application.properties 中配置。"}
                                    onChange={onAlarmChannelChange}/>
-                    <ProFormSelect name={"chatId"} options={groupSearchList} label={"告警群组"} width={350}
+                    <ProFormSelect name={"nameAndChatId"} options={groupSearchList} label={"告警群组"} width={350}
                                    rules={[{required: true}]}
                                    tooltip={"支持查询最近创建的群，需要先邀请机器人进群，才能被检索到。"}/>
                 </ProForm.Group>
-                <Button type={"primary"} danger onClick={tryAlarm}>试一下</Button>
+                <Button type={"primary"} danger onClick={tryAlarm}>触发告警</Button>
             </ModalForm>
             {/*告警配置的表单*/}
 

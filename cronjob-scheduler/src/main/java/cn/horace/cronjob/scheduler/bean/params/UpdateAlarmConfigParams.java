@@ -12,7 +12,8 @@ import lombok.ToString;
 @Data
 @ToString
 @NoArgsConstructor
-public class SendAlarmParams {
+public class UpdateAlarmConfigParams {
+    private String tenantId;
     private int type;
     private String nameAndChatId;
 }

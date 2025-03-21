@@ -196,4 +196,15 @@ public class TenantServiceImpl implements TenantService {
         Collections.sort(items, (o1, o2) -> (int) (Long.parseLong(o1.getValue()) - Long.parseLong(o2.getValue())));
         return Result.success(items);
     }
+
+    /**
+     * 更新租户信息
+     *
+     * @param tenant 租户信息
+     * @return
+     */
+    @Override
+    public boolean updateTenant(TenantEntity tenant) {
+        return this.mapper.updateByPrimaryKeySelective(tenant) > 0;
+    }
 }

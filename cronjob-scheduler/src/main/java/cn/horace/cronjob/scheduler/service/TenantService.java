@@ -71,4 +71,12 @@ public interface TenantService {
      * @return
      */
     Result<List<SearchItem>> getSearchList(long userId);
+
+    /**
+     * 更新租户信息
+     *
+     * @param tenant 租户信息
+     * @return
+     */
+    boolean updateTenant(TenantEntity tenant);
 }

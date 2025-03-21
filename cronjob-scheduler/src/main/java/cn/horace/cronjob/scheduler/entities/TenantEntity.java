@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- * Create in 2025-03-18 23:00:21.932.
+ * Create in 2025-03-21 21:28:20.487.
  * <p>
  * 对应数据库表：t_tenant
  * 
@@ -26,11 +26,6 @@ public class TenantEntity {
      * 租户编码 tenant
      */
     private String tenant;
-
-    /**
-     * 0：不告警，1：飞书告警，2：企微告警，3：邮件告警 alarm_type
-     */
-    private Integer alarmType;
 
     /**
      * 告警配置，json格式 alarm_config
@@ -104,24 +99,6 @@ public class TenantEntity {
      */
     public void setTenant(String tenant) {
         this.tenant = tenant == null ? null : tenant.trim();
-    }
-
-    /**
-     * 0：不告警，1：飞书告警，2：企微告警，3：邮件告警
-     * 
-     * @return 0：不告警，1：飞书告警，2：企微告警，3：邮件告警
-     */
-    public Integer getAlarmType() {
-        return alarmType;
-    }
-
-    /**
-     * 0：不告警，1：飞书告警，2：企微告警，3：邮件告警
-     * 
-     * @param alarmType 0：不告警，1：飞书告警，2：企微告警，3：邮件告警
-     */
-    public void setAlarmType(Integer alarmType) {
-        this.alarmType = alarmType;
     }
 
     /**
@@ -207,7 +184,6 @@ public class TenantEntity {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", tenant=").append(tenant);
-        sb.append(", alarmType=").append(alarmType);
         sb.append(", alarmConfig=").append(alarmConfig);
         sb.append(", remark=").append(remark);
         sb.append(", createTime=").append(createTime);
@@ -223,7 +199,6 @@ public class TenantEntity {
         id("id", "id", "BIGINT", false),
         name("name", "name", "VARCHAR", false),
         tenant("tenant", "tenant", "VARCHAR", false),
-        alarmType("alarm_type", "alarmType", "INTEGER", false),
         alarmConfig("alarm_config", "alarmConfig", "VARCHAR", false),
         remark("remark", "remark", "VARCHAR", false),
         createTime("create_time", "createTime", "TIMESTAMP", false),
