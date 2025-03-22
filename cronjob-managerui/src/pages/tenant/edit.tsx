@@ -9,6 +9,7 @@ import TenantService from "@/services/TenantService";
 import AlarmService from "@/services/AlarmService";
 import {TenantBeans} from "@/typings/tenant";
 import {Commons} from "@/typings/commons";
+import MsgCodes from "@/typings/msgcodes";
 
 /**
  * 租户编辑
@@ -54,10 +55,13 @@ const TenantEdit: React.FC = () => {
      * 触发一次告警
      */
     async function sendAlarm() {
-        await AlarmService.getInstance().sendAlarm({
+        let result = await AlarmService.getInstance().sendAlarm({
             type: tenant?.type,
             chatId: tenant?.chatId,
         });
+        if (result.code === MsgCodes.SUCCESS) {
+            message.success("发送告警信息成功！");
+        }
     }
 
     /**

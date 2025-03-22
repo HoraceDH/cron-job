@@ -5,7 +5,6 @@ import Apis from "@/typings/apis";
 import MsgCodes from "@/typings/msgcodes";
 import {TenantBeans} from "@/typings/tenant";
 import UserService from "@/services/UserService";
-import {message} from "antd";
 
 /**
  * 租户服务类
@@ -72,7 +71,6 @@ class TenantService {
             ...(options || {}),
         });
         if (tenantResult.code !== MsgCodes.SUCCESS) {
-            console.error("get all tenant list failed, ", tenantResult);
             return [];
         }
         return tenantResult.data ? tenantResult.data : [];
@@ -99,7 +97,6 @@ class TenantService {
                 method: "POST",
             });
             if (result.code !== MsgCodes.SUCCESS) {
-                console.error("get search tenant list failed, ", result);
                 this.tenantItems = [];
             }
             this.tenantItems = result.data;
@@ -118,8 +115,6 @@ class TenantService {
             data: tenant,
         });
         if (result.code !== MsgCodes.SUCCESS) {
-            console.error("update tenant failed, ", result);
-            message.error("更新租户信息失败！" + result.msg);
             return result;
         }
         return result;

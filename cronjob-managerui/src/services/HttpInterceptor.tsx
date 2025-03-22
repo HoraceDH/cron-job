@@ -75,9 +75,9 @@ const responseInterceptor = (response: any) => {
     let data = response.data;
     const {status, statusText, config} = response;
     const {url} = config;
-    let errMsg = status + " " + statusText;
+    let errMsg = status + ", " + statusText + ", " + url;
     if (status !== 200) {
-        console.error("request server error,", errMsg, " -> ", url);
+        console.error("request server error,", errMsg);
         message.error(errMsg).then(() => {
         });
         return response;
@@ -88,7 +88,9 @@ const responseInterceptor = (response: any) => {
         document.location.href = Pages.PAGE_URL_USER_LOGIN;
     }
     if (data.code !== MsgCodes.SUCCESS) {
-        message.error(data.msg).then(() => {
+        let msg = data.msg + ", " + url;
+        console.error("request failed, ", msg)
+        message.error(msg).then(() => {
         });
     }
     return response;

@@ -36,7 +36,6 @@ class TaskLogService {
             ...(options || {}),
         });
         if (taskListLogResult.code !== MsgCodes.SUCCESS) {
-            console.error("get task log list failed, ", taskListLogResult);
             return [];
         }
         return taskListLogResult.data ? taskListLogResult.data : [];
@@ -53,7 +52,6 @@ class TaskLogService {
             params: {id: id}
         });
         if (taskLogResult.code !== MsgCodes.SUCCESS) {
-            console.error("get task log failed, ", taskLogResult);
             return null;
         }
         return taskLogResult.data ? taskLogResult.data : null;

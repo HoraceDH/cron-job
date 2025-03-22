@@ -41,7 +41,6 @@ class AppService {
             ...(options || {}),
         });
         if (appListResult.code !== MsgCodes.SUCCESS) {
-            console.error("get app list failed, ", appListResult);
             return [];
         }
         return appListResult.data ? appListResult.data : [];
@@ -59,7 +58,6 @@ class AppService {
             params: {tenantId: tenantId}
         });
         if (result.code !== MsgCodes.SUCCESS) {
-            console.error("get search app list failed, ", result);
             return [];
         }
         return result.data;
@@ -68,7 +66,7 @@ class AppService {
     /**
      * 获取搜索列表
      *
-     * @param tenant 租户
+     * @param tenantId
      */
     public async getSearchListEnum(tenantId: string | undefined): Promise<Map<string, string>> {
         const items = await this.getSearchList(tenantId);
@@ -100,9 +98,6 @@ class AppService {
             method: "POST",
             data: {id: id}
         });
-        if (result.code !== MsgCodes.SUCCESS) {
-            console.error("stop app error, id:", id, ", result:", result);
-        }
     }
 
     /**
@@ -114,9 +109,6 @@ class AppService {
             method: "POST",
             data: {id: id}
         });
-        if (result.code !== MsgCodes.SUCCESS) {
-            console.error("start app error, id:", id, ", result:", result);
-        }
     }
 }
 

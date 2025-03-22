@@ -50,7 +50,6 @@ class MenuService {
         }
         const menuResult = await request<Menu.MenuResult>(Apis.URI_MENU_GET_USER_MENU_LIST, {method: "POST"});
         if (menuResult.code !== MsgCodes.SUCCESS) {
-            console.error("get menu list failed, ", menuResult);
             return [];
         }
         return this.handlerMenuIcon(menuResult.data);
@@ -74,7 +73,6 @@ class MenuService {
             ...(options || {}),
         });
         if (menuResult.code !== MsgCodes.SUCCESS) {
-            console.error("get all menu list failed, ", menuResult);
             return [];
         }
         return menuResult.data;

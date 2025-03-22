@@ -30,7 +30,6 @@ class StatisticsService {
             params: {}
         });
         if (summaryResult.code !== MsgCodes.SUCCESS) {
-            console.error("get summary data failed, ", summaryResult);
             return undefined;
         }
         return summaryResult.data;
@@ -53,7 +52,6 @@ class StatisticsService {
             }
         });
         if (lineDataResult.code !== MsgCodes.SUCCESS) {
-            console.error("get line data failed, ", lineDataResult);
             return [];
         }
         return lineDataResult.data;

@@ -36,7 +36,6 @@ class TaskService {
             ...(options || {}),
         });
         if (taskListResult.code !== MsgCodes.SUCCESS) {
-            console.error("get task list failed, ", taskListResult);
             return [];
         }
         return taskListResult.data ? taskListResult.data : [];
@@ -53,7 +52,6 @@ class TaskService {
             params: {id: id}
         });
         if (taskResult.code !== MsgCodes.SUCCESS) {
-            console.error("get task failed, ", taskResult);
             return null;
         }
         return taskResult.data ? taskResult.data : null;
@@ -71,7 +69,6 @@ class TaskService {
             params: {id: id, runState: runState}
         });
         if (result.code !== MsgCodes.SUCCESS) {
-            console.error("get task failed, ", result);
             return false;
         }
         return true;
@@ -114,7 +111,6 @@ class TaskService {
             }
         });
         if (result.code !== MsgCodes.SUCCESS) {
-            console.error("execute task failed, ", result);
             return result.data;
         }
         return result.data;
@@ -135,7 +131,6 @@ class TaskService {
             params: {tenantId: tenantId, appName: appName},
         });
         if (result.code !== MsgCodes.SUCCESS) {
-            console.error("get search task list failed, ", result);
             return [];
         }
         return result.data;
@@ -168,7 +163,6 @@ class TaskService {
             data: data,
         });
         if (result.code !== MsgCodes.SUCCESS) {
-            console.error("failed to update task, params:", data, ", result:", result);
             return false;
         }
         return true;
@@ -185,7 +179,6 @@ class TaskService {
             params: {cron: cron}
         });
         if (taskResult.code !== MsgCodes.SUCCESS) {
-            console.error("get recent execution time failed, ", taskResult);
             return taskResult;
         }
         return taskResult;

@@ -42,7 +42,6 @@ class ExecutorService {
             ...(options || {}),
         });
         if (executorListResult.code !== MsgCodes.SUCCESS) {
-            console.error("get executor list failed, ", executorListResult);
             return [];
         }
         return executorListResult.data ? executorListResult.data : [];
@@ -60,7 +59,6 @@ class ExecutorService {
                 }
             });
             if (result.code !== MsgCodes.SUCCESS) {
-                console.error("get search executor tag list failed, ", result);
                 this.tagItems = [];
             }
             this.tagItems = result.data;

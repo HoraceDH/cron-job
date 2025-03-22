@@ -41,7 +41,6 @@ class SchedulersService {
             ...(options || {}),
         });
         if (schedulersListResult.code !== MsgCodes.SUCCESS) {
-            console.error("get schedulers list failed, ", schedulersListResult);
             return [];
         }
         return schedulersListResult.data ? schedulersListResult.data : [];
