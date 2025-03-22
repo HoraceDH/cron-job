@@ -58,7 +58,7 @@ public class AlarmServiceImpl implements AlarmService {
     public void init() {
         alarmHandlerMap = new HashMap<>();
         for (AlarmHandler alarmHandler : alarmHandlers) {
-            alarmHandlerMap.put(alarmHandler.getAlarmChannel().getValue(), alarmHandler);
+            alarmHandlerMap.put(alarmHandler.getAlarmType().getValue(), alarmHandler);
         }
     }
 
@@ -164,7 +164,7 @@ public class AlarmServiceImpl implements AlarmService {
         searchItems.add(new SearchItem(AlarmType.NONE.getMsg(), String.valueOf(AlarmType.NONE.getValue())));
         for (AlarmHandler alarmHandler : this.alarmHandlers) {
             if (alarmHandler.isAvailable()) {
-                AlarmType channel = alarmHandler.getAlarmChannel();
+                AlarmType channel = alarmHandler.getAlarmType();
                 searchItems.add(new SearchItem(channel.getMsg(), String.valueOf(channel.getValue())));
             }
         }

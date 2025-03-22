@@ -29,22 +29,21 @@ import java.util.UUID;
  * @author Horace
  */
 @Service
-public class LarkAlarmHandlerImpl implements AlarmHandler {
+public class LarkAlarmHandlerImpl extends AlarmHandler {
     private static final Logger logger = LoggerFactory.getLogger(LarkAlarmHandlerImpl.class);
     @Resource
     private AppConfig appConfig;
-    private boolean available;
-    private Client client;
+    protected Client client;
 
     @PostConstruct
     public void init() {
         if (StringUtils.isBlank(this.appConfig.getLarkAppId()) || StringUtils.isBlank(this.appConfig.getLarkAppSecret())) {
-            logger.info("lark/feishu app id or app secret are empty, skip lark alarm handler init");
+            logger.info("lark app id or app secret are empty, skip lark alarm handler init");
             return;
         }
         this.client = Client.newBuilder(this.appConfig.getLarkAppId(), this.appConfig.getLarkAppSecret()).build();
-        this.available = true;
-        logger.info("init lark/feishu alarm handler success.");
+        super.available = true;
+        logger.info("init lark alarm handler success.");
     }
 
     /**
@@ -53,7 +52,7 @@ public class LarkAlarmHandlerImpl implements AlarmHandler {
      * @return
      */
     @Override
-    public AlarmType getAlarmChannel() {
+    public AlarmType getAlarmType() {
         return AlarmType.Lark;
     }
 
@@ -66,16 +65,6 @@ public class LarkAlarmHandlerImpl implements AlarmHandler {
     public String getMsgType() {
         // 卡片消息
         return "interactive";
-    }
-
-    /**
-     * 是否可用
-     *
-     * @return
-     */
-    @Override
-    public boolean isAvailable() {
-        return this.available;
     }
 
     /**

@@ -19,7 +19,7 @@ import java.util.List;
  * @author Horace
  */
 @Service
-public class WeiXinWorkAlarmHandlerImpl implements AlarmHandler {
+public class WeiXinWorkAlarmHandlerImpl extends AlarmHandler {
     private static final Logger logger = LoggerFactory.getLogger(WeiXinWorkAlarmHandlerImpl.class);
 
     /**
@@ -28,7 +28,7 @@ public class WeiXinWorkAlarmHandlerImpl implements AlarmHandler {
      * @return
      */
     @Override
-    public AlarmType getAlarmChannel() {
+    public AlarmType getAlarmType() {
         return AlarmType.WEIXIN_WORK;
     }
 

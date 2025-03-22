@@ -62,8 +62,8 @@ const Index: React.FC = () => {
             valueEnum: {
                 0: <Tag color={"orange-inverse"}>未设置告警</Tag>,
                 1: <Tag color={"orange-inverse"}>飞书告警</Tag>,
-                2: <Tag color={"orange-inverse"}>企微告警</Tag>,
-                3: <Tag color={"orange-inverse"}>邮件告警</Tag>,
+                2: <Tag color={"orange-inverse"}>Lark告警</Tag>,
+                3: <Tag color={"orange-inverse"}>企微告警</Tag>,
             },
         },
         {

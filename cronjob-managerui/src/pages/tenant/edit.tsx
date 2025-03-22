@@ -194,7 +194,7 @@ const TenantEdit: React.FC = () => {
                         <Row gutter={16}>
                             <Col lg={6} md={12} sm={24}>
                                 <ProFormSelect
-                                    tooltip={"支持的告警方式，如：飞书/Lark、企业微信、邮件等，但需要在application.properties中配置相关信息才可选"}
+                                    tooltip={"支持的告警方式，如：飞书、Lark、企业微信等，但需要在application.properties中配置相关信息才可选"}
                                     label={"告警方式"}
                                     name="type"
                                     rules={[{required: true, message: '请选择告警方式'}]}

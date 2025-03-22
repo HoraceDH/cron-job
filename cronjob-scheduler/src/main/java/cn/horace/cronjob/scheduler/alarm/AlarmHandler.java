@@ -15,34 +15,38 @@ import java.util.List;
  *
  * @author Horace
  */
-public interface AlarmHandler {
+public abstract class AlarmHandler {
+    protected boolean available;
+
     /**
      * 获取告警通道
      *
      * @return
      */
-    public AlarmType getAlarmChannel();
+    public abstract AlarmType getAlarmType();
 
     /**
      * 获取消息类型
      *
      * @return
      */
-    public String getMsgType();
+    public abstract String getMsgType();
 
     /**
      * 是否可用
      *
      * @return
      */
-    public boolean isAvailable();
+    public boolean isAvailable() {
+        return this.available;
+    }
 
     /**
      * 获取告警群列表
      *
      * @return
      */
-    public Result<List<AlarmGroup>> getGroupList();
+    public abstract Result<List<AlarmGroup>> getGroupList();
 
     /**
      * 发送消息
@@ -50,7 +54,7 @@ public interface AlarmHandler {
      * @param message 消息对象
      * @return
      */
-    public Result<Void> sendMessage(Message message);
+    public abstract Result<Void> sendMessage(Message message);
 
     /**
      * 构建消息
@@ -58,5 +62,5 @@ public interface AlarmHandler {
      * @param params
      * @return
      */
-    String buildMessage(SendAlarmParams params);
+    public abstract String buildMessage(SendAlarmParams params);
 }

@@ -15,9 +15,9 @@ public enum AlarmType {
      * 不设置告警
      */
     NONE(0, "不设置告警"),
-    Lark(1, "飞书/Lark"),
-    WEIXIN_WORK(2, "企业微信"),
-    EMAIL(3, "邮件"),
+    FeiShu(1, "飞书"),
+    Lark(2, "Lark"),
+    WEIXIN_WORK(3, "企业微信"),
     ;
     private int value;
     private String msg;

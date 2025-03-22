@@ -44,4 +44,8 @@ public class AppConfig {
     private String larkAppId;
     @Value("${lark.appSecret}")
     private String larkAppSecret;
+    @Value("${feiShu.appId}")
+    private String feiShuAppId;
+    @Value("${feiShu.appSecret}")
+    private String feiShuAppSecret;
 }
