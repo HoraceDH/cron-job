@@ -66,6 +66,13 @@ public class AlarmController {
      */
     @PostMapping(name = "发送一次告警信息", value = "/sendAlarm")
     public MsgObject sendAlarm(@RequestBody SendAlarmParams params) {
+        params.setOwner("horace");
+        params.setTenantName("horace");
+        params.setAppName("example-executor");
+        params.setTaskName("测试任务");
+        params.setTaskMethod("cn.horace.cronjob.examples.tasks.DemoCronTask.handle");
+        params.setFailedReason("测试告警信息");
+        params.setUrl("https://cronjob.horace.cn");
         Result<Void> result = this.alarmService.sendAlarm(params);
         if (result.isSuccess()) {
             return MsgObject.success();

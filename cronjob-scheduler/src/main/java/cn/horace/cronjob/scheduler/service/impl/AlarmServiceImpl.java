@@ -7,17 +7,21 @@ import cn.horace.cronjob.commons.constants.TaskLogState;
 import cn.horace.cronjob.commons.thread.DefaultThreadFactory;
 import cn.horace.cronjob.commons.utils.executor.GracefulThreadPoolExecutor;
 import cn.horace.cronjob.scheduler.alarm.AlarmHandler;
+import cn.horace.cronjob.scheduler.bean.AlarmConfig;
 import cn.horace.cronjob.scheduler.bean.Message;
 import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
 import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
 import cn.horace.cronjob.scheduler.bean.result.AlarmGroup;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
-import cn.horace.cronjob.scheduler.constants.AlarmChannel;
+import cn.horace.cronjob.scheduler.config.AppConfig;
+import cn.horace.cronjob.scheduler.constants.AlarmType;
 import cn.horace.cronjob.scheduler.entities.AlarmEntity;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
+import cn.horace.cronjob.scheduler.entities.TenantEntity;
 import cn.horace.cronjob.scheduler.mappers.AlarmEntityMapper;
 import cn.horace.cronjob.scheduler.service.AlarmService;
 import cn.horace.cronjob.scheduler.service.TenantService;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,8 @@ import java.util.concurrent.TimeUnit;
 public class AlarmServiceImpl implements AlarmService {
     private static final Logger logger = LoggerFactory.getLogger(AlarmServiceImpl.class);
     private GracefulThreadPoolExecutor executor = new GracefulThreadPoolExecutor(5, 50, 5, TimeUnit.MINUTES, new SynchronousQueue<>(), new DefaultThreadFactory("task-alarm"), false);
+    @Resource
+    private AppConfig appConfig;
     @Resource
     private AlarmEntityMapper mapper;
     @Resource
@@ -81,6 +87,41 @@ public class AlarmServiceImpl implements AlarmService {
 
         // 发送告警信息
         logger.info("task execute failed, send alarm, entity:{}", entity);
+        TenantEntity tenant = this.tenantService.getTenant(taskLog.getTenantId());
+        if (tenant == null) {
+            logger.error("task execute failed, send alarm failed, tenant is null, taskLog:{}", taskLog);
+            return;
+        }
+
+        String alarmConfig = tenant.getAlarmConfig();
+        if (alarmConfig == null || alarmConfig.isEmpty()) {
+            logger.error("task execute failed, send alarm failed, alarmConfig is empty, tenant:{}", tenant);
+            return;
+        }
+
+        AlarmConfig config = JSONObject.parseObject(alarmConfig, AlarmConfig.class);
+        if (config.getType() == AlarmType.NONE.getValue()) {
+            logger.info("task execute failed, not need send alarm, tenant:{}", tenant);
+            return;
+        }
+
+        SendAlarmParams params = new SendAlarmParams();
+        params.setOwner(taskLog.getOwner() + " ");
+        params.setType(config.getType());
+        params.setChatId(config.getChatId());
+        params.setTenantName(tenant.getName());
+        params.setAppName(taskLog.getAppName());
+        params.setTaskName(taskLog.getName());
+        params.setTaskMethod(taskLog.getMethod());
+        params.setFailedReason(TaskLogState.from(taskLog.getState()).getMsg());
+        params.setTaskLogId(taskLog.getId());
+        params.setUrl(this.appConfig.getDomain() + "/schedulers/tasklog/detail?id=" + taskLog.getId());
+        Result<Void> result = this.sendAlarm(params);
+        if (result.isSuccess()) {
+            logger.info("task execute failed, send alarm success, result:{}, params:{}", result, params);
+        } else {
+            logger.error("task execute failed, send alarm failed, result:{}, params:{}", result, params);
+        }
     }
 
     /**
@@ -99,25 +140,9 @@ public class AlarmServiceImpl implements AlarmService {
         entity.setExecutorAddress(taskLog.getExecutorAddress());
         entity.setExecutorHostName(taskLog.getExecutorHostName());
         entity.setMethod(taskLog.getMethod());
-        entity.setFailedReason(this.getSimpleReason(taskLog));
         entity.setCreateTime(date);
         entity.setModifyTime(date);
         return entity;
-    }
-
-    /**
-     * 获取简单的失败原因
-     *
-     * @param taskLog 任务日志
-     * @return
-     */
-    private String getSimpleReason(TaskLogEntity taskLog) {
-        StringBuilder sb = new StringBuilder();
-        TaskLogState state = TaskLogState.from(taskLog.getState());
-        sb.append("state: ").append(state).append("\n");
-        sb.append("msg: ").append(state.getMsg()).append("\n");
-        sb.append("reason: ").append(taskLog.getFailedReason()).append("\n");
-        return sb.toString();
     }
 
     /**
@@ -136,10 +161,10 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public Result<List<SearchItem>> getSearchList() {
         List<SearchItem> searchItems = new ArrayList<>();
-        searchItems.add(new SearchItem(AlarmChannel.NONE.getMsg(), String.valueOf(AlarmChannel.NONE.getValue())));
+        searchItems.add(new SearchItem(AlarmType.NONE.getMsg(), String.valueOf(AlarmType.NONE.getValue())));
         for (AlarmHandler alarmHandler : this.alarmHandlers) {
             if (alarmHandler.isAvailable()) {
-                AlarmChannel channel = alarmHandler.getAlarmChannel();
+                AlarmType channel = alarmHandler.getAlarmChannel();
                 searchItems.add(new SearchItem(channel.getMsg(), String.valueOf(channel.getValue())));
             }
         }
@@ -189,7 +214,7 @@ public class AlarmServiceImpl implements AlarmService {
         }
         Message message = new Message();
         message.setChatId(params.getChatId());
-        message.setMsg("{\"text\": \"test message\"}");
+        message.setMsg(alarmHandler.buildMessage(params));
         return alarmHandler.sendMessage(message);
     }
 }

@@ -3,9 +3,10 @@ package cn.horace.cronjob.scheduler.alarm;
 import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.scheduler.bean.Message;
+import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
 import cn.horace.cronjob.scheduler.bean.result.AlarmGroup;
 import cn.horace.cronjob.scheduler.config.AppConfig;
-import cn.horace.cronjob.scheduler.constants.AlarmChannel;
+import cn.horace.cronjob.scheduler.constants.AlarmType;
 import com.lark.oapi.Client;
 import com.lark.oapi.service.im.v1.enums.CreateMessageReceiveIdTypeEnum;
 import com.lark.oapi.service.im.v1.model.*;
@@ -52,8 +53,19 @@ public class LarkAlarmHandlerImpl implements AlarmHandler {
      * @return
      */
     @Override
-    public AlarmChannel getAlarmChannel() {
-        return AlarmChannel.Lark;
+    public AlarmType getAlarmChannel() {
+        return AlarmType.Lark;
+    }
+
+    /**
+     * 获取消息类型
+     *
+     * @return
+     */
+    @Override
+    public String getMsgType() {
+        // 卡片消息
+        return "interactive";
     }
 
     /**
@@ -114,7 +126,7 @@ public class LarkAlarmHandlerImpl implements AlarmHandler {
             CreateMessageReq createMsgReq = CreateMessageReq.newBuilder()
                     .createMessageReqBody(CreateMessageReqBody.newBuilder()
                             .receiveId(message.getChatId())
-                            .msgType("text")
+                            .msgType(this.getMsgType())
                             .content(message.getMsg())
                             .uuid(UUID.randomUUID().toString())
                             .build())
@@ -134,5 +146,25 @@ public class LarkAlarmHandlerImpl implements AlarmHandler {
             logger.error("send message to lark/feishu error, message:{}, msg: {}", message, e.getMessage(), e);
             return Result.msgCodes(MsgCodes.ERROR_EXTERNAL);
         }
+    }
+
+    /**
+     * 构建告警消息
+     *
+     * @param params 参数
+     * @return
+     */
+    @Override
+    public String buildMessage(SendAlarmParams params) {
+        String msg = "{\"config\":{\"wide_screen_mode\":true},\"elements\":[{\"tag\":\"div\",\"text\":{\"content\":\"**负责人：${owner}**\\r\\n**租户名称：${tenantName}**\\r\\n**应用名称：${appName}**\\r\\n**任务名称：${taskName}**\\r\\n**任务方法：${taskMethod}**\\r\\n**日志ID：${taskLogId}**\\r\\n**失败原因：[点击查看](${url})**\",\"tag\":\"lark_md\"}},{\"actions\":[{\"tag\":\"button\",\"text\":{\"content\":\"查看详情\",\"tag\":\"plain_text\"},\"type\":\"primary\",\"url\":\"${url}\"}],\"tag\":\"action\"}],\"header\":{\"template\":\"red\",\"title\":{\"content\":\"任务执行失败\",\"tag\":\"plain_text\"}}}";
+        msg = msg.replace("${tenantName}", params.getTenantName());
+        msg = msg.replace("${appName}", params.getAppName());
+        msg = msg.replace("${taskName}", params.getTaskName());
+        msg = msg.replace("${taskMethod}", params.getTaskMethod());
+        msg = msg.replace("${failedReason}", params.getFailedReason());
+        msg = msg.replace("${taskLogId}", params.getTaskLogId() + "");
+        msg = msg.replace("${url}", params.getUrl());
+        msg = msg.replace("${owner}", params.getOwner());
+        return msg;
     }
 }

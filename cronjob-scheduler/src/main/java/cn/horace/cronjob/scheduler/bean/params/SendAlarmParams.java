@@ -15,4 +15,12 @@ import lombok.ToString;
 public class SendAlarmParams {
     private int type;
     private String chatId;
+    private String tenantName;
+    private String appName;
+    private String taskName;
+    private String taskMethod;
+    private String failedReason;
+    private long taskLogId;
+    private String url;
+    private String owner;
 }

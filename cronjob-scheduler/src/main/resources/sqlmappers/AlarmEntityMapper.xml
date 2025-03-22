@@ -9,7 +9,6 @@
     <result column="executor_address" jdbcType="VARCHAR" property="executorAddress" />
     <result column="executor_host_name" jdbcType="VARCHAR" property="executorHostName" />
     <result column="method" jdbcType="VARCHAR" property="method" />
-    <result column="failed_reason" jdbcType="VARCHAR" property="failedReason" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
@@ -73,7 +72,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, task_log_id, app_name, task_name, executor_address, executor_host_name, method, 
-    failed_reason, create_time, modify_time
+    create_time, modify_time
   </sql>
   <select id="selectByExample" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntityExample" resultMap="BaseResultMap">
     select
@@ -109,12 +108,12 @@
   <insert id="insert" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
     insert into t_alarm (id, task_log_id, app_name, 
       task_name, executor_address, executor_host_name, 
-      method, failed_reason, create_time, 
-      modify_time)
+      method, create_time, modify_time
+      )
     values (#{id,jdbcType=BIGINT}, #{taskLogId,jdbcType=BIGINT}, #{appName,jdbcType=VARCHAR}, 
       #{taskName,jdbcType=VARCHAR}, #{executorAddress,jdbcType=VARCHAR}, #{executorHostName,jdbcType=VARCHAR}, 
-      #{method,jdbcType=VARCHAR}, #{failedReason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
+      #{method,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
     insert into t_alarm
@@ -139,9 +138,6 @@
       </if>
       <if test="method != null">
         method,
-      </if>
-      <if test="failedReason != null">
-        failed_reason,
       </if>
       <if test="createTime != null">
         create_time,
@@ -171,9 +167,6 @@
       </if>
       <if test="method != null">
         #{method,jdbcType=VARCHAR},
-      </if>
-      <if test="failedReason != null">
-        #{failedReason,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -213,9 +206,6 @@
       <if test="row.method != null">
         method = #{row.method,jdbcType=VARCHAR},
       </if>
-      <if test="row.failedReason != null">
-        failed_reason = #{row.failedReason,jdbcType=VARCHAR},
-      </if>
       <if test="row.createTime != null">
         create_time = #{row.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -236,7 +226,6 @@
       executor_address = #{row.executorAddress,jdbcType=VARCHAR},
       executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
       method = #{row.method,jdbcType=VARCHAR},
-      failed_reason = #{row.failedReason,jdbcType=VARCHAR},
       create_time = #{row.createTime,jdbcType=TIMESTAMP},
       modify_time = #{row.modifyTime,jdbcType=TIMESTAMP}
     <if test="example != null">
@@ -264,9 +253,6 @@
       <if test="method != null">
         method = #{method,jdbcType=VARCHAR},
       </if>
-      <if test="failedReason != null">
-        failed_reason = #{failedReason,jdbcType=VARCHAR},
-      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -284,7 +270,6 @@
       executor_address = #{executorAddress,jdbcType=VARCHAR},
       executor_host_name = #{executorHostName,jdbcType=VARCHAR},
       method = #{method,jdbcType=VARCHAR},
-      failed_reason = #{failedReason,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
@@ -292,13 +277,13 @@
   <insert id="batchInsert" parameterType="map">
     insert into t_alarm
     (id, task_log_id, app_name, task_name, executor_address, executor_host_name, method, 
-      failed_reason, create_time, modify_time)
+      create_time, modify_time)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.id,jdbcType=BIGINT}, #{item.taskLogId,jdbcType=BIGINT}, #{item.appName,jdbcType=VARCHAR}, 
         #{item.taskName,jdbcType=VARCHAR}, #{item.executorAddress,jdbcType=VARCHAR}, #{item.executorHostName,jdbcType=VARCHAR}, 
-        #{item.method,jdbcType=VARCHAR}, #{item.failedReason,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
-        #{item.modifyTime,jdbcType=TIMESTAMP})
+        #{item.method,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP}
+        )
     </foreach>
   </insert>
   <insert id="batchInsertSelective" parameterType="map">
@@ -331,9 +316,6 @@
         </if>
         <if test="'method'.toString() == column.value">
           #{item.method,jdbcType=VARCHAR}
-        </if>
-        <if test="'failed_reason'.toString() == column.value">
-          #{item.failedReason,jdbcType=VARCHAR}
         </if>
         <if test="'create_time'.toString() == column.value">
           #{item.createTime,jdbcType=TIMESTAMP}

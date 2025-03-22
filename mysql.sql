@@ -260,7 +260,6 @@ create table `t_alarm` (
     `executor_address` varchar(50) not null comment '执行器地址',
     `executor_host_name` varchar(100) comment '执行器主机名',
     `method` varchar(500) not null comment '任务方法，类全限定名',
-    `failed_reason` text not null comment '简要原因',
     `create_time` datetime(3) not null default current_timestamp(3) comment '创建时间',
     `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间' on update current_timestamp(3)
 ) comment '告警记录表';

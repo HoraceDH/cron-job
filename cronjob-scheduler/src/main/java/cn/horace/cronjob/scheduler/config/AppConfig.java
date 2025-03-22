@@ -38,6 +38,8 @@ public class AppConfig {
      */
     @Value("${executor.autoStopAppMinutes}")
     private int autoStopAppMinutes;
+    @Value("${domain}")
+    private String domain;
     @Value("${lark.appId}")
     private String larkAppId;
     @Value("${lark.appSecret}")

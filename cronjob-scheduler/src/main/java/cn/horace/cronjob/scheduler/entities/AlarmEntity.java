@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- * Create in 2025-03-18 22:29:24.392.
+ * Create in 2025-03-22 13:08:27.880.
  * <p>
  * 对应数据库表：t_alarm
  * 
@@ -46,11 +46,6 @@ public class AlarmEntity {
      * 任务方法，类全限定名 method
      */
     private String method;
-
-    /**
-     * 简要原因 failed_reason
-     */
-    private String failedReason;
 
     /**
      * 创建时间 create_time
@@ -189,24 +184,6 @@ public class AlarmEntity {
     }
 
     /**
-     * 简要原因
-     * 
-     * @return 简要原因
-     */
-    public String getFailedReason() {
-        return failedReason;
-    }
-
-    /**
-     * 简要原因
-     * 
-     * @param failedReason 简要原因
-     */
-    public void setFailedReason(String failedReason) {
-        this.failedReason = failedReason == null ? null : failedReason.trim();
-    }
-
-    /**
      * 创建时间
      * 
      * @return 创建时间
@@ -257,7 +234,6 @@ public class AlarmEntity {
         sb.append(", executorAddress=").append(executorAddress);
         sb.append(", executorHostName=").append(executorHostName);
         sb.append(", method=").append(method);
-        sb.append(", failedReason=").append(failedReason);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);
         sb.append("]");
@@ -275,7 +251,6 @@ public class AlarmEntity {
         executorAddress("executor_address", "executorAddress", "VARCHAR", false),
         executorHostName("executor_host_name", "executorHostName", "VARCHAR", false),
         method("method", "method", "VARCHAR", false),
-        failedReason("failed_reason", "failedReason", "VARCHAR", false),
         createTime("create_time", "createTime", "TIMESTAMP", false),
         modifyTime("modify_time", "modifyTime", "TIMESTAMP", false);
 

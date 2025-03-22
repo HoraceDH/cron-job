@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author Horace
  */
-public enum AlarmChannel {
+public enum AlarmType {
     /**
      * 不设置告警
      */
@@ -22,15 +22,15 @@ public enum AlarmChannel {
     private int value;
     private String msg;
 
-    private static Map<Integer, AlarmChannel> map = new HashMap<>();
+    private static Map<Integer, AlarmType> map = new HashMap<>();
 
     static {
-        for (AlarmChannel object : AlarmChannel.values()) {
+        for (AlarmType object : AlarmType.values()) {
             map.put(object.getValue(), object);
         }
     }
 
-    AlarmChannel(int value, String msg) {
+    AlarmType(int value, String msg) {
         this.value = value;
         this.msg = msg;
     }
@@ -49,7 +49,7 @@ public enum AlarmChannel {
      * @param value 值
      * @return
      */
-    public static AlarmChannel from(int value) {
+    public static AlarmType from(int value) {
         return map.get(value);
     }
 }

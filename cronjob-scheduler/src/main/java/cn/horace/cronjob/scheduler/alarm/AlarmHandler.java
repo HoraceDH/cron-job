@@ -2,8 +2,9 @@ package cn.horace.cronjob.scheduler.alarm;
 
 import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.scheduler.bean.Message;
+import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
 import cn.horace.cronjob.scheduler.bean.result.AlarmGroup;
-import cn.horace.cronjob.scheduler.constants.AlarmChannel;
+import cn.horace.cronjob.scheduler.constants.AlarmType;
 
 import java.util.List;
 
@@ -20,7 +21,14 @@ public interface AlarmHandler {
      *
      * @return
      */
-    public AlarmChannel getAlarmChannel();
+    public AlarmType getAlarmChannel();
+
+    /**
+     * 获取消息类型
+     *
+     * @return
+     */
+    public String getMsgType();
 
     /**
      * 是否可用
@@ -43,4 +51,12 @@ public interface AlarmHandler {
      * @return
      */
     public Result<Void> sendMessage(Message message);
+
+    /**
+     * 构建消息
+     *
+     * @param params
+     * @return
+     */
+    String buildMessage(SendAlarmParams params);
 }

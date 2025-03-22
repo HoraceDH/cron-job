@@ -55,6 +55,11 @@ const TenantEdit: React.FC = () => {
      * 触发一次告警
      */
     async function sendAlarm() {
+        if (tenant?.type === 0) {
+            message.warning("请先设置告警方式！");
+            return;
+        }
+
         let result = await AlarmService.getInstance().sendAlarm({
             type: tenant?.type,
             chatId: tenant?.chatId,

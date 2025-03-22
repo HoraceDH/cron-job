@@ -96,7 +96,7 @@ public class AlarmEntityExample {
     }
 
     /**
-     * Create in 2025-03-18 22:29:24.392.
+     * Create in 2025-03-22 13:08:27.880.
      * <p>
      * 对应数据库表：t_alarm
      * 
@@ -613,76 +613,6 @@ public class AlarmEntityExample {
             return (Criteria) this;
         }
 
-        public Criteria andFailedReasonIsNull() {
-            addCriterion("failed_reason is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonIsNotNull() {
-            addCriterion("failed_reason is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonEqualTo(String value) {
-            addCriterion("failed_reason =", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonNotEqualTo(String value) {
-            addCriterion("failed_reason <>", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonGreaterThan(String value) {
-            addCriterion("failed_reason >", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonGreaterThanOrEqualTo(String value) {
-            addCriterion("failed_reason >=", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonLessThan(String value) {
-            addCriterion("failed_reason <", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonLessThanOrEqualTo(String value) {
-            addCriterion("failed_reason <=", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonLike(String value) {
-            addCriterion("failed_reason like", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonNotLike(String value) {
-            addCriterion("failed_reason not like", value, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonIn(List<String> values) {
-            addCriterion("failed_reason in", values, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonNotIn(List<String> values) {
-            addCriterion("failed_reason not in", values, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonBetween(String value1, String value2) {
-            addCriterion("failed_reason between", value1, value2, "failedReason");
-            return (Criteria) this;
-        }
-
-        public Criteria andFailedReasonNotBetween(String value1, String value2) {
-            addCriterion("failed_reason not between", value1, value2, "failedReason");
-            return (Criteria) this;
-        }
-
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -805,7 +735,7 @@ public class AlarmEntityExample {
     }
 
     /**
-     * Create in 2025-03-18 22:29:24.392.
+     * Create in 2025-03-22 13:08:27.880.
      * <p>
      * 对应数据库表：t_alarm
      * 
@@ -818,7 +748,7 @@ public class AlarmEntityExample {
     }
 
     /**
-     * Create in 2025-03-18 22:29:24.392.
+     * Create in 2025-03-22 13:08:27.880.
      * <p>
      * 对应数据库表：t_alarm
      * 
