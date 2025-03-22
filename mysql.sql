@@ -6,7 +6,7 @@ create table `t_tenant` (
     `id` bigint primary key comment '主键',
     `name` varchar(50) not null comment '租户名称',
     `tenant` varchar(50) not null unique comment '租户编码',
-    `alarm_config` varchar(500) not null default '{}' comment '告警配置，AlarmConfig，json格式',
+    `alarm_config` varchar(500) not null default '{"chatId":"不设置告警","type":0}' comment '告警配置，AlarmConfig，json格式',
     `remark` varchar(500) not null comment '租户描述',
     `create_time` datetime(3) not null default current_timestamp(3) comment '创建时间',
     `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间'  on update current_timestamp(3)
