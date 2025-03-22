@@ -9,6 +9,9 @@
     <result column="executor_address" jdbcType="VARCHAR" property="executorAddress" />
     <result column="executor_host_name" jdbcType="VARCHAR" property="executorHostName" />
     <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="alarm_type" jdbcType="INTEGER" property="alarmType" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="alarm_group_name" jdbcType="VARCHAR" property="alarmGroupName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
@@ -72,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, task_log_id, app_name, task_name, executor_address, executor_host_name, method, 
-    create_time, modify_time
+    alarm_type, state, alarm_group_name, create_time, modify_time
   </sql>
   <select id="selectByExample" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntityExample" resultMap="BaseResultMap">
     select
@@ -108,11 +111,13 @@
   <insert id="insert" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
     insert into t_alarm (id, task_log_id, app_name, 
       task_name, executor_address, executor_host_name, 
-      method, create_time, modify_time
+      method, alarm_type, state, 
+      alarm_group_name, create_time, modify_time
       )
     values (#{id,jdbcType=BIGINT}, #{taskLogId,jdbcType=BIGINT}, #{appName,jdbcType=VARCHAR}, 
       #{taskName,jdbcType=VARCHAR}, #{executorAddress,jdbcType=VARCHAR}, #{executorHostName,jdbcType=VARCHAR}, 
-      #{method,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
+      #{method,jdbcType=VARCHAR}, #{alarmType,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, 
+      #{alarmGroupName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.horace.cronjob.scheduler.entities.AlarmEntity">
@@ -138,6 +143,15 @@
       </if>
       <if test="method != null">
         method,
+      </if>
+      <if test="alarmType != null">
+        alarm_type,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="alarmGroupName != null">
+        alarm_group_name,
       </if>
       <if test="createTime != null">
         create_time,
@@ -167,6 +181,15 @@
       </if>
       <if test="method != null">
         #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmType != null">
+        #{alarmType,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="alarmGroupName != null">
+        #{alarmGroupName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -206,6 +229,15 @@
       <if test="row.method != null">
         method = #{row.method,jdbcType=VARCHAR},
       </if>
+      <if test="row.alarmType != null">
+        alarm_type = #{row.alarmType,jdbcType=INTEGER},
+      </if>
+      <if test="row.state != null">
+        state = #{row.state,jdbcType=INTEGER},
+      </if>
+      <if test="row.alarmGroupName != null">
+        alarm_group_name = #{row.alarmGroupName,jdbcType=VARCHAR},
+      </if>
       <if test="row.createTime != null">
         create_time = #{row.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -226,6 +258,9 @@
       executor_address = #{row.executorAddress,jdbcType=VARCHAR},
       executor_host_name = #{row.executorHostName,jdbcType=VARCHAR},
       method = #{row.method,jdbcType=VARCHAR},
+      alarm_type = #{row.alarmType,jdbcType=INTEGER},
+      state = #{row.state,jdbcType=INTEGER},
+      alarm_group_name = #{row.alarmGroupName,jdbcType=VARCHAR},
       create_time = #{row.createTime,jdbcType=TIMESTAMP},
       modify_time = #{row.modifyTime,jdbcType=TIMESTAMP}
     <if test="example != null">
@@ -253,6 +288,15 @@
       <if test="method != null">
         method = #{method,jdbcType=VARCHAR},
       </if>
+      <if test="alarmType != null">
+        alarm_type = #{alarmType,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="alarmGroupName != null">
+        alarm_group_name = #{alarmGroupName,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -270,6 +314,9 @@
       executor_address = #{executorAddress,jdbcType=VARCHAR},
       executor_host_name = #{executorHostName,jdbcType=VARCHAR},
       method = #{method,jdbcType=VARCHAR},
+      alarm_type = #{alarmType,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      alarm_group_name = #{alarmGroupName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
@@ -277,13 +324,14 @@
   <insert id="batchInsert" parameterType="map">
     insert into t_alarm
     (id, task_log_id, app_name, task_name, executor_address, executor_host_name, method, 
-      create_time, modify_time)
+      alarm_type, state, alarm_group_name, create_time, modify_time)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.id,jdbcType=BIGINT}, #{item.taskLogId,jdbcType=BIGINT}, #{item.appName,jdbcType=VARCHAR}, 
         #{item.taskName,jdbcType=VARCHAR}, #{item.executorAddress,jdbcType=VARCHAR}, #{item.executorHostName,jdbcType=VARCHAR}, 
-        #{item.method,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.modifyTime,jdbcType=TIMESTAMP}
-        )
+        #{item.method,jdbcType=VARCHAR}, #{item.alarmType,jdbcType=INTEGER}, #{item.state,jdbcType=INTEGER}, 
+        #{item.alarmGroupName,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.modifyTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   <insert id="batchInsertSelective" parameterType="map">
@@ -316,6 +364,15 @@
         </if>
         <if test="'method'.toString() == column.value">
           #{item.method,jdbcType=VARCHAR}
+        </if>
+        <if test="'alarm_type'.toString() == column.value">
+          #{item.alarmType,jdbcType=INTEGER}
+        </if>
+        <if test="'state'.toString() == column.value">
+          #{item.state,jdbcType=INTEGER}
+        </if>
+        <if test="'alarm_group_name'.toString() == column.value">
+          #{item.alarmGroupName,jdbcType=VARCHAR}
         </if>
         <if test="'create_time'.toString() == column.value">
           #{item.createTime,jdbcType=TIMESTAMP}

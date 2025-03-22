@@ -70,6 +70,25 @@ class AlarmService {
             }
         });
     }
+
+    /**
+     * 获取告警列表
+     */
+    public async getAlarmList(params: { current?: number; pageSize?: number; }, options?: {
+        [key: string]: any
+    }): Promise<AlarmBeans.AlarmItem[]> {
+        const alarmListResult = await request<AlarmBeans.AlarmListResult>(Apis.URI_ALARM_GET_ALARM_LIST, {
+            method: "POST",
+            data: {
+                ...params,
+            },
+            ...(options || {}),
+        });
+        if (alarmListResult.code !== MsgCodes.SUCCESS) {
+            return [];
+        }
+        return alarmListResult.data ? alarmListResult.data : [];
+    }
 }
 
 export default AlarmService;

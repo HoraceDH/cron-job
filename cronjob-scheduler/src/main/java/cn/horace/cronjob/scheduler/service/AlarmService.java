@@ -2,9 +2,12 @@ package cn.horace.cronjob.scheduler.service;
 
 import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.commons.constants.TaskLogState;
+import cn.horace.cronjob.scheduler.bean.params.GetAlarmListParams;
 import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
 import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
+import cn.horace.cronjob.scheduler.bean.result.AlarmListResult;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
+import cn.horace.cronjob.scheduler.constants.AlarmState;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 
 import java.util.List;
@@ -57,4 +60,22 @@ public interface AlarmService {
      * @return
      */
     Result<Void> sendAlarm(SendAlarmParams params);
+
+    /**
+     * 获取告警列表
+     *
+     * @param userId 用户ID
+     * @param params 参数
+     * @return
+     */
+    Result<AlarmListResult> getAlarmList(long userId, GetAlarmListParams params);
+
+    /**
+     * 更新告警状态
+     *
+     * @param id    告警ID
+     * @param state 状态
+     * @return
+     */
+    boolean updateState(Long id, AlarmState state);
 }

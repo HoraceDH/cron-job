@@ -180,5 +180,9 @@ export default {
      * 发送一次告警信息
      */
     URI_ALARM_POST_SEND_ALARM: "/manager-api/alarm/sendAlarm",
+    /**
+     * 获取告警列表
+     */
+    URI_ALARM_GET_ALARM_LIST: "/manager-api/alarm/getAlarmList",
     /*********** 告警模块 **************************************/
 }

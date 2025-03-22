@@ -96,7 +96,7 @@ public class AlarmEntityExample {
     }
 
     /**
-     * Create in 2025-03-22 13:08:27.880.
+     * Create in 2025-03-22 19:20:29.012.
      * <p>
      * 对应数据库表：t_alarm
      * 
@@ -613,6 +613,196 @@ public class AlarmEntityExample {
             return (Criteria) this;
         }
 
+        public Criteria andAlarmTypeIsNull() {
+            addCriterion("alarm_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeIsNotNull() {
+            addCriterion("alarm_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeEqualTo(Integer value) {
+            addCriterion("alarm_type =", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeNotEqualTo(Integer value) {
+            addCriterion("alarm_type <>", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeGreaterThan(Integer value) {
+            addCriterion("alarm_type >", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("alarm_type >=", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeLessThan(Integer value) {
+            addCriterion("alarm_type <", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("alarm_type <=", value, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeIn(List<Integer> values) {
+            addCriterion("alarm_type in", values, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeNotIn(List<Integer> values) {
+            addCriterion("alarm_type not in", values, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeBetween(Integer value1, Integer value2) {
+            addCriterion("alarm_type between", value1, value2, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("alarm_type not between", value1, value2, "alarmType");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIsNull() {
+            addCriterion("state is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIsNotNull() {
+            addCriterion("state is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateEqualTo(Integer value) {
+            addCriterion("state =", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotEqualTo(Integer value) {
+            addCriterion("state <>", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateGreaterThan(Integer value) {
+            addCriterion("state >", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("state >=", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLessThan(Integer value) {
+            addCriterion("state <", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLessThanOrEqualTo(Integer value) {
+            addCriterion("state <=", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIn(List<Integer> values) {
+            addCriterion("state in", values, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotIn(List<Integer> values) {
+            addCriterion("state not in", values, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateBetween(Integer value1, Integer value2) {
+            addCriterion("state between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotBetween(Integer value1, Integer value2) {
+            addCriterion("state not between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameIsNull() {
+            addCriterion("alarm_group_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameIsNotNull() {
+            addCriterion("alarm_group_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameEqualTo(String value) {
+            addCriterion("alarm_group_name =", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameNotEqualTo(String value) {
+            addCriterion("alarm_group_name <>", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameGreaterThan(String value) {
+            addCriterion("alarm_group_name >", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameGreaterThanOrEqualTo(String value) {
+            addCriterion("alarm_group_name >=", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameLessThan(String value) {
+            addCriterion("alarm_group_name <", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameLessThanOrEqualTo(String value) {
+            addCriterion("alarm_group_name <=", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameLike(String value) {
+            addCriterion("alarm_group_name like", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameNotLike(String value) {
+            addCriterion("alarm_group_name not like", value, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameIn(List<String> values) {
+            addCriterion("alarm_group_name in", values, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameNotIn(List<String> values) {
+            addCriterion("alarm_group_name not in", values, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameBetween(String value1, String value2) {
+            addCriterion("alarm_group_name between", value1, value2, "alarmGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAlarmGroupNameNotBetween(String value1, String value2) {
+            addCriterion("alarm_group_name not between", value1, value2, "alarmGroupName");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -735,7 +925,7 @@ public class AlarmEntityExample {
     }
 
     /**
-     * Create in 2025-03-22 13:08:27.880.
+     * Create in 2025-03-22 19:20:29.012.
      * <p>
      * 对应数据库表：t_alarm
      * 
@@ -748,7 +938,7 @@ public class AlarmEntityExample {
     }
 
     /**
-     * Create in 2025-03-22 13:08:27.880.
+     * Create in 2025-03-22 19:20:29.012.
      * <p>
      * 对应数据库表：t_alarm
      * 

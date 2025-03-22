@@ -60,10 +60,10 @@ const Index: React.FC = () => {
             hideInSearch: true,
             dataIndex: 'type',
             valueEnum: {
-                0: <Tag color={"orange-inverse"}>未设置告警</Tag>,
-                1: <Tag color={"orange-inverse"}>飞书告警</Tag>,
-                2: <Tag color={"orange-inverse"}>Lark告警</Tag>,
-                3: <Tag color={"orange-inverse"}>企微告警</Tag>,
+                0: <Tag color={"volcano"}>未设置告警</Tag>,
+                1: <Tag color={"volcano"}>飞书告警</Tag>,
+                2: <Tag color={"volcano"}>Lark告警</Tag>,
+                3: <Tag color={"volcano"}>企微告警</Tag>,
             },
         },
         {
@@ -71,7 +71,7 @@ const Index: React.FC = () => {
             hideInSearch: true,
             dataIndex: 'groupName',
             render: (dom: React.ReactNode, entity: TenantBeans.TenantItem) => {
-                return <Tag color={"orange-inverse"}>{entity.groupName}</Tag>;
+                return <Tag color={"orange"}>{entity.groupName}</Tag>;
             }
         },
         {

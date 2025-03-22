@@ -254,14 +254,20 @@ create table `t_task_statistics` (
 # 告警表
 create table `t_alarm` (
     `id` bigint primary key comment '主键',
-    `task_log_id` bigint not null comment '任务日志ID',
+    `task_log_id` bigint unique not null comment '任务日志ID',
     `app_name` varchar(100) not null comment '应用名',
     `task_name` varchar(100) not null comment '任务名',
     `executor_address` varchar(50) not null comment '执行器地址',
     `executor_host_name` varchar(100) comment '执行器主机名',
     `method` varchar(500) not null comment '任务方法，类全限定名',
+    `alarm_type` int not null default 0 comment '告警方式，AlarmType枚举',
+    `state` int not null default 0 comment '告警状态，AlarmState枚举',
+    `alarm_group_name` varchar(200) default '' comment '告警群名称',
     `create_time` datetime(3) not null default current_timestamp(3) comment '创建时间',
-    `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间' on update current_timestamp(3)
+    `modify_time` datetime(3) not null default current_timestamp(3) comment '修改时间' on update current_timestamp(3),
+    index idx_app_name(`app_name`),
+    index idx_task_name(`task_name`),
+    index idx_create_time(`create_time`)
 ) comment '告警记录表';
 
 # 初始化锁信息

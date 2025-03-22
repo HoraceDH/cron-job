@@ -1,6 +1,6 @@
-import {PageContainer} from '@ant-design/pro-components';
+import {PageContainer, ProColumns, ProTable} from '@ant-design/pro-components';
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, DatePicker, Divider, Row, Select, Tooltip} from "antd";
+import {Button, Card, Col, DatePicker, Divider, Row, Select, Tag, Tooltip} from "antd";
 import {InfoCircleOutlined, ReloadOutlined} from "@ant-design/icons";
 import "./Welcome.less"
 import {StatisticsBeans} from "@/typings/statisticss";
@@ -12,6 +12,8 @@ import {Pages} from "@/typings/pages";
 import {Link} from "@@/exports";
 import TaskService from "@/services/TaskService";
 import {Commons} from "@/typings/commons";
+import {TenantBeans} from "@/typings/tenant";
+import AlarmService from "@/services/AlarmService";
 
 const {RangePicker} = DatePicker;
 
@@ -72,6 +74,110 @@ const Welcome: React.FC = () => {
             valueFormatter: '.2f'
         },
     };
+
+    /**
+     * 渲染操作按钮
+     *
+     * @param dom dom节点
+     * @param entity 当前行数据实体
+     */
+    function renderOperationOptions(dom: React.ReactNode, entity: AlarmBeans.AlarmItem) {
+        return (
+            <Button type={"primary"} size={"small"}>
+                <Link to={Pages.PAGE_TASKLOG_DETAILS + `?id=${entity.taskLogId}`}>查看详情</Link>
+            </Button>
+        );
+    }
+
+    const columns: ProColumns<AlarmBeans.AlarmItem>[] = [
+        {
+            title: '任务日志ID',
+            dataIndex: 'taskLogId',
+            width: "10%",
+            hideInSearch: true,
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '应用名称',
+            dataIndex: 'appName',
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '任务名称',
+            dataIndex: 'taskName',
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '告警状态',
+            dataIndex: 'state',
+            valueEnum: {
+                0: <Tag color={"green"}>初始化</Tag>,
+                1: <Tag color={"green"}>已送达</Tag>,
+                2: <Tag color={"green"}>告警失败</Tag>,
+            },
+        },
+        {
+            title: '告警方式',
+            dataIndex: 'alarmType',
+            hideInSearch: true,
+            valueEnum: {
+                0: <Tag color={"volcano"}>未设置告警</Tag>,
+                1: <Tag color={"volcano"}>飞书告警</Tag>,
+                2: <Tag color={"volcano"}>Lark告警</Tag>,
+                3: <Tag color={"volcano"}>企微告警</Tag>,
+            },
+        },
+        {
+            title: '告警群名',
+            dataIndex: 'alarmGroupName',
+            hideInSearch: true,
+            render: (dom: React.ReactNode, entity: AlarmBeans.AlarmItem) => {
+                return <Tag color={"orange"}>{entity.alarmGroupName}</Tag>;
+            }
+        },
+        {
+            title: '执行器地址',
+            hideInSearch: true,
+            dataIndex: 'executorAddress',
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '执行器主机名',
+            hideInSearch: true,
+            dataIndex: 'executorHostName',
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '创建时间',
+            dataIndex: 'createTime',
+            valueType: 'text',
+            hideInSearch: true,
+            width: 250,
+            ellipsis: {showTitle: true}, // 超出自动缩略
+        },
+        {
+            title: '创建时间',
+            dataIndex: 'createTimeRange',
+            valueType: "dateTimeRange",
+            initialValue: [dayjs().add(-30, 'minute'), dayjs().add(10, 'minute')],
+            fieldProps: {
+                presets: [
+                    {label: "最近半小时", value: [dayjs().add(-30, 'minute'), dayjs().add(10, 'minute')]},
+                    {label: "最近1小时", value: [dayjs().add(-1, 'hour'), dayjs().add(10, 'minute')]},
+                    {label: "最近2小时", value: [dayjs().add(-2, 'hour'), dayjs().add(10, 'minute')]},
+                    {label: "最近3小时", value: [dayjs().add(-170, 'minute'), dayjs().add(10, 'minute')]},
+                ]
+            },
+            colSize: 2,
+            hideInTable: true,
+        },
+        {
+            title: "操作",
+            width: "9%",
+            hideInSearch: true,
+            render: renderOperationOptions,
+        }
+    ];
 
     // @ts-ignore
     return (
@@ -181,6 +287,30 @@ const Welcome: React.FC = () => {
                 </Col>
             </Row>
 
+            {/*告警列表*/}
+            <ProTable<AlarmBeans.AlarmItem, Commons.PageParams>
+                defaultSize="small"
+                headerTitle="告警列表"
+                style={{marginTop: 30, marginBottom: 30}}
+                search={{
+                    labelWidth: 120,
+                }}
+                pagination={{pageSize: 5}}
+                rowKey="key"
+                request={AlarmService.getInstance().getAlarmList}
+                columns={columns}
+                onRow={(row) => {
+                    return {
+                        // 双击进入详情页
+                        onDoubleClick: (event) => {
+                            location.href = Pages.PAGE_TASKLOG_DETAILS + "?id=" + row.taskLogId;
+                        }
+                    }
+                }}
+            />
+            {/*告警列表*/}
+
+            {/*数据曲线*/}
             <Card loading={loading} title={
                 <>
                     <span style={{marginRight: 5}}>数据指标</span>
@@ -248,6 +378,7 @@ const Welcome: React.FC = () => {
             }>
                 <Line {...config}/>
             </Card>
+            {/*数据曲线*/}
         </PageContainer>
     );
 };

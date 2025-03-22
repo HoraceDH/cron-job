@@ -6,22 +6,30 @@ import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.commons.constants.TaskLogState;
 import cn.horace.cronjob.commons.thread.DefaultThreadFactory;
 import cn.horace.cronjob.commons.utils.executor.GracefulThreadPoolExecutor;
+import cn.horace.cronjob.scheduler.adapter.AlarmAdapter;
 import cn.horace.cronjob.scheduler.alarm.AlarmHandler;
 import cn.horace.cronjob.scheduler.bean.AlarmConfig;
 import cn.horace.cronjob.scheduler.bean.Message;
+import cn.horace.cronjob.scheduler.bean.params.GetAlarmListParams;
 import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
 import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
 import cn.horace.cronjob.scheduler.bean.result.AlarmGroup;
+import cn.horace.cronjob.scheduler.bean.result.AlarmListResult;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.config.AppConfig;
+import cn.horace.cronjob.scheduler.constants.AlarmState;
 import cn.horace.cronjob.scheduler.constants.AlarmType;
 import cn.horace.cronjob.scheduler.entities.AlarmEntity;
+import cn.horace.cronjob.scheduler.entities.AlarmEntityExample;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 import cn.horace.cronjob.scheduler.entities.TenantEntity;
 import cn.horace.cronjob.scheduler.mappers.AlarmEntityMapper;
 import cn.horace.cronjob.scheduler.service.AlarmService;
 import cn.horace.cronjob.scheduler.service.TenantService;
+import cn.horace.cronjob.scheduler.utils.LikeUtils;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +62,8 @@ public class AlarmServiceImpl implements AlarmService {
     @Autowired
     private List<AlarmHandler> alarmHandlers;
     private Map<Integer, AlarmHandler> alarmHandlerMap;
+    @Resource
+    private AlarmAdapter alarmAdapter;
 
     @PostConstruct
     public void init() {
@@ -80,35 +91,37 @@ public class AlarmServiceImpl implements AlarmService {
      */
     @Override
     public void alarm(TaskLogEntity taskLog) {
-        // 保存告警日志
-        AlarmEntity entity = this.buildAlarmEntity(taskLog);
-        int insert = this.mapper.insert(entity);
-        logger.info("task execute failed, save alarm, count:{}, entity:{}", insert, entity);
-
-        // 发送告警信息
-        logger.info("task execute failed, send alarm, entity:{}", entity);
         TenantEntity tenant = this.tenantService.getTenant(taskLog.getTenantId());
         if (tenant == null) {
             logger.error("task execute failed, send alarm failed, tenant is null, taskLog:{}", taskLog);
             return;
         }
 
+        AlarmType type = AlarmType.NONE;
+        String chatId = "";
+        String groupName = "";
+
         String alarmConfig = tenant.getAlarmConfig();
-        if (alarmConfig == null || alarmConfig.isEmpty()) {
-            logger.error("task execute failed, send alarm failed, alarmConfig is empty, tenant:{}", tenant);
-            return;
+        if (StringUtils.isNotBlank(alarmConfig)) {
+            AlarmConfig config = JSONObject.parseObject(alarmConfig, AlarmConfig.class);
+            type = AlarmType.from(config.getType());
+            chatId = config.getChatId();
+            groupName = config.getGroupName();
         }
 
-        AlarmConfig config = JSONObject.parseObject(alarmConfig, AlarmConfig.class);
-        if (config.getType() == AlarmType.NONE.getValue()) {
-            logger.info("task execute failed, not need send alarm, tenant:{}", tenant);
-            return;
-        }
+        // 保存告警日志
+        AlarmEntity entity = this.buildAlarmEntity(taskLog);
+        entity.setAlarmType(type.getValue());
+        entity.setAlarmGroupName(groupName);
 
+        int insert = this.mapper.insert(entity);
+        logger.info("task execute failed, save alarm, count:{}, entity:{}", insert, entity);
+
+        // 发送告警信息
         SendAlarmParams params = new SendAlarmParams();
         params.setOwner(taskLog.getOwner() + " ");
-        params.setType(config.getType());
-        params.setChatId(config.getChatId());
+        params.setType(type.getValue());
+        params.setChatId(chatId);
         params.setTenantName(tenant.getName());
         params.setAppName(taskLog.getAppName());
         params.setTaskName(taskLog.getName());
@@ -122,6 +135,7 @@ public class AlarmServiceImpl implements AlarmService {
         } else {
             logger.error("task execute failed, send alarm failed, result:{}, params:{}", result, params);
         }
+        this.updateState(entity.getId(), result.isSuccess() ? AlarmState.SUCCESS : AlarmState.FAILED);
     }
 
     /**
@@ -140,6 +154,7 @@ public class AlarmServiceImpl implements AlarmService {
         entity.setExecutorAddress(taskLog.getExecutorAddress());
         entity.setExecutorHostName(taskLog.getExecutorHostName());
         entity.setMethod(taskLog.getMethod());
+        entity.setState(AlarmState.INIT.getValue());
         entity.setCreateTime(date);
         entity.setModifyTime(date);
         return entity;
@@ -216,5 +231,92 @@ public class AlarmServiceImpl implements AlarmService {
         message.setChatId(params.getChatId());
         message.setMsg(alarmHandler.buildMessage(params));
         return alarmHandler.sendMessage(message);
+    }
+
+    /**
+     * 获取告警列表
+     *
+     * @param userId 用户ID
+     * @param params 参数
+     * @return
+     */
+    @Override
+    public Result<AlarmListResult> getAlarmList(long userId, GetAlarmListParams params) {
+        Result<AlarmListResult> result = Result.success();
+        AlarmEntityExample example = new AlarmEntityExample();
+        long id = 0;
+        long taskLogId = 0;
+        if (StringUtils.isNotBlank(params.getId())) {
+            id = Long.parseLong(params.getId());
+        }
+        if (StringUtils.isNotBlank(params.getTaskLogId())) {
+            taskLogId = Long.parseLong(params.getTaskLogId());
+        }
+
+        // 条件设置
+        AlarmEntityExample.Criteria criteria = example.or();
+        if (id > 0) {
+            criteria.andIdEqualTo(id);
+        }
+        if (taskLogId > 0) {
+            criteria.andTaskLogIdEqualTo(taskLogId);
+        }
+        if (StringUtils.isNotBlank(params.getAppName())) {
+            criteria.andAppNameEqualTo(params.getAppName());
+        }
+        if (StringUtils.isNotBlank(params.getAppName())) {
+            criteria.andAppNameLike(LikeUtils.toLikeString(params.getAppName()));
+        }
+        if (StringUtils.isNotBlank(params.getTaskName())) {
+            criteria.andTaskNameLike(LikeUtils.toLikeString(params.getTaskName()));
+        }
+        if (params.getState() != null && params.getState() >= 0) {
+            criteria.andStateEqualTo(params.getState());
+        }
+
+        String[] createTimeRange = params.getCreateTimeRange();
+        if (createTimeRange != null && createTimeRange.length == 2) {
+            String startTime = createTimeRange[0];
+            String endTime = createTimeRange[1];
+            try {
+                Date startDate = DateUtils.parseDate(startTime, "yyyy-MM-dd HH:mm:ss");
+                Date endDate = DateUtils.parseDate(endTime, "yyyy-MM-dd HH:mm:ss");
+                long diff = endDate.getTime() - startDate.getTime();
+                long millis = TimeUnit.HOURS.toMillis(3);
+                if (diff > millis) {
+                    return Result.msgCodes(MsgCodes.ERROR_QUERY_RANGE);
+                }
+                criteria.andCreateTimeBetween(startDate, endDate);
+            } catch (ParseException e) {
+                logger.error("parse date time error, params:{}, msg:{}", params, e.getMessage(), e);
+            }
+        }
+
+        AlarmListResult taskListResult = new AlarmListResult();
+        taskListResult.setTotal(this.mapper.countByExample(example));
+        int offset = (params.getCurrent() - 1) * params.getPageSize();
+        int limit = params.getPageSize();
+        example.setOrderByClause("`create_time` desc limit " + offset + ", " + limit);
+        List<AlarmEntity> entityList = this.mapper.selectByExample(example);
+        taskListResult.setCurrent(params.getCurrent());
+        taskListResult.setPageSize(params.getPageSize());
+        taskListResult.setData(this.alarmAdapter.convert(entityList));
+        result.setData(taskListResult);
+        return result;
+    }
+
+    /**
+     * 更新告警状态
+     *
+     * @param id    告警ID
+     * @param state 状态
+     * @return
+     */
+    @Override
+    public boolean updateState(Long id, AlarmState state) {
+        AlarmEntity entity = new AlarmEntity();
+        entity.setId(id);
+        entity.setState(state.getValue());
+        return this.mapper.updateByPrimaryKeySelective(entity) > 0;
     }
 }

@@ -2,9 +2,12 @@ package cn.horace.cronjob.scheduler.controller;
 
 import cn.horace.cronjob.commons.bean.MsgObject;
 import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.scheduler.bean.params.GetAlarmListParams;
 import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
 import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
+import cn.horace.cronjob.scheduler.bean.result.AlarmListResult;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
+import cn.horace.cronjob.scheduler.context.WebContext;
 import cn.horace.cronjob.scheduler.service.AlarmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,5 +82,21 @@ public class AlarmController {
         } else {
             return MsgObject.msgCodes(result.getMsgCodes());
         }
+    }
+
+    /**
+     * 获取告警列表
+     *
+     * @param params 请求参数
+     * @return
+     */
+    @PostMapping(name = "获取告警列表", value = "/getAlarmList")
+    public MsgObject getAlarmList(@RequestBody GetAlarmListParams params) {
+        long userId = WebContext.getContext().getUserId();
+        Result<AlarmListResult> result = this.alarmService.getAlarmList(userId, params);
+        if (result.isSuccess()) {
+            return MsgObject.success(result.getData());
+        }
+        return MsgObject.msgCodes(result.getMsgCodes());
     }
 }

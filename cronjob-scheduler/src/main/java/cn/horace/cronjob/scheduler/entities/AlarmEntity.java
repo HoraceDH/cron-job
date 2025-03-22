@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- * Create in 2025-03-22 13:08:27.880.
+ * Create in 2025-03-22 19:20:29.012.
  * <p>
  * 对应数据库表：t_alarm
  * 
@@ -46,6 +46,21 @@ public class AlarmEntity {
      * 任务方法，类全限定名 method
      */
     private String method;
+
+    /**
+     * 告警方式，AlarmType枚举 alarm_type
+     */
+    private Integer alarmType;
+
+    /**
+     * 告警状态，AlarmState枚举 state
+     */
+    private Integer state;
+
+    /**
+     * 告警群名称 alarm_group_name
+     */
+    private String alarmGroupName;
 
     /**
      * 创建时间 create_time
@@ -184,6 +199,60 @@ public class AlarmEntity {
     }
 
     /**
+     * 告警方式，AlarmType枚举
+     * 
+     * @return 告警方式，AlarmType枚举
+     */
+    public Integer getAlarmType() {
+        return alarmType;
+    }
+
+    /**
+     * 告警方式，AlarmType枚举
+     * 
+     * @param alarmType 告警方式，AlarmType枚举
+     */
+    public void setAlarmType(Integer alarmType) {
+        this.alarmType = alarmType;
+    }
+
+    /**
+     * 告警状态，AlarmState枚举
+     * 
+     * @return 告警状态，AlarmState枚举
+     */
+    public Integer getState() {
+        return state;
+    }
+
+    /**
+     * 告警状态，AlarmState枚举
+     * 
+     * @param state 告警状态，AlarmState枚举
+     */
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    /**
+     * 告警群名称
+     * 
+     * @return 告警群名称
+     */
+    public String getAlarmGroupName() {
+        return alarmGroupName;
+    }
+
+    /**
+     * 告警群名称
+     * 
+     * @param alarmGroupName 告警群名称
+     */
+    public void setAlarmGroupName(String alarmGroupName) {
+        this.alarmGroupName = alarmGroupName == null ? null : alarmGroupName.trim();
+    }
+
+    /**
      * 创建时间
      * 
      * @return 创建时间
@@ -234,6 +303,9 @@ public class AlarmEntity {
         sb.append(", executorAddress=").append(executorAddress);
         sb.append(", executorHostName=").append(executorHostName);
         sb.append(", method=").append(method);
+        sb.append(", alarmType=").append(alarmType);
+        sb.append(", state=").append(state);
+        sb.append(", alarmGroupName=").append(alarmGroupName);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);
         sb.append("]");
@@ -251,6 +323,9 @@ public class AlarmEntity {
         executorAddress("executor_address", "executorAddress", "VARCHAR", false),
         executorHostName("executor_host_name", "executorHostName", "VARCHAR", false),
         method("method", "method", "VARCHAR", false),
+        alarmType("alarm_type", "alarmType", "INTEGER", false),
+        state("state", "state", "INTEGER", false),
+        alarmGroupName("alarm_group_name", "alarmGroupName", "VARCHAR", false),
         createTime("create_time", "createTime", "TIMESTAMP", false),
         modifyTime("modify_time", "modifyTime", "TIMESTAMP", false);
 

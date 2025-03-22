@@ -35,7 +35,7 @@ public class DemoCronTask implements TaskHandler {
         Random random = new Random();
         int delay = random.nextInt(10);
         LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(delay));
-        throw new RuntimeException("handler task exception");
-//        return HandlerResult.success();
+//        throw new RuntimeException("handler task exception");
+        return HandlerResult.success();
     }
 }

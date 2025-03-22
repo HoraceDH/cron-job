@@ -42,7 +42,7 @@ public class TaskController {
      * @return
      */
     @PostMapping(name = "获取任务列表", value = "/getTaskList")
-    public MsgObject getCronTaskList(@RequestBody GetTaskListParams params) {
+    public MsgObject getTaskList(@RequestBody GetTaskListParams params) {
         long userId = WebContext.getContext().getUserId();
         Result<TaskListResult> result = this.taskService.getTaskList(userId, params);
         if (result.isSuccess()) {
