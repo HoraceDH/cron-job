@@ -17,9 +17,10 @@ public class TenantItem {
     private String name;
     private String tenant;
     private int appCount;
-    private int type;
+    private String type;
     private String chatId;
     private String groupName;
     private String remark;
     private String createTime;
+    private String modifyTime;
 }

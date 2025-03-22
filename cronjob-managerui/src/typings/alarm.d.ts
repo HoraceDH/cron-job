@@ -8,9 +8,9 @@ declare namespace AlarmBeans {
      */
     type AlarmConfig = {
         // 告警类型
-        type?: string;
+        type?: number;
         // 告警群ID
-        nameAndChatId?: string;
+        chatId?: string;
     };
 
 }

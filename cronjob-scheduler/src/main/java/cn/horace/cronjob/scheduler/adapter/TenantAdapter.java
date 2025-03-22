@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,15 +55,40 @@ public class TenantAdapter {
         tenantItem.setRemark(entity.getRemark());
         if (entity.getAlarmConfig() != null) {
             AlarmConfig alarmConfig = JSONObject.parseObject(entity.getAlarmConfig(), AlarmConfig.class);
-            tenantItem.setType(alarmConfig.getType());
+            tenantItem.setType(alarmConfig.getType() + "");
             tenantItem.setGroupName(alarmConfig.getGroupName());
             tenantItem.setChatId(alarmConfig.getChatId());
         }
         if (entity.getCreateTime() != null) {
             tenantItem.setCreateTime(DateFormatUtils.format(entity.getCreateTime(), Constants.DATE_FORMAT));
         }
+        if (entity.getModifyTime() != null) {
+            tenantItem.setModifyTime(DateFormatUtils.format(entity.getModifyTime(), Constants.DATE_FORMAT));
+        }
         // 获取应用数
         tenantItem.setAppCount(this.appService.getAppCount(entity.getId()));
         return tenantItem;
+    }
+
+    /**
+     * 对象转换
+     *
+     * @param params 参数
+     * @return
+     */
+    public TenantEntity convertEntity(TenantItem params) {
+        AlarmConfig alarmConfig = new AlarmConfig();
+        alarmConfig.setType(Integer.parseInt(params.getType()));
+        alarmConfig.setChatId(params.getChatId());
+        alarmConfig.setGroupName(params.getGroupName());
+
+        TenantEntity entity = new TenantEntity();
+        entity.setId(Long.parseLong(params.getKey()));
+        entity.setName(params.getName());
+        entity.setTenant(params.getTenant());
+        entity.setAlarmConfig(JSONObject.toJSONString(alarmConfig));
+        entity.setRemark(params.getRemark());
+        entity.setModifyTime(new Date());
+        return entity;
     }
 }

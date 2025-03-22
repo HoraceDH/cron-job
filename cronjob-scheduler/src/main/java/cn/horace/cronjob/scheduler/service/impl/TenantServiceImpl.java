@@ -2,8 +2,10 @@ package cn.horace.cronjob.scheduler.service.impl;
 
 import cn.horace.cronjob.commons.GuidGenerate;
 import cn.horace.cronjob.commons.bean.Result;
+import cn.horace.cronjob.commons.constants.MsgCodes;
 import cn.horace.cronjob.scheduler.adapter.TenantAdapter;
 import cn.horace.cronjob.scheduler.bean.params.GetTenantListParams;
+import cn.horace.cronjob.scheduler.bean.params.GetTenantParams;
 import cn.horace.cronjob.scheduler.bean.params.GrantTenantParams;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.bean.result.TenantItem;
@@ -206,5 +208,47 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public boolean updateTenant(TenantEntity tenant) {
         return this.mapper.updateByPrimaryKeySelective(tenant) > 0;
+    }
+
+    /**
+     * 获取租户信息
+     *
+     * @param userId 用户ID
+     * @param params 参数
+     * @return
+     */
+    @Override
+    public Result<TenantItem> getTenantDetail(long userId, GetTenantParams params) {
+        String id = params.getId();
+        long tenantId = Long.parseLong(id);
+        List<Long> tenantIds = this.userTenantService.getTenantIds(userId);
+        if (!tenantIds.contains(tenantId)) {
+            return Result.msgCodes(MsgCodes.ERROR_PERMISSION);
+        }
+        TenantEntity entity = this.getTenant(tenantId);
+        return Result.success(this.tenantAdapter.convertItem(entity));
+    }
+
+    /**
+     * 更新租户信息
+     *
+     * @param userId 用户ID
+     * @param params 参数
+     * @return
+     */
+    @Override
+    public Result<Void> updateTenant(long userId, TenantItem params) {
+        String id = params.getKey();
+        long tenantId = Long.parseLong(id);
+        List<Long> tenantIds = this.userTenantService.getTenantIds(userId);
+        if (!tenantIds.contains(tenantId)) {
+            return Result.msgCodes(MsgCodes.ERROR_PERMISSION);
+        }
+        TenantEntity entity = this.tenantAdapter.convertEntity(params);
+        boolean success = this.updateTenant(entity);
+        if (success) {
+            return Result.success();
+        }
+        return Result.msgCodes(MsgCodes.ERROR_SYSTEM);
     }
 }

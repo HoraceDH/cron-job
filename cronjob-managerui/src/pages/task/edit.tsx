@@ -100,6 +100,7 @@ const TaskEdit: React.FC = () => {
             </ModalForm>
             {/*cron表达式的弹窗*/}
             <PageContainer
+                title="任务编辑"
                 footer={[
                     <Link to={Pages.PAGE_TASK_INDEX}><Button key="1" type={"primary"}>返回</Button></Link>,
                     <Button key="2" type={"primary"} onClick={async () => {

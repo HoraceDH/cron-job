@@ -4,7 +4,6 @@ import cn.horace.cronjob.commons.bean.MsgObject;
 import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
 import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
-import cn.horace.cronjob.scheduler.bean.params.UpdateAlarmConfigParams;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.service.AlarmService;
 import org.slf4j.Logger;
@@ -68,21 +67,6 @@ public class AlarmController {
     @PostMapping(name = "发送一次告警信息", value = "/sendAlarm")
     public MsgObject sendAlarm(@RequestBody SendAlarmParams params) {
         Result<Void> result = this.alarmService.sendAlarm(params);
-        if (result.isSuccess()) {
-            return MsgObject.success();
-        } else {
-            return MsgObject.msgCodes(result.getMsgCodes());
-        }
-    }
-
-    /**
-     * 更新告警配置
-     *
-     * @return
-     */
-    @PostMapping(name = "更新告警配置", value = "/updateAlarmConfig")
-    public MsgObject updateAlarmConfig(@RequestBody UpdateAlarmConfigParams params) {
-        Result<Void> result = this.alarmService.updateAlarmConfig(params);
         if (result.isSuccess()) {
             return MsgObject.success();
         } else {

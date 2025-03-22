@@ -3,11 +3,13 @@ package cn.horace.cronjob.scheduler.controller;
 import cn.horace.cronjob.commons.bean.MsgObject;
 import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.scheduler.bean.params.GetTenantListParams;
+import cn.horace.cronjob.scheduler.bean.params.GetTenantParams;
 import cn.horace.cronjob.scheduler.bean.params.GrantTenantParams;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
+import cn.horace.cronjob.scheduler.bean.result.TenantItem;
 import cn.horace.cronjob.scheduler.bean.result.TenantListResult;
-import cn.horace.cronjob.scheduler.service.TenantService;
 import cn.horace.cronjob.scheduler.context.WebContext;
+import cn.horace.cronjob.scheduler.service.TenantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,6 +88,38 @@ public class TenantController {
     public MsgObject getSearchList() {
         long userId = WebContext.getContext().getUserId();
         Result<List<SearchItem>> result = this.tenantService.getSearchList(userId);
+        if (result.isSuccess()) {
+            return MsgObject.success(result.getData());
+        } else {
+            return MsgObject.msgCodes(result.getMsgCodes());
+        }
+    }
+
+    /**
+     * 获取租户信息
+     *
+     * @return
+     */
+    @PostMapping(name = "获取租户信息", value = "/getTenantDetail")
+    public MsgObject getTenant(@RequestBody GetTenantParams params) {
+        long userId = WebContext.getContext().getUserId();
+        Result<TenantItem> result = this.tenantService.getTenantDetail(userId, params);
+        if (result.isSuccess()) {
+            return MsgObject.success(result.getData());
+        } else {
+            return MsgObject.msgCodes(result.getMsgCodes());
+        }
+    }
+
+    /**
+     * 更新租户信息
+     *
+     * @return
+     */
+    @PostMapping(name = "更新租户信息", value = "/updateById")
+    public MsgObject updateById(@RequestBody TenantItem params) {
+        long userId = WebContext.getContext().getUserId();
+        Result<Void> result = this.tenantService.updateTenant(userId, params);
         if (result.isSuccess()) {
             return MsgObject.success(result.getData());
         } else {

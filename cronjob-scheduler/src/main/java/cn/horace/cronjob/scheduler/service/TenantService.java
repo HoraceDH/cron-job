@@ -2,8 +2,10 @@ package cn.horace.cronjob.scheduler.service;
 
 import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.scheduler.bean.params.GetTenantListParams;
+import cn.horace.cronjob.scheduler.bean.params.GetTenantParams;
 import cn.horace.cronjob.scheduler.bean.params.GrantTenantParams;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
+import cn.horace.cronjob.scheduler.bean.result.TenantItem;
 import cn.horace.cronjob.scheduler.bean.result.TenantListResult;
 import cn.horace.cronjob.scheduler.entities.TenantEntity;
 
@@ -79,4 +81,22 @@ public interface TenantService {
      * @return
      */
     boolean updateTenant(TenantEntity tenant);
+
+    /**
+     * 获取租户信息
+     *
+     * @param userId 用户ID
+     * @param params 参数
+     * @return
+     */
+    Result<TenantItem> getTenantDetail(long userId, GetTenantParams params);
+
+    /**
+     * 更新租户信息
+     *
+     * @param userId 用户ID
+     * @param params 参数
+     * @return
+     */
+    Result<Void> updateTenant(long userId, TenantItem params);
 }

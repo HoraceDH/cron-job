@@ -4,7 +4,6 @@ import cn.horace.cronjob.commons.bean.Result;
 import cn.horace.cronjob.commons.constants.TaskLogState;
 import cn.horace.cronjob.scheduler.bean.params.GetGroupListParams;
 import cn.horace.cronjob.scheduler.bean.params.SendAlarmParams;
-import cn.horace.cronjob.scheduler.bean.params.UpdateAlarmConfigParams;
 import cn.horace.cronjob.scheduler.bean.result.SearchItem;
 import cn.horace.cronjob.scheduler.entities.TaskLogEntity;
 
@@ -58,12 +57,4 @@ public interface AlarmService {
      * @return
      */
     Result<Void> sendAlarm(SendAlarmParams params);
-
-    /**
-     * 更新告警配置
-     *
-     * @param params 参数
-     * @return
-     */
-    Result<Void> updateAlarmConfig(UpdateAlarmConfigParams params);
 }

@@ -5,6 +5,7 @@ import Apis from "@/typings/apis";
 import MsgCodes from "@/typings/msgcodes";
 import {TenantBeans} from "@/typings/tenant";
 import UserService from "@/services/UserService";
+import {message} from "antd";
 
 /**
  * 租户服务类
@@ -34,6 +35,21 @@ class TenantService {
         });
         if (result.code !== MsgCodes.SUCCESS) {
             return [];
+        }
+        return result.data;
+    }
+
+    /**
+     * 获取租户信息
+     *
+     * @param id 租户ID
+     */
+    public async getTenantDetail(id: string): Promise<TenantBeans.TenantItem | undefined> {
+        const result = await request<TenantBeans.TenantResult>(Apis.URI_TENANT_GET_TENANT, {
+            method: "POST", data: {id: id}
+        });
+        if (result.code !== MsgCodes.SUCCESS) {
+            return;
         }
         return result.data;
     }
@@ -89,6 +105,24 @@ class TenantService {
             this.tenantItems = result.data;
         }
         return this.tenantItems;
+    }
+
+    /**
+     * 更新租户信息
+     *
+     * @param tenant 租户信息
+     */
+    public async updateById(tenant: TenantBeans.TenantItem): Promise<Commons.CommonResult> {
+        const result = await request<Commons.CommonResult>(Apis.URI_TENANT_POST_UPDATE_BY_ID, {
+            method: "POST",
+            data: tenant,
+        });
+        if (result.code !== MsgCodes.SUCCESS) {
+            console.error("update tenant failed, ", result);
+            message.error("更新租户信息失败！" + result.msg);
+            return result;
+        }
+        return result;
     }
 }
 

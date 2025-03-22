@@ -12,8 +12,9 @@ import java.util.Map;
  */
 public enum AlarmChannel {
     /**
-     * 飞书或者Larkin
+     * 不设置告警
      */
+    NONE(0, "不设置告警"),
     Lark(1, "飞书/Lark"),
     WEIXIN_WORK(2, "企业微信"),
     EMAIL(3, "邮件"),

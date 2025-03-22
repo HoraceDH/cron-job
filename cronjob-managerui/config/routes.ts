@@ -66,6 +66,13 @@ export default [
         component: './tenant/index',
     },
     {
+        path: '/system/tenant/edit',
+        name: '租户编辑',
+        locale: false,
+        icon: 'smile',
+        component: './tenant/edit',
+    },
+    {
         path: '/system/schedulers/index',
         name: '调度器管理',
         locale: false,

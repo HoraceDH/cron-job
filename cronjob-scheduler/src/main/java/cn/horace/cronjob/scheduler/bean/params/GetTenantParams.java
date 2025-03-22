@@ -5,14 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Created in 2025-03-19 23:23.
+ * Created in 2025-03-22 00:09.
  *
  * @author Horace
  */
 @Data
 @ToString
 @NoArgsConstructor
-public class SendAlarmParams {
-    private int type;
-    private String chatId;
+public class GetTenantParams {
+    private String id;
 }

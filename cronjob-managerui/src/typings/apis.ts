@@ -52,6 +52,10 @@ export default {
      * 获取当前用户所属的租户ID列表
      */
     URI_TENANT_GET_TENANT_IDS: "/manager-api/tenant/getTenantIds",
+    /**
+     * 获取租户信息
+     */
+    URI_TENANT_GET_TENANT: "/manager-api/tenant/getTenantDetail",
     /*********** 菜单模块 **************************************/
 
     /*********** 租户模块 **************************************/
@@ -67,6 +71,10 @@ export default {
      * 获取租户列表，提供给搜索框用
      */
     URI_TENANT_GET_SEARCH_LIST: "/manager-api/tenant/getSearchList",
+    /**
+     * 更新租户信息
+     */
+    URI_TENANT_POST_UPDATE_BY_ID: "/manager-api/tenant/updateById",
     /*********** 租户模块 **************************************/
 
     /*********** 应用模块 **************************************/
@@ -172,9 +180,5 @@ export default {
      * 发送一次告警信息
      */
     URI_ALARM_POST_SEND_ALARM: "/manager-api/alarm/sendAlarm",
-    /**
-     * 更新告警配置
-     */
-    URI_ALARM_POST_UPDATE_ALARM: "/manager-api/alarm/updateAlarmConfig",
     /*********** 告警模块 **************************************/
 }

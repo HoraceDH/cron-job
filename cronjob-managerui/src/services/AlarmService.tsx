@@ -71,38 +71,14 @@ class AlarmService {
             method: "POST",
             data: {
                 type: config.type,
-                chatId: config.nameAndChatId,
+                chatId: config.chatId,
             }
         });
         if (result.code !== MsgCodes.SUCCESS) {
             console.error("send alarm failed, ", result);
-            message.error("发送告警信息失败，请重试。");
+            message.error("发送告警信息失败：" + result.msg);
         } else {
             message.success("发送告警信息成功！");
-        }
-        return result;
-    }
-
-    /**
-     * 更新告警配置
-     *
-     * @param currentTenantId 当前租户ID
-     * @param alarmConfig 告警配置
-     */
-    public async updateAlarmConfig(currentTenantId: string | undefined, alarmConfig: AlarmBeans.AlarmConfig): Promise<Commons.CommonResult> {
-        const result = await request<Commons.CommonResult>(Apis.URI_ALARM_POST_UPDATE_ALARM, {
-            method: "POST",
-            data: {
-                tenantId: currentTenantId,
-                type: alarmConfig.type,
-                nameAndChatId: alarmConfig.nameAndChatId
-            }
-        });
-        if (result.code !== MsgCodes.SUCCESS) {
-            console.error("update alarm failed, ", result);
-            message.error("更新告警信息失败，请重试。");
-        } else {
-            message.success("更新告警信息成功！");
         }
         return result;
     }
