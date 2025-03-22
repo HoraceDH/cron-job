@@ -361,10 +361,10 @@ public class TaskServiceImpl implements TaskService {
         if (StringUtils.isNotBlank(appName)) {
             criteria.andAppNameEqualTo(appName);
         }
-        List<TaskEntity> cronTasks = this.mapper.selectByExample(example);
-        for (TaskEntity cronTask : cronTasks) {
-            String label = cronTask.getAppDesc() + "（" + cronTask.getAppName() + "）";
-            items.add(new SearchItem(label, String.valueOf(cronTask.getId())));
+        List<TaskEntity> tasks = this.mapper.selectByExample(example);
+        for (TaskEntity task : tasks) {
+            String label = task.getName() + "（" + task.getAppName() + "）";
+            items.add(new SearchItem(label, String.valueOf(task.getId())));
         }
         return Result.success(items);
     }
