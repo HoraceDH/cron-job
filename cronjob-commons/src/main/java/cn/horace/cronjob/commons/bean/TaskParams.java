@@ -58,7 +58,7 @@ public class TaskParams {
     /**
      * 调度时间，这里表示接到调度任务的时间，并不是服务端记录的调度时间，查问题时也可以拿来与服务端做对比，服务端是先更新调度时间，再发起请求给执行器
      */
-    private long receivedDispatcherTime = System.currentTimeMillis();
+    private long receivedDispatcherTime;
 
     /**
      * 自定义参数

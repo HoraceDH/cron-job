@@ -53,6 +53,7 @@ public class ExecutorServlet extends HttpServlet {
             }
 
             TaskParams taskParams = JSONObject.parseObject(body, TaskParams.class);
+            taskParams.setReceivedDispatcherTime(System.currentTimeMillis());
             int size = this.dispatcherService.add(taskParams);
             logger.debug("received execute request, queueSize:{}, params:{}", size, taskParams);
             result = MsgObject.success();
