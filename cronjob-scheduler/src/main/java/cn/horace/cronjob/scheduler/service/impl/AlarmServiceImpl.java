@@ -91,51 +91,53 @@ public class AlarmServiceImpl implements AlarmService {
      */
     @Override
     public void alarm(TaskLogEntity taskLog) {
-        TenantEntity tenant = this.tenantService.getTenant(taskLog.getTenantId());
-        if (tenant == null) {
-            logger.error("task execute failed, send alarm failed, tenant is null, taskLog:{}", taskLog);
-            return;
-        }
+        this.executor.submit(() -> {
+            TenantEntity tenant = this.tenantService.getTenant(taskLog.getTenantId());
+            if (tenant == null) {
+                logger.error("task execute failed, send alarm failed, tenant is null, taskLog:{}", taskLog);
+                return;
+            }
 
-        AlarmType type = AlarmType.NONE;
-        String chatId = "";
-        String groupName = "";
+            AlarmType type = AlarmType.NONE;
+            String chatId = "";
+            String groupName = "";
 
-        String alarmConfig = tenant.getAlarmConfig();
-        if (StringUtils.isNotBlank(alarmConfig)) {
-            AlarmConfig config = JSONObject.parseObject(alarmConfig, AlarmConfig.class);
-            type = AlarmType.from(config.getType());
-            chatId = config.getChatId();
-            groupName = config.getGroupName();
-        }
+            String alarmConfig = tenant.getAlarmConfig();
+            if (StringUtils.isNotBlank(alarmConfig)) {
+                AlarmConfig config = JSONObject.parseObject(alarmConfig, AlarmConfig.class);
+                type = AlarmType.from(config.getType());
+                chatId = config.getChatId();
+                groupName = config.getGroupName();
+            }
 
-        // 保存告警日志
-        AlarmEntity entity = this.buildAlarmEntity(taskLog);
-        entity.setAlarmType(type.getValue());
-        entity.setAlarmGroupName(groupName);
+            // 保存告警日志
+            AlarmEntity entity = this.buildAlarmEntity(taskLog);
+            entity.setAlarmType(type.getValue());
+            entity.setAlarmGroupName(groupName);
 
-        int insert = this.mapper.insert(entity);
-        logger.info("task execute failed, save alarm, count:{}, entity:{}", insert, entity);
+            int insert = this.mapper.insert(entity);
+            logger.info("task execute failed, save alarm, count:{}, entity:{}", insert, entity);
 
-        // 发送告警信息
-        SendAlarmParams params = new SendAlarmParams();
-        params.setOwner(taskLog.getOwner() + " ");
-        params.setType(type.getValue());
-        params.setChatId(chatId);
-        params.setTenantName(tenant.getName());
-        params.setAppName(taskLog.getAppName());
-        params.setTaskName(taskLog.getName());
-        params.setTaskMethod(taskLog.getMethod());
-        params.setFailedReason(TaskLogState.from(taskLog.getState()).getMsg());
-        params.setTaskLogId(taskLog.getId());
-        params.setUrl(this.appConfig.getDomain() + "/schedulers/tasklog/detail?id=" + taskLog.getId());
-        Result<Void> result = this.sendAlarm(params);
-        if (result.isSuccess()) {
-            logger.info("task execute failed, send alarm success, result:{}, params:{}", result, params);
-        } else {
-            logger.error("task execute failed, send alarm failed, result:{}, params:{}", result, params);
-        }
-        this.updateState(entity.getId(), result.isSuccess() ? AlarmState.SUCCESS : AlarmState.FAILED);
+            // 发送告警信息
+            SendAlarmParams params = new SendAlarmParams();
+            params.setOwner(taskLog.getOwner() + " ");
+            params.setType(type.getValue());
+            params.setChatId(chatId);
+            params.setTenantName(tenant.getName());
+            params.setAppName(taskLog.getAppName());
+            params.setTaskName(taskLog.getName());
+            params.setTaskMethod(taskLog.getMethod());
+            params.setFailedReason(TaskLogState.from(taskLog.getState()).getMsg());
+            params.setTaskLogId(taskLog.getId());
+            params.setUrl(this.appConfig.getDomain() + "/schedulers/tasklog/detail?id=" + taskLog.getId());
+            Result<Void> result = this.sendAlarm(params);
+            if (result.isSuccess()) {
+                logger.info("task execute failed, send alarm success, result:{}, params:{}", result, params);
+            } else {
+                logger.error("task execute failed, send alarm failed, result:{}, params:{}", result, params);
+            }
+            this.updateState(entity.getId(), result.isSuccess() ? AlarmState.SUCCESS : AlarmState.FAILED);
+        });
     }
 
     /**
