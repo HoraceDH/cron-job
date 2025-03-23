@@ -58,7 +58,10 @@ public class AppServiceImpl implements AppService {
         example.or().andTenantIdEqualTo(tenantId).andAppNameEqualTo(appName);
         List<AppEntity> entities = this.mapper.selectByExample(example);
         if (entities != null && !entities.isEmpty()) {
-            return entities.get(0);
+            AppEntity entity = entities.get(0);
+            entity.setState(AppState.RUN.getValue());
+            this.mapper.updateByPrimaryKeySelective(entity);
+            return entity;
         }
 
         // 新增
