@@ -59,7 +59,6 @@ public class DefaultRequestInterceptor implements HttpRequestInterceptor {
             entityRequest.addHeader("sign", sign);
             entityRequest.addHeader("times", currentTimeMillis + "");
             entityRequest.addHeader("token", token);
-            entityRequest.addHeader("rb", body);
         } else {
             logger.error("httpclient interceptor error, requestClass:{}, request:{}", request.getClass(), request);
         }
