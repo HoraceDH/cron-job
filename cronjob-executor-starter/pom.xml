@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.horace.cronjob</groupId>
         <artifactId>cron-job</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.7</version>
     </parent>
 
     <artifactId>cronjob-executor-starter</artifactId>
