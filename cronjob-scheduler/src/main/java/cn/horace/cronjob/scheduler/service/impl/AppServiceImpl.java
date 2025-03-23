@@ -60,6 +60,8 @@ public class AppServiceImpl implements AppService {
         if (entities != null && !entities.isEmpty()) {
             AppEntity entity = entities.get(0);
             entity.setState(AppState.RUN.getValue());
+            entity.setAppDesc(appDesc);
+            entity.setModifyTime(new Date());
             this.mapper.updateByPrimaryKeySelective(entity);
             return entity;
         }
