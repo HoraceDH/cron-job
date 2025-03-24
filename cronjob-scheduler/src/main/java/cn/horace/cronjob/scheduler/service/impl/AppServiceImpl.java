@@ -59,10 +59,11 @@ public class AppServiceImpl implements AppService {
         List<AppEntity> entities = this.mapper.selectByExample(example);
         if (entities != null && !entities.isEmpty()) {
             AppEntity entity = entities.get(0);
-            entity.setState(AppState.RUN.getValue());
-            entity.setAppDesc(appDesc);
-            entity.setModifyTime(new Date());
-            this.mapper.updateByPrimaryKeySelective(entity);
+            if (entity.getState() != AppState.RUN.getValue()) {
+                entity.setState(AppState.RUN.getValue());
+                entity.setModifyTime(new Date());
+                this.mapper.updateByPrimaryKeySelective(entity);
+            }
             return entity;
         }
 
@@ -244,7 +245,7 @@ public class AppServiceImpl implements AppService {
             return Result.msgCodes(MsgCodes.ERROR_PERMISSION);
         }
         boolean success = this.updateState(id, state);
-        if (success && state == AppState.STOP) {
+        if (success && state == cn.horace.cronjob.commons.constants.AppState.STOP) {
             this.taskService.stopAllTask(id);
         }
         return Result.success();
