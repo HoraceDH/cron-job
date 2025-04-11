@@ -145,7 +145,7 @@ public class LarkAlarmHandlerImpl extends AlarmHandler {
      */
     @Override
     public String buildMessage(SendAlarmParams params) {
-        String msg = "{\"config\":{\"wide_screen_mode\":true},\"elements\":[{\"tag\":\"div\",\"text\":{\"content\":\"**负责人：${owner}**\\r\\n**租户名称：${tenantName}**\\r\\n**应用名称：${appName}**\\r\\n**任务名称：${taskName}**\\r\\n**任务方法：${taskMethod}**\\r\\n**日志ID：${taskLogId}**\\r\\n**失败原因：[点击查看](${url})**\",\"tag\":\"lark_md\"}},{\"actions\":[{\"tag\":\"button\",\"text\":{\"content\":\"查看详情\",\"tag\":\"plain_text\"},\"type\":\"primary\",\"url\":\"${url}\"}],\"tag\":\"action\"}],\"header\":{\"template\":\"red\",\"title\":{\"content\":\"任务执行失败\",\"tag\":\"plain_text\"}}}";
+        String msg = "{\"config\":{\"wide_screen_mode\":true},\"elements\":[{\"tag\":\"div\",\"text\":{\"content\":\"**负责人：${owner}**\\r\\n**租户名称：${tenantName}**\\r\\n**应用名称：${appName}**\\r\\n**任务名称：${taskName}**\\r\\n**任务方法：${taskMethod}**\\r\\n**日志ID：${taskLogId}**\\r\\n**失败原因：[点击查看](${url})**\",\"tag\":\"lark_md\"}},{\"actions\":[{\"tag\":\"button\",\"text\":{\"content\":\"查看详情\",\"tag\":\"plain_text\"},\"type\":\"primary\",\"url\":\"${url}\"}],\"tag\":\"action\"}],\"header\":{\"template\":\"red\",\"title\":{\"content\":\"任务执行失败-${taskName}\",\"tag\":\"plain_text\"}}}";
         msg = msg.replace("${tenantName}", params.getTenantName());
         msg = msg.replace("${appName}", params.getAppName());
         msg = msg.replace("${taskName}", params.getTaskName());
