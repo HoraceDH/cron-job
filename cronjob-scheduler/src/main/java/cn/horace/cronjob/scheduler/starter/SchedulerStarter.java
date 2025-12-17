@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class SchedulerStarter implements InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(SchedulerStarter.class);
-    private GracefulScheduledThreadPoolExecutor threadScheduledExecutor = new GracefulScheduledThreadPoolExecutor(11, new DefaultThreadFactory("scheduler-thread"), false);
+    private GracefulScheduledThreadPoolExecutor threadScheduledExecutor = new GracefulScheduledThreadPoolExecutor(12, new DefaultThreadFactory("scheduler-thread"), false);
     @Resource
     private AppConfig appConfig;
     @Resource
